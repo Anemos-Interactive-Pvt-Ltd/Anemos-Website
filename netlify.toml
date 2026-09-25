@@ -1,0 +1,7 @@
+# Netlify deploy configuration for the Anemos Interactive site.
+#
+# This is a plain static site: there is nothing to compile, so there is no
+# build command. Netlify serves the HTML/CSS/SVG straight from the repo root.
+
+[build]
+  publish = "."

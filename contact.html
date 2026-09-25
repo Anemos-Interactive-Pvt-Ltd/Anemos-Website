@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Anemos Interactive</title>
+  <meta name="description" content="Contact Anemos Interactive Private Limited — email, phone, and mailing address.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Questrial&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="container header-inner">
+    <a class="wordmark" href="index.html"><img src="logo.svg" alt="Anemos Interactive logo" class="logo-symbol">anemos <span>interactive</span></a>
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" id="site-nav">
+      <a href="index.html">Home</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#services">Services</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="kicker">Contact</div>
+    <h2>Get in touch</h2>
+    <p class="lede">We operate as a fully online business — the best way to reach us is by email or the form below. We typically respond within one business day.</p>
+
+    <div class="contact-grid">
+      <div class="contact-block">
+        <h3>Email</h3>
+        <p><a href="mailto:contact@anemosinteractive.com">contact@anemosinteractive.com</a></p>
+
+        <h3>Phone</h3>
+        <p>+91 93723 62676</p>
+
+        <h3>Mailing address</h3>
+        <p>
+          Anemos Interactive Private Limited<br>
+          F50, 1st Floor, The Zone,<br>
+          Chandravarkar Road, Borivali West,<br>
+          Mumbai – 400092, Maharashtra, India
+        </p>
+        <h3>Company details</h3>
+        <p>
+          CIN: U58203MH2026PTC475216<br>
+          GSTIN: 27ABGCA5982P1ZU
+        </p>
+      </div>
+
+      <div class="contact-block">
+        <h3>Send us a message</h3>
+        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="contact">
+          <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="6" required></textarea>
+          <button class="btn" type="submit">Send message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="wordmark"><img src="logo-white.svg" alt="" class="logo-symbol logo-symbol-footer">anemos <span>interactive</span></div>
+    <div class="legal">
+      Anemos Interactive Private Limited<br>
+      CIN: U58203MH2026PTC475216 &nbsp;·&nbsp; GSTIN: 27ABGCA5982P1ZU<br>
+      Registered office (mailing address): F50, 1st Floor, The Zone, Chandravarkar Road, Borivali West, Mumbai – 400092, Maharashtra, India<br>
+      <a href="mailto:contact@anemosinteractive.com">contact@anemosinteractive.com</a><br><br>
+      © 2026 Anemos Interactive Private Limited. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const nav = document.getElementById('site-nav');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+</script>
+
+</body>
+</html>

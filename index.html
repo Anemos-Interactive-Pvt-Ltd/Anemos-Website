@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anemos Interactive — Game Development &amp; Technology Studio, Mumbai</title>
+  <meta name="description" content="Anemos Interactive Private Limited is a Mumbai-based game development and technology studio building original IP, B2B game development services, and IT consulting.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Questrial&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="container header-inner">
+    <a class="wordmark" href="index.html"><img src="logo.svg" alt="Anemos Interactive logo" class="logo-symbol">anemos <span>interactive</span></a>
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" id="site-nav">
+      <a href="index.html" class="active">Home</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#services">Services</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>Games and technology, <em>built in Mumbai</em>, made for the world.</h1>
+    <p>Anemos Interactive is an independent game development and technology studio. We build original interactive worlds, and we build software for businesses that need it done right.</p>
+    <a class="btn" href="contact.html">Get in touch</a>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container">
+    <div class="kicker">About us</div>
+    <h2>A digital-first studio</h2>
+    <p class="lede">Anemos Interactive Private Limited is a fully online business. Our team develops, publishes, and delivers all of our work digitally — games distributed through online storefronts, and software services delivered remotely to clients. We are incorporated in Mumbai, Maharashtra, and recognised under the DPIIT Startup India programme.</p>
+  </div>
+</section>
+
+<section id="services" class="alt">
+  <div class="container">
+    <div class="kicker">What we do</div>
+    <h2>Three lines of work</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="dot"></div>
+        <h3>Original Games</h3>
+        <p>We develop our own intellectual property — story-driven action games designed for global digital distribution on PC and console storefronts. Our flagship original title is currently in development.</p>
+      </div>
+      <div class="card">
+        <div class="dot"></div>
+        <h3>Game Development Services</h3>
+        <p>End-to-end B2B game development for partners and clients — design, 3D art, engineering, and production, delivered remotely by our team.</p>
+      </div>
+      <div class="card">
+        <div class="dot"></div>
+        <h3>Technology Consulting</h3>
+        <p>Software engineering and IT consulting services — interactive 3D applications, real-time experiences, and custom tools for businesses.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="kicker">Work with us</div>
+    <h2>Everything we do happens online</h2>
+    <p class="lede">From client meetings to final delivery, our operations are remote and digital. If you'd like to discuss a project or partnership, the fastest way to reach us is by email.</p>
+    <a class="btn" href="contact.html">Contact us</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="wordmark"><img src="logo-white.svg" alt="" class="logo-symbol logo-symbol-footer">anemos <span>interactive</span></div>
+    <div class="legal">
+      Anemos Interactive Private Limited<br>
+      CIN: U58203MH2026PTC475216 &nbsp;·&nbsp; GSTIN: 27ABGCA5982P1ZU<br>
+      Registered office (mailing address): F50, 1st Floor, The Zone, Chandravarkar Road, Borivali West, Mumbai – 400092, Maharashtra, India<br>
+      <a href="mailto:contact@anemosinteractive.com">contact@anemosinteractive.com</a><br><br>
+      © 2026 Anemos Interactive Private Limited. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const nav = document.getElementById('site-nav');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+</script>
+
+</body>
+</html>

@@ -250,9 +250,16 @@ h2, .page-title {
   gap: 48px;
   margin-top: 40px;
 }
-/* Wide screens: details on the left, form on the right, whatever their order in the markup. */
+/* Wide screens: details on the left, form on the right, whatever their order in the markup.
+   Both sit on white panels so they stay readable over the mark behind the page. */
 .contact-details { grid-column: 1; grid-row: 1; }
 .contact-form { grid-column: 2; grid-row: 1; }
+.contact-form, .contact-details {
+  padding: 28px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
 
 .contact-block h3 {
   color: var(--navy);
@@ -940,6 +947,25 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .founder p { margin-top: 14px; color: #cfd2e6; font-size: 15px; }
 .chips-dark { margin-top: 22px; }
 .about-block .btn { margin-top: 32px; }
+
+/* ============ Contact: the mark behind the page, as on the business card ============ */
+.contact-main { position: relative; overflow: hidden; }
+.contact-main > section { position: relative; z-index: 1; }
+.contact-mark {
+  position: absolute;
+  right: -4vw;
+  top: 24px;
+  height: 115%;
+  max-height: 1180px;
+  width: auto;
+  max-width: none;
+  pointer-events: none;
+  z-index: 0;
+}
+@media (max-width: 899px) {
+  .contact-mark { right: -24vw; top: 300px; height: 78vh; max-height: 720px; }
+  .contact-form, .contact-details { padding: 20px; }
+}
 
 /* ============ Contact: wind behind the heading ============ */
 .page-intro { position: relative; }

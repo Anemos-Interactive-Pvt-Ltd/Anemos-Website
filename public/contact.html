@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact — Anemos Interactive</title>
-  <meta name="description" content="Get in touch with Anemos Interactive in Mumbai: email, phone, mailing address and a contact form. We typically reply within one business day.">
+  <meta name="description" content="Get in touch with Anemos Interactive in Mumbai: email, phone, mailing address and a contact form. We typically reply within 48 hours.">
   <link rel="canonical" href="https://anemosinteractive.com/contact.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Anemos Interactive">
   <meta property="og:title" content="Contact — Anemos Interactive">
-  <meta property="og:description" content="Get in touch with Anemos Interactive in Mumbai: email, phone, mailing address and a contact form. We typically reply within one business day.">
+  <meta property="og:description" content="Get in touch with Anemos Interactive in Mumbai: email, phone, mailing address and a contact form. We typically reply within 48 hours.">
   <meta property="og:url" content="https://anemosinteractive.com/contact.html">
   <meta property="og:image" content="https://anemosinteractive.com/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -53,7 +53,7 @@
   <div class="container">
     <div class="kicker" data-wind>Contact</div>
     <h1 class="page-title" data-wind="words">Get in touch</h1>
-    <p class="lede" data-wind="words">We operate as a fully online business — the best way to reach us is by email or the form below. We typically respond within one business day.</p>
+    <p class="lede" data-wind="words">We operate as a fully online business — the best way to reach us is by email or the form below. We typically respond within 48 hours.</p>
 
     <!-- The form comes first in the markup, so it is first when the page stacks on phones and
          portrait tablets. On wider screens the grid puts the details on the left of it. -->
@@ -151,7 +151,7 @@
         const d = await r.json();
         if (!d.success) throw new Error(d.message || 'not sent');
         form.reset();
-        status.textContent = 'Thanks, your message is on its way. We typically reply within one business day.';
+        status.textContent = 'Thanks, your message is on its way. We typically reply within 48 hours.';
       } catch (err) {
         status.classList.add('is-error');
         status.textContent = 'Sorry, that did not send. Please email contactus@anemosinteractive.com instead.';

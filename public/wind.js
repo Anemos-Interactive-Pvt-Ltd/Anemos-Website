@@ -386,22 +386,10 @@
     for (const x of SOCIAL_X) JUMPS.push({ x, hw: 0.55, h: 0.85, hop: true });
     const CHASM = [22.7, 25.3];
     const CYCLE = 1.5;                                      // ground covered by one full stride cycle
-    // Speed bumps. However fast the page is scrolled, the runner tops out at MAX_SPEED. The first
-    // time he reaches a panel's mark with the scroll already well ahead of him (a fast scroll
-    // that would have skipped the section) he stops there for HOLD seconds; a visitor scrolling
-    // at reading pace is never held. (The hero needs no stop: the page opens on it.) The final
-    // mark is different: he waits there until the visitor scrolls again, so one big flick never
-    // leaves the page.
-    const MAX_SPEED = 28;                                   // units per second
-    const RUSHING = 1.5;                                    // how far ahead the scroll must be to count as fast
     // How much scrolling the course takes: SCREENS screen-heights at a laptop, times SLOW so the
     // runner takes his time, times more again on wide screens (see measure).
     const SCREENS = 10.4;
     const SLOW = 4;
-    const HOLD = 1.2;                                       // seconds
-    const LAST = STOPS.length - 1;
-    const arrived = STOPS.map(() => null);                  // when (or, for the last, where) he reached each mark
-    const released = STOPS.map((_, i) => i === 0);          // marks he has already waited at
 
     const ORBS = [];
     for (const j of JUMPS) for (const d of j.hop ? [0] : [-0.5, 0, 0.5]) ORBS.push(j.x + d * j.hw);
@@ -547,15 +535,49 @@
     function line(x1, y1, x2, y2) {
       ctx.beginPath(); ctx.moveTo(x1 * u, y1 * u); ctx.lineTo(x2 * u, y2 * u); ctx.stroke();
     }
+    // Limbs taper: thicker at the hip and shoulder, teal boots and gloves at the ends.
     function drawLeg(l, colour) {
-      ctx.strokeStyle = colour; ctx.lineWidth = 0.075 * u;
-      ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(l.kx * u, l.ky * u); ctx.lineTo(l.ax * u, l.ay * u); ctx.stroke();
-      ctx.strokeStyle = '#2fd0c9'; ctx.lineWidth = 0.062 * u;
+      ctx.strokeStyle = colour;
+      ctx.lineWidth = 0.09 * u; line(0, 0, l.kx, l.ky);
+      ctx.lineWidth = 0.072 * u; line(l.kx, l.ky, l.ax, l.ay);
+      ctx.strokeStyle = '#2fd0c9'; ctx.lineWidth = 0.066 * u;
       line(l.ax, l.ay, l.tx, l.ty);
     }
     function drawArm(s, a, colour) {
-      ctx.strokeStyle = colour; ctx.lineWidth = 0.06 * u;
-      ctx.beginPath(); ctx.moveTo(s.sx * u, s.sy * u); ctx.lineTo(a.ex * u, a.ey * u); ctx.lineTo(a.hx * u, a.hy * u); ctx.stroke();
+      ctx.strokeStyle = colour;
+      ctx.lineWidth = 0.07 * u; line(s.sx, s.sy, a.ex, a.ey);
+      ctx.lineWidth = 0.058 * u; line(a.ex, a.ey, a.hx, a.hy);
+      ctx.fillStyle = '#2fd0c9';
+      ctx.beginPath(); ctx.arc(a.hx * u, a.hy * u, 0.034 * u, 0, TAU); ctx.fill();
+    }
+    // A tapered torso with a belt, and a hood with a glowing visor where the face would be.
+    function drawBody(s, ink, faceTone) {
+      const fx = -s.uy, fy = s.ux;           // towards the way he faces
+      const bx = s.uy, by = -s.ux;           // towards his back
+      ctx.fillStyle = ink; ctx.strokeStyle = ink; ctx.lineWidth = 0.035 * u; ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(fx * 0.055 * u, fy * 0.055 * u);
+      ctx.lineTo((s.sx + fx * 0.085) * u, (s.sy + fy * 0.085) * u);
+      ctx.lineTo((s.sx + bx * 0.075) * u, (s.sy + by * 0.075) * u);
+      ctx.lineTo(bx * 0.055 * u, by * 0.055 * u);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.strokeStyle = '#2fd0c9'; ctx.lineWidth = 0.026 * u; ctx.lineCap = 'butt';
+      line(s.ux * 0.07 + fx * 0.06, s.uy * 0.07 + fy * 0.06, s.ux * 0.07 + bx * 0.06, s.uy * 0.07 + by * 0.06);
+      ctx.lineCap = 'round';
+      // Hood: a point (along his up vector a, along his front b) in head space.
+      const H = (a, b) => [(s.hx + s.ux * a + fx * b) * u, (s.hy + s.uy * a + fy * b) * u];
+      const hood = [H(0.10, -0.01), H(0.07, 0.07), H(0.015, 0.09), H(-0.065, 0.05), H(-0.085, -0.04), H(-0.035, -0.17), H(0.06, -0.11)];
+      ctx.fillStyle = ink; ctx.strokeStyle = ink;
+      ctx.beginPath(); hood.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); ctx.fill(); ctx.stroke();
+      // The face in shadow, and the visor lit.
+      const [cx, cy] = H(-0.005, 0.035);
+      ctx.fillStyle = faceTone;
+      ctx.beginPath(); ctx.ellipse(cx, cy, 0.05 * u, 0.058 * u, Math.atan2(s.uy, s.ux) + Math.PI / 2, 0, TAU); ctx.fill();
+      const [vx1, vy1] = H(0.012, -0.005), [vx2, vy2] = H(0.018, 0.085);
+      ctx.strokeStyle = 'rgba(127,240,234,0.35)'; ctx.lineWidth = 0.06 * u;
+      ctx.beginPath(); ctx.moveTo(vx1, vy1); ctx.lineTo(vx2, vy2); ctx.stroke();
+      ctx.strokeStyle = '#7ff0ea'; ctx.lineWidth = 0.026 * u;
+      ctx.beginPath(); ctx.moveTo(vx1, vy1); ctx.lineTo(vx2, vy2); ctx.stroke();
     }
 
     function stepScarf(ax, ay, dt, rel) {
@@ -577,14 +599,23 @@
         }
       }
     }
-    function drawScarf() {
-      ctx.strokeStyle = '#2fd0c9'; ctx.lineWidth = 0.036 * u; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      ctx.beginPath(); ctx.moveTo(scarf[0].x, scarf[0].y);
-      for (let i = 1; i < scarf.length - 1; i++) {
-        const a = scarf[i], b = scarf[i + 1];
-        ctx.quadraticCurveTo(a.x, a.y, (a.x + b.x) / 2, (a.y + b.y) / 2);
+    // The cape: a ribbon along the scarf points, wide at the neck and tapering away.
+    function drawCape() {
+      const n = scarf.length, L = [], R = [];
+      for (let i = 0; i < n; i++) {
+        const a = scarf[Math.max(0, i - 1)], b = scarf[Math.min(n - 1, i + 1)];
+        const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1;
+        const w = Math.max(0.012, 0.07 - i * 0.0085) * u;
+        L.push([scarf[i].x - dy / d * w, scarf[i].y + dx / d * w]);
+        R.push([scarf[i].x + dy / d * w, scarf[i].y - dx / d * w]);
       }
-      ctx.stroke();
+      const g = ctx.createLinearGradient(scarf[0].x, scarf[0].y, scarf[n - 1].x, scarf[n - 1].y);
+      g.addColorStop(0, '#2fd0c9'); g.addColorStop(1, 'rgba(47,208,201,0.55)');
+      ctx.fillStyle = g; ctx.lineJoin = 'round';
+      ctx.beginPath();
+      L.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+      for (let i = n - 1; i >= 0; i--) ctx.lineTo(R[i][0], R[i][1]);
+      ctx.closePath(); ctx.fill();
     }
 
     function drawRunner(dt) {
@@ -597,7 +628,7 @@
       pose = mix(pose, airPose(time), air);
       const s = skeleton(pose);
       // Beyond the last hoop the world is white, so he is drawn dark.
-      const [ink, shade] = cur > GOAL ? ['#262262', '#7774b3'] : ['#f3f5ff', '#8f97cf'];
+      const [ink, shade, faceTone] = cur > GOAL ? ['#262262', '#7774b3', '#e8ebff'] : ['#f3f5ff', '#8f97cf', '#1b1a4a'];
 
       // Keep the lower foot on the ground; in the air, tuck the legs for real clearance.
       const reach = lerp(s.reach, (LIMB.thigh + LIMB.shin) * 0.92, air);
@@ -615,21 +646,16 @@
       flip();
       drawArm(s, s.armB, shade);
       drawLeg(s.legB, shade);
-      ctx.strokeStyle = ink; ctx.lineWidth = 0.13 * u;
-      line(0, 0, s.sx, s.sy);
-      ctx.fillStyle = ink;
-      ctx.beginPath(); ctx.arc(s.hx * u, s.hy * u, LIMB.head * u, 0, TAU); ctx.fill();
-      ctx.strokeStyle = '#2fd0c9'; ctx.lineWidth = 0.05 * u;
-      const nx = s.sx + s.ux * 0.045, ny = s.sy + s.uy * 0.045;
-      line(nx - 0.04, ny + 0.012, nx + 0.045, ny - 0.012);
       ctx.restore();
 
-      // The scarf streams out behind him, harder the faster he runs.
+      // The cape streams out behind him, harder the faster he runs. It hangs from the back of the neck.
       const rel = clamp(-0.5 - vel * 0.9, -7, 4);
-      stepScarf(rx + face * (s.sx + s.ux * 0.045 - 0.04) * u, hipY + (s.sy + s.uy * 0.045) * u, dt, rel);
-      drawScarf();
+      const ax = s.sx + s.uy * 0.05 + s.ux * 0.03, ay = s.sy - s.ux * 0.05 + s.uy * 0.03;
+      stepScarf(rx + face * ax * u, hipY + ay * u, dt, rel);
+      drawCape();
 
       flip();
+      drawBody(s, ink, faceTone);
       drawLeg(s.legA, ink);
       drawArm(s, s.armA, ink);
       ctx.restore();
@@ -1213,35 +1239,9 @@
       last = now;
       time += dt;
 
-      let target = clamp((window.scrollY - top) / scrollLen, 0, 1) * END;
+      const target = clamp((window.scrollY - top) / scrollLen, 0, 1) * END;
       const prev = cur;
-      if (first) {
-        cur = target;
-        // Landing somewhere by link or dot counts as having seen everything before it.
-        STOPS.forEach((x, i) => { if (x <= cur + 0.01) released[i] = true; });
-      } else {
-        // The next mark he has not yet passed holds him if he got there in a rush.
-        const want = target;
-        for (let i = 1; i < STOPS.length; i++) {
-          if (released[i]) continue;
-          if (cur >= STOPS[i] - 0.02) {
-            if (i === LAST) {
-              if (arrived[i] === null) arrived[i] = window.scrollY;
-              if (window.scrollY > arrived[i] + 40) { released[i] = true; continue; }
-            } else {
-              if (arrived[i] === null) {
-                if (want - STOPS[i] < RUSHING) { released[i] = true; continue; }
-                arrived[i] = time;
-              }
-              if (time - arrived[i] >= HOLD) { released[i] = true; continue; }
-            }
-          }
-          target = Math.min(target, STOPS[i]);
-          break;
-        }
-        const step = (target - cur) * ease(dt, 7);
-        cur += clamp(step, -MAX_SPEED * dt, MAX_SPEED * dt);
-      }
+      cur = first ? target : cur + (target - cur) * ease(dt, 7);
       if (Math.abs(target - cur) < 0.0005) cur = target;
       const dx = first ? 0 : cur - prev;
       vel += (dx / dt - vel) * ease(dt, 10);

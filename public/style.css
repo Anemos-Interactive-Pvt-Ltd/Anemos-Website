@@ -781,7 +781,6 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .is-live .panel { transform-origin: 0 0; }
 .is-live .chips { margin-top: 2px; }
 .is-live .team + .btn { margin-top: 8px; }
-.is-live #about { max-width: 700px; }
 .is-live .chips li { margin-bottom: 8px; }
 
 @media (max-height: 480px) {

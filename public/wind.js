@@ -373,8 +373,8 @@
       { x: 36.0, hw: 1.6, h: 1.25 },    // crates (Game Development)
       { x: 48.0, hw: 1.75, h: 1.25 },   // gears (Technology Consulting)
       { x: 60.0, hw: 1.15, h: 0.8 },    // hurdle (Courses)
-      { x: 70.6, hw: 1.15, h: 0.65 },   // hurdle (About us)
-      { x: 73.4, hw: 1.15, h: 0.65 },   // hurdle (About us)
+      { x: 70.6, hw: 1.15, h: 0.8 },    // hurdle (About us)
+      { x: 73.4, hw: 1.15, h: 0.8 },    // hurdle (About us)
     ];
     // The social icons stand on the course as blocks, and he hops over them one by one. They are
     // the real buttons from the Follow us panel, laid over the canvas so they can be clicked.
@@ -386,11 +386,14 @@
     for (const x of SOCIAL_X) JUMPS.push({ x, hw: 0.55, h: 0.85, hop: true });
     const CHASM = [22.7, 25.3];
     const CYCLE = 1.5;                                      // ground covered by one full stride cycle
-    // Speed bumps. However fast the page is scrolled, the runner tops out at MAX_SPEED and stops
-    // at each panel's mark for HOLD seconds the first time he reaches it, so every section is
-    // seen. (The hero needs no stop: the page opens on it.) The final mark is different: he
-    // waits there until the visitor scrolls again, so one big flick never leaves the page.
+    // Speed bumps. However fast the page is scrolled, the runner tops out at MAX_SPEED. The first
+    // time he reaches a panel's mark with the scroll already well ahead of him (a fast scroll
+    // that would have skipped the section) he stops there for HOLD seconds; a visitor scrolling
+    // at reading pace is never held. (The hero needs no stop: the page opens on it.) The final
+    // mark is different: he waits there until the visitor scrolls again, so one big flick never
+    // leaves the page.
     const MAX_SPEED = 28;                                   // units per second
+    const RUSHING = 1.5;                                    // how far ahead the scroll must be to count as fast
     // How much scrolling the course takes: SCREENS screen-heights at a laptop, times SLOW so the
     // runner takes his time, times more again on wide screens (see measure).
     const SCREENS = 10.4;
@@ -505,7 +508,7 @@
 
     // Whatever the screen, each panel has to stay clear of what happens beneath it. If the copy
     // is too tall for the room it has, it is scaled down (and widened to match) until it fits.
-    const CLEARANCE = [1.3, 1.6, 2.15, 2.15, 2.15, 1.85, 1.65, 1.85, 1.3];   // runner-heights of scene under each panel
+    const CLEARANCE = [1.3, 1.6, 2.15, 2.15, 2.15, 1.85, 1.75, 1.85, 1.3];   // runner-heights of scene under each panel
     function fitPanels() {
       panels.forEach((p, i) => {
         p.style.transform = p.style.width = p.style.maxWidth = '';
@@ -1217,7 +1220,8 @@
         // Landing somewhere by link or dot counts as having seen everything before it.
         STOPS.forEach((x, i) => { if (x <= cur + 0.01) released[i] = true; });
       } else {
-        // The next mark he has not yet waited at holds him until its time is up.
+        // The next mark he has not yet passed holds him if he got there in a rush.
+        const want = target;
         for (let i = 1; i < STOPS.length; i++) {
           if (released[i]) continue;
           if (cur >= STOPS[i] - 0.02) {
@@ -1225,7 +1229,10 @@
               if (arrived[i] === null) arrived[i] = window.scrollY;
               if (window.scrollY > arrived[i] + 40) { released[i] = true; continue; }
             } else {
-              if (arrived[i] === null) arrived[i] = time;
+              if (arrived[i] === null) {
+                if (want - STOPS[i] < RUSHING) { released[i] = true; continue; }
+                arrived[i] = time;
+              }
               if (time - arrived[i] >= HOLD) { released[i] = true; continue; }
             }
           }

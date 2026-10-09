@@ -563,9 +563,7 @@
       ctx.closePath(); ctx.fill(); ctx.stroke();
       ctx.strokeStyle = '#2fd0c9'; ctx.lineWidth = 0.026 * u; ctx.lineCap = 'butt';
       line(s.ux * 0.07 + fx * 0.06, s.uy * 0.07 + fy * 0.06, s.ux * 0.07 + bx * 0.06, s.uy * 0.07 + by * 0.06);
-      // Collar across the shoulders, where the cape is fastened.
-      ctx.lineCap = 'round'; ctx.lineWidth = 0.05 * u;
-      line(s.sx + fx * 0.055, s.sy + fy * 0.055, s.sx + bx * 0.085, s.sy + by * 0.085);
+      ctx.lineCap = 'round';
       // A round helmet of a head. H(a, b) is a point in head space, a along his up vector and
       // b along his front.
       const H = (a, b) => [(s.hx + s.ux * a + fx * b) * u, (s.hy + s.uy * a + fy * b) * u];
@@ -603,36 +601,15 @@
         }
       }
     }
-    // The cape: a smooth ribbon through the scarf points, as wide as the collar where it
-    // starts and tapering to a point. Drawn behind the body, so the collar covers the join.
-    function drawCape() {
-      const n = scarf.length, C = [];
-      // A smooth centre line: quadratic curves through the midpoints, sampled finely.
-      let px = scarf[0].x, py = scarf[0].y;
-      C.push([px, py]);
-      for (let i = 1; i < n; i++) {
-        const c = scarf[i], e = i < n - 1 ? [(scarf[i].x + scarf[i + 1].x) / 2, (scarf[i].y + scarf[i + 1].y) / 2] : [scarf[i].x, scarf[i].y];
-        for (let t = 0.25; t <= 1.001; t += 0.25) {
-          const q = 1 - t;
-          C.push([q * q * px + 2 * q * t * c.x + t * t * e[0], q * q * py + 2 * q * t * c.y + t * t * e[1]]);
-        }
-        px = e[0]; py = e[1];
+    // The scarf: a thin teal line through the scarf points, as on the original figure.
+    function drawScarf() {
+      ctx.strokeStyle = '#2fd0c9'; ctx.lineWidth = 0.04 * u; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.beginPath(); ctx.moveTo(scarf[0].x, scarf[0].y);
+      for (let i = 1; i < scarf.length - 1; i++) {
+        const a = scarf[i], b = scarf[i + 1];
+        ctx.quadraticCurveTo(a.x, a.y, (a.x + b.x) / 2, (a.y + b.y) / 2);
       }
-      const m = C.length, L = [], R = [];
-      for (let i = 0; i < m; i++) {
-        const a = C[Math.max(0, i - 1)], b = C[Math.min(m - 1, i + 1)];
-        const dx = b[0] - a[0], dy = b[1] - a[1], d = Math.hypot(dx, dy) || 1;
-        const k = i / (m - 1), w = (0.01 + 0.07 * Math.pow(1 - k, 1.4)) * u;
-        L.push([C[i][0] - dy / d * w, C[i][1] + dx / d * w]);
-        R.push([C[i][0] + dy / d * w, C[i][1] - dx / d * w]);
-      }
-      const g = ctx.createLinearGradient(C[0][0], C[0][1], C[m - 1][0], C[m - 1][1]);
-      g.addColorStop(0, '#2fd0c9'); g.addColorStop(1, 'rgba(47,208,201,0.6)');
-      ctx.fillStyle = g; ctx.lineJoin = 'round';
-      ctx.beginPath();
-      L.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
-      for (let i = m - 1; i >= 0; i--) ctx.lineTo(R[i][0], R[i][1]);
-      ctx.closePath(); ctx.fill();
+      ctx.stroke();
     }
 
     function drawRunner(dt) {
@@ -665,11 +642,11 @@
       drawLeg(s.legB, shade);
       ctx.restore();
 
-      // The cape streams out behind him, harder the faster he runs. It hangs from the back of the neck.
+      // The scarf streams out behind him, harder the faster he runs. It is tied at the back of the neck.
       const rel = clamp(-0.5 - vel * 0.9, -7, 4);
-      const ax = s.sx + s.uy * 0.06 + s.ux * 0.01, ay = s.sy - s.ux * 0.06 + s.uy * 0.01;
+      const ax = s.sx + s.uy * 0.04 + s.ux * 0.04, ay = s.sy - s.ux * 0.04 + s.uy * 0.04;
       stepScarf(rx + face * ax * u, hipY + ay * u, dt, rel);
-      drawCape();
+      drawScarf();
 
       flip();
       drawBody(s, ink, faceTone);

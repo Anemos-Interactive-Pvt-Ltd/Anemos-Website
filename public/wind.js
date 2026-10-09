@@ -373,8 +373,8 @@
       { x: 36.0, hw: 1.6, h: 1.25 },    // crates (Game Development)
       { x: 48.0, hw: 1.75, h: 1.25 },   // gears (Technology Consulting)
       { x: 60.0, hw: 1.15, h: 0.8 },    // hurdle (Courses)
-      { x: 70.6, hw: 1.15, h: 0.8 },    // hurdle (About us)
-      { x: 73.4, hw: 1.15, h: 0.8 },    // hurdle (About us)
+      { x: 70.6, hw: 1.15, h: 0.65 },   // hurdle (About us)
+      { x: 73.4, hw: 1.15, h: 0.65 },   // hurdle (About us)
     ];
     // The social icons stand on the course as blocks, and he hops over them one by one. They are
     // the real buttons from the Follow us panel, laid over the canvas so they can be clicked.
@@ -391,6 +391,10 @@
     // seen. (The hero needs no stop: the page opens on it.) The final mark is different: he
     // waits there until the visitor scrolls again, so one big flick never leaves the page.
     const MAX_SPEED = 28;                                   // units per second
+    // How much scrolling the course takes: SCREENS screen-heights at a laptop, times SLOW so the
+    // runner takes his time, times more again on wide screens (see measure).
+    const SCREENS = 10.4;
+    const SLOW = 4;
     const HOLD = 1.2;                                       // seconds
     const LAST = STOPS.length - 1;
     const arrived = STOPS.map(() => null);                  // when (or, for the last, where) he reached each mark
@@ -473,7 +477,7 @@
       // and more scrolling to cover it.
       const longer = wide ? 1 : 1 + 0.6 * clamp((W - 1440) / 1120, 0, 1);
       span *= longer;
-      journey.style.height = longer > 1 ? stage.offsetHeight * (1 + 10.4 * longer) + 'px' : '';
+      journey.style.height = stage.offsetHeight * (1 + SCREENS * SLOW * longer) + 'px';
       guide = new Float32Array(Math.ceil((W + PAD * 2) / STEP) + 1);
       scratch = new Float32Array(guide.length);
       top = journey.getBoundingClientRect().top + window.scrollY;
@@ -501,7 +505,7 @@
 
     // Whatever the screen, each panel has to stay clear of what happens beneath it. If the copy
     // is too tall for the room it has, it is scaled down (and widened to match) until it fits.
-    const CLEARANCE = [1.3, 1.6, 2.15, 2.15, 2.15, 1.85, 1.75, 1.85, 1.3];   // runner-heights of scene under each panel
+    const CLEARANCE = [1.3, 1.6, 2.15, 2.15, 2.15, 1.85, 1.65, 1.85, 1.3];   // runner-heights of scene under each panel
     function fitPanels() {
       panels.forEach((p, i) => {
         p.style.transform = p.style.width = p.style.maxWidth = '';

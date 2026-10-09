@@ -485,9 +485,9 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .team li {
   display: flex;
   align-items: flex-start;
-  width: 330px;
+  width: 318px;
   max-width: 100%;
-  margin: 0 24px 8px 0;
+  margin: 0 12px 8px 0;
 }
 .team-badge {
   flex: none;
@@ -518,8 +518,8 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .is-wide .team-name { font-size: 14px; }
 .is-wide .team-role, .is-wide .team-bio { font-size: 11px; }
 
-/* One screen for the stage plus 10.4 of scrolling; wind.js lengthens this on large screens. */
-.journey.is-live { height: 1140vh; height: 1140lvh; }
+/* One screen for the stage plus the scrolling distance; wind.js sets the real height (SCREENS, SLOW). */
+.journey.is-live { height: 4260vh; height: 4260lvh; }
 .is-live .journey-stage {
   position: -webkit-sticky;
   position: sticky;
@@ -736,7 +736,6 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   body.home .nav a.active { color: var(--teal-bright); box-shadow: inset 3px 0 0 var(--teal-bright); }
 }
 @media (max-width: 640px) {
-  .journey.is-live { height: 1040vh; height: 1040lvh; }
   .team li { width: 100%; margin-right: 0; }
   .team-badge { width: 40px; height: 40px; font-size: 18px; margin-right: 12px; }
   .team-name { font-size: 17px; }
@@ -782,6 +781,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .is-live .panel { transform-origin: 0 0; }
 .is-live .chips { margin-top: 2px; }
 .is-live .team + .btn { margin-top: 8px; }
+.is-live #about { max-width: 700px; }
 .is-live .chips li { margin-bottom: 8px; }
 
 @media (max-height: 480px) {

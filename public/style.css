@@ -850,7 +850,9 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 
 @media (max-height: 480px) {
   .header-inner { padding: 8px var(--gutter); }
-  .nav a { padding: 10px var(--gutter); }
+  /* A phone on its side: the menu's seven links in two columns, so they fit without scrolling. */
+  .nav { flex-direction: row; flex-wrap: wrap; }
+  .nav a { width: 50%; padding: 10px var(--gutter); }
 }
 /* The narrowest phones, down to 300px. */
 @media (max-width: 360px) {

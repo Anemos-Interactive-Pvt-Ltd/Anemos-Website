@@ -5,6 +5,7 @@
 //
 //   npx wrangler deploy                    -> production worker "anemos-website", the live domain
 //   npx wrangler deploy --env experiment   -> worker "anemos-website-experiment" at experiment.anemosinteractive.com
+//   npx wrangler deploy --env test         -> worker "anemos-website-test" at test.anemosinteractive.com
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "anemos-website",
@@ -23,6 +24,12 @@
       "name": "anemos-website-experiment",
       "routes": [
         { "pattern": "experiment.anemosinteractive.com", "custom_domain": true }
+      ]
+    },
+    "test": {
+      "name": "anemos-website-test",
+      "routes": [
+        { "pattern": "test.anemosinteractive.com", "custom_domain": true }
       ]
     }
   }

@@ -336,7 +336,7 @@
     const SPACING = 12;
     const LENGTH = SPACING * (panels.length - 1);
     const REACH = 4.6;                                      // how far either side of its mark a panel stays up
-    const STOPS = [0, 8.6, 21.5, 33.6, 45.8, 57.7, 69.8, LENGTH]; // where the dots and nav links land
+    const STOPS = [0, 8.6, 21.5, 33.6, 45.8, 57.7, 68.4, LENGTH]; // where the dots and nav links land
     const GOAL = LENGTH + 5.4;                              // the last hoop: through it, the wind carries you to the contact page
     const END = LENGTH + 6;                                 // where the scroll runs out
     // A hoop halfway between each pair of panels. The world changes on the far side of every one.
@@ -361,13 +361,20 @@
       { x: 36.0, hw: 1.8, h: 1.0 },     // chasm
       { x: 48.0, hw: 1.6, h: 1.25 },    // crates
       { x: 60.0, hw: 1.75, h: 1.25 },   // gears
-      { x: 72.0, hw: 1.15, h: 0.8 },    // hurdle
     ];
+    // The social icons stand on the course as blocks, and he hops over them one by one. They are
+    // the real buttons from the Follow us panel, laid over the canvas so they can be clicked.
+    const SOCIAL_X = [69.5, 70.75, 72, 73.25, 74.5];
+    const SOCIAL_SIZE = 0.5;
+    const socials = journey.querySelector('.socials');
+    const socialTiles = [...socials.children];
+    const socialHome = socials.parentNode;
+    for (const x of SOCIAL_X) JUMPS.push({ x, hw: 0.55, h: 0.85, hop: true });
     const CHASM = [34.7, 37.3];
     const CYCLE = 1.5;                                      // ground covered by one full stride cycle
 
     const ORBS = [];
-    for (const j of JUMPS) for (const d of [-0.5, 0, 0.5]) ORBS.push(j.x + d * j.hw);
+    for (const j of JUMPS) for (const d of j.hop ? [0] : [-0.5, 0, 0.5]) ORBS.push(j.x + d * j.hw);
     for (const x of [5, 6, 7, 18, 19, 20, 22.5, 24, 25.5, 29.5, 30.5, 31.5, 41, 42, 43, 53, 54, 55, 65, 66, 67, 77, 78, 79]) ORBS.push(x);
 
     const rand = rng(7);
@@ -447,7 +454,24 @@
       top = journey.getBoundingClientRect().top + window.scrollY;
       scrollLen = Math.max(1, journey.offsetHeight - stage.offsetHeight);
       first = true;
+      socials.style.setProperty('--tile', SOCIAL_SIZE * u + 'px');
       fitPanels();
+    }
+
+    // Each icon pops up out of the ground as he nears it, and can be clicked from then on.
+    function placeSocials() {
+      const size = SOCIAL_SIZE * u, edge = Math.min(rx + 4.6 * u, W * 0.9);
+      socialTiles.forEach((tile, i) => {
+        const x = X(SOCIAL_X[i]);
+        const k = smooth(edge, edge - 1.4 * u, x);
+        const grow = (0.3 + 0.7 * k) * (1 + Math.sin(k * Math.PI) * 0.2);
+        tile.style.transform = `translate3d(${x - size / 2}px, ${gy - size}px, 0) scale(${grow})`;
+        tile.style.opacity = k;
+        tile.style.pointerEvents = k > 0.5 ? 'auto' : 'none';
+        if (k <= 0 || x < -size || x > W + size) return;
+        ctx.fillStyle = `rgba(4,4,24,${0.3 * k})`;
+        ctx.beginPath(); ctx.ellipse(x, gy + 0.02 * u, size * 0.62, 0.03 * u, 0, 0, TAU); ctx.fill();
+      });
     }
 
     // Whatever the screen, each panel has to stay clear of what happens beneath it. If the copy
@@ -1117,6 +1141,10 @@
       travel(i);
     });
     // Tabbing into a panel that is not on screen brings the run to it.
+    socials.addEventListener('focusin', () => {
+      const i = panels.indexOf(socialHome);
+      if (live && activeIdx !== i) goTo(i);
+    });
     panels.forEach((p, i) => p.addEventListener('focusin', () => {
       if (live && activeIdx !== i) goTo(i);
     }));
@@ -1176,7 +1204,7 @@
       drawPennant(LENGTH + 1.3, 1.5, 0.7);
       drawHurdle(JUMPS[0].x);
       drawHurdle(JUMPS[1].x);
-      drawHurdle(JUMPS[5].x);
+      placeSocials();
       drawCrates(JUMPS[3].x);
       drawGears(JUMPS[4].x);
       drawOrbs();
@@ -1201,6 +1229,10 @@
       if (want === live) return;
       live = want;
       journey.classList.toggle('is-live', live);
+      // Live, the icons leave the panel and stand on the course; otherwise they sit in the panel.
+      (live ? stage : socialHome).appendChild(socials);
+      socials.classList.toggle('is-course', live);
+      if (!live) socialTiles.forEach(tile => { tile.style.transform = tile.style.opacity = tile.style.pointerEvents = ''; });
       panels.forEach(p => {
         p.classList.toggle('wind-armed', live);
         if (!live) { p.classList.remove('is-active', 'is-past'); p.style.transform = p.style.width = p.style.maxWidth = ''; }

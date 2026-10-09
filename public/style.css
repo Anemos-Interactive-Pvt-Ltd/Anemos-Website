@@ -409,6 +409,32 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   border-radius: 999px;
   margin: 0 10px 10px 0;
 }
+/* On the live run wind.js moves the icons out of their panel and onto the course as
+   blocks, placing each <li> every frame; --tile is their size. */
+.socials.is-course {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  z-index: 2;
+}
+.socials.is-course li {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 50% 100%;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.socials.is-course .social {
+  width: var(--tile);
+  height: var(--tile);
+  margin: 0;
+  border-width: 2px;
+  border-radius: calc(var(--tile) * 0.28);
+  background: rgba(20, 18, 66, 0.9);
+}
+.socials.is-course .social svg { width: 48%; height: 48%; }
 
 /* One screen for the stage plus 9.2 of scrolling; wind.js lengthens this on large screens. */
 /* Social icons: buttons for now, links once each has somewhere to go. */

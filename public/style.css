@@ -1139,7 +1139,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .contact-block h3 { font-size: 22px; }
   .contact-block p, form label, form input, form textarea, .card p, .founder p, .founder-role { font-size: 19px; }
   .card h3, .founder h3 { font-size: 24px; }
-  .about-intro h1 { font-size: 60px; }
+  .about-intro h1, .notfound h1 { font-size: 60px; }
   .contact-form, .contact-details { padding: 36px; }
   .team li { width: 380px; }
   .team-badge { width: 62px; height: 62px; font-size: 28px; }
@@ -1176,7 +1176,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   form label { margin: 26px 0 10px; }
   .card h3, .founder h3 { font-size: 34px; }
   .card { padding: 40px; }
-  .about-intro h1 { font-size: 84px; }
+  .about-intro h1, .notfound h1 { font-size: 84px; }
   .contact-form, .contact-details { padding: 52px; border-radius: 18px; }
   .contact-grid { gap: 80px; margin-top: 64px; }
   .contact-mark { height: 118%; max-height: 2200px; }

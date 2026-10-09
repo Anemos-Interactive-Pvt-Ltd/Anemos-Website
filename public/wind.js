@@ -1175,7 +1175,7 @@
       });
       // Between panels the header keeps whatever it was last showing.
       if (idx < 0) return;
-      const hash = idx >= 1 && idx <= 4 ? '#services' : idx === 5 ? '#courses' : idx === 6 ? '#about' : '';
+      const hash = idx >= 1 && idx <= 4 ? '#services' : idx === 5 ? '#courses' : idx === 6 ? '#about' : idx === 7 ? '#follow' : '';
       for (const a of navLinks) {
         const here = pagePath(a.pathname) === pagePath(location.pathname);
         a.classList.toggle('active', here && (a.hash ? a.hash === hash : idx === 0));

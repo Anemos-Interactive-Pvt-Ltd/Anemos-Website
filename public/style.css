@@ -145,6 +145,9 @@ header {
     flex-direction: column;
     padding: 4px 0 10px;
     overflow: hidden;
+    overflow-y: auto;
+    max-height: calc(100vh - 100%);    /* never taller than the room under the header */
+    max-height: calc(100dvh - 100%);
     background: var(--bg);
     border-bottom: 1px solid var(--line);
     box-shadow: 0 12px 24px rgba(28, 28, 40, 0.08);
@@ -172,6 +175,7 @@ header {
   .nav.open a:nth-child(4) { transition-delay: 190ms; }
   .nav.open a:nth-child(5) { transition-delay: 240ms; }
   .nav.open a:nth-child(6) { transition-delay: 290ms; }
+  .nav.open a:nth-child(7) { transition-delay: 340ms; }
   .nav a + a { margin-left: 0; }
   .nav a {
     padding: 15px var(--gutter);
@@ -846,6 +850,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 
 @media (max-height: 480px) {
   .header-inner { padding: 8px var(--gutter); }
+  .nav a { padding: 10px var(--gutter); }
 }
 /* The narrowest phones, down to 300px. */
 @media (max-width: 360px) {

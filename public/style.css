@@ -875,6 +875,12 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 
 @media (max-height: 480px) {
   .header-inner { padding: 8px var(--gutter); }
+  /* Short screens: smaller, tighter dots, and the column starts below the fixed header. */
+  .is-live .journey-dots { top: calc(50% + 30px); padding: 6px 10px; }
+  .journey-dots::before { top: 16px; bottom: 16px; }
+  .journey-dots button { width: 20px; height: 20px; }
+  .journey-dots button + button { margin-top: 2px; }
+  .journey-dots button::before { top: 7px; right: 7px; bottom: 7px; left: 7px; }
   /* A phone on its side: the menu's seven links in two columns, so they fit without scrolling. */
   .nav { flex-direction: row; flex-wrap: wrap; }
   .nav a { width: 50%; padding: 10px var(--gutter); }

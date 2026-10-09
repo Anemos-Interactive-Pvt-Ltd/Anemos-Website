@@ -6,7 +6,7 @@
  * he runs through a hoop into a different world; the last hoop leads to the
  * contact page.
  * Contact page: the same ribbons, drifting quietly behind the heading.
- * Projects page: a building site for the game still in development.
+ * Products page: a building site for the game still in development.
  * Both pages: moving between pages, or jumping along the run, happens behind a
  * wipe of gusts.
  *
@@ -260,7 +260,9 @@
     el.setAttribute('aria-hidden', 'true');
     for (let i = 0; i < 7; i++) el.appendChild(document.createElement('i'));
     document.body.appendChild(el);
-    let busy = false;
+    let phase = null;      // 'covering' | 'clearing' | null
+    let onCovered = null;  // what to do once the screen is covered
+    let queued = null;     // a wipe asked for while one was clearing; it goes next
 
     // Put the bands in a state at once, without animating there.
     function snap(state) {
@@ -270,16 +272,23 @@
       void el.offsetWidth;
       el.classList.remove('is-still');
     }
-    function reset() { snap(''); busy = false; }
+    function reset() {
+      snap(''); phase = null;
+      if (queued) { const next = queued; queued = null; next(); }
+    }
     function clear() {
+      phase = 'clearing';
       el.classList.replace('is-covering', 'is-clearing');
       setTimeout(reset, WIPE_MS);
     }
+    // Cover the screen, then do whatever was asked for most recently.
     function cover(then) {
-      if (busy) return;
-      busy = true;
+      onCovered = then;
+      if (phase === 'covering') return;
+      if (phase === 'clearing') { queued = () => cover(onCovered); return; }
+      phase = 'covering';
       el.classList.add('is-covering');
-      setTimeout(then, WIPE_MS);
+      setTimeout(() => { const f = onCovered; onCovered = null; f(); }, WIPE_MS);
     }
 
     return {
@@ -303,7 +312,7 @@
         if (!root.classList.contains('wind-arriving')) return;
         try { sessionStorage.removeItem('wind-arrive'); } catch (e) { /* nothing to clear */ }
         if (!reducedMotion.matches) {
-          busy = true;
+          phase = 'covering';
           snap('is-covering');
           requestAnimationFrame(() => requestAnimationFrame(clear));
         }
@@ -336,7 +345,7 @@
     const SPACING = 12;
     const LENGTH = SPACING * (panels.length - 1);
     const REACH = 4.6;                                      // how far either side of its mark a panel stays up
-    const STOPS = [0, 8.6, 21.5, 33.6, 45.8, 57.7, 68.4, LENGTH]; // where the dots and nav links land
+    const STOPS = [0, 9.5, 21.6, 33.8, 45.8, 57.0, 69.7, LENGTH]; // where the dots and nav links land
     const GOAL = LENGTH + 5.4;                              // the last hoop: through it, the wind carries you to the contact page
     const END = LENGTH + 6;                                 // where the scroll runs out
     // A hoop halfway between each pair of panels. The world changes on the far side of every one.
@@ -346,21 +355,22 @@
     // One world per panel, plus the white of the contact page beyond the last hoop.
     const THEMES = [
       { back: 'city', sky: ['#141242', '#262262', '#1b3a66'], sil: '190,200,255', ground: ['#0f0e3c', '#090822'], stars: 1, link: true },
-      { back: 'city', sky: ['#1d1552', '#5a2a7c', '#e58a6f'], sil: '255,214,220', ground: ['#22123f', '#120924'], stars: 0.4, sun: [0.15, '255,196,140'] },
       { back: 'hills', sky: ['#0d2547', '#11505f', '#1f8f88'], sil: '205,255,244', ground: ['#0a2733', '#06151d'], turbines: true },
       { back: 'islands', sky: ['#1c0b16', '#6b1d2a', '#e2603a'], sil: '255,214,190', ground: ['#220c14', '#12060b'], stars: 1, pixel: true },
       { back: 'grid', sky: ['#0a2463', '#12409a', '#1b5fc4'], sil: '205,226,255', ground: ['#0a1f5c', '#061236'] },
       { back: 'circuit', sky: ['#04161c', '#06323a', '#0a5a5a'], sil: '120,255,235', ground: ['#03171c', '#020c0f'] },
+      { back: 'city', sky: ['#1d1552', '#5a2a7c', '#e58a6f'], sil: '255,214,220', ground: ['#22123f', '#120924'], stars: 0.4, sun: [0.15, '255,196,140'] },
       { back: 'city', sky: ['#0a1f4d', '#1a559c', '#3f9ed6'], sil: '220,240,255', ground: ['#0b1c44', '#060f26'], stars: 0.5 },
       { back: 'hills', sky: ['#1a2466', '#2c7790', '#f2b56b'], sil: '255,236,205', ground: ['#12204f', '#090f2a'], sun: [0.35, '255,226,160'] },
       { back: 'blank', sky: ['#ffffff', '#ffffff', '#f5f6fa'], sil: '38,34,98', ground: ['#f5f6fa', '#e4e6ef'], light: true },
     ];
+    // Panels sit every 12 units; each world runs from 6 before its panel to 6 after.
     const JUMPS = [
-      { x: 10.6, hw: 1.15, h: 0.8 },    // hurdle
-      { x: 13.4, hw: 1.15, h: 0.8 },    // hurdle
-      { x: 36.0, hw: 1.8, h: 1.0 },     // chasm
-      { x: 48.0, hw: 1.6, h: 1.25 },    // crates
-      { x: 60.0, hw: 1.75, h: 1.25 },   // gears
+      { x: 24.0, hw: 1.8, h: 1.0 },     // chasm (Original Games)
+      { x: 36.0, hw: 1.6, h: 1.25 },    // crates (Game Development)
+      { x: 48.0, hw: 1.75, h: 1.25 },   // gears (Technology Consulting)
+      { x: 58.6, hw: 1.15, h: 0.8 },    // hurdle (About us)
+      { x: 61.4, hw: 1.15, h: 0.8 },    // hurdle (About us)
     ];
     // The social icons stand on the course as blocks, and he hops over them one by one. They are
     // the real buttons from the Follow us panel, laid over the canvas so they can be clicked.
@@ -370,12 +380,21 @@
     const socialTiles = [...socials.children];
     const socialHome = socials.parentNode;
     for (const x of SOCIAL_X) JUMPS.push({ x, hw: 0.55, h: 0.85, hop: true });
-    const CHASM = [34.7, 37.3];
+    const CHASM = [22.7, 25.3];
     const CYCLE = 1.5;                                      // ground covered by one full stride cycle
+    // Speed bumps. However fast the page is scrolled, the runner tops out at MAX_SPEED and stops
+    // at each panel's mark for HOLD seconds the first time he reaches it, so every section is
+    // seen. (The hero needs no stop: the page opens on it.) The final mark is different: he
+    // waits there until the visitor scrolls again, so one big flick never leaves the page.
+    const MAX_SPEED = 28;                                   // units per second
+    const HOLD = 1.2;                                       // seconds
+    const LAST = STOPS.length - 1;
+    const arrived = STOPS.map(() => null);                  // when (or, for the last, where) he reached each mark
+    const released = STOPS.map((_, i) => i === 0);          // marks he has already waited at
 
     const ORBS = [];
     for (const j of JUMPS) for (const d of j.hop ? [0] : [-0.5, 0, 0.5]) ORBS.push(j.x + d * j.hw);
-    for (const x of [5, 6, 7, 18, 19, 20, 22.5, 24, 25.5, 29.5, 30.5, 31.5, 41, 42, 43, 53, 54, 55, 65, 66, 67, 77, 78, 79]) ORBS.push(x);
+    for (const x of [5, 6, 7, 10.5, 12, 13.5, 17, 18, 19, 29.5, 30.5, 31.5, 41, 42, 43, 53, 54, 55, 65, 66, 67, 77, 78, 79]) ORBS.push(x);
 
     const rand = rng(7);
     const STARS = Array.from({ length: 70 }, () => ({ x: rand(), y: rand() * 0.62, r: 0.5 + rand() * 1.1, ph: rand() * TAU }));
@@ -390,10 +409,10 @@
     const TRACES = Array.from({ length: 16 }, () => ({ x: rand() * 24, y: 0.3 + rand() * 2.7, a: 0.6 + rand() * 1.8, d: (rand() < 0.5 ? -1 : 1) * (0.2 + rand() * 0.4), b: 0.5 + rand() * 1.6, ph: rand() }));
     // Icons hanging in the air, [where, how high, which]. The wind uncovers each as he nears it.
     const ICONS = [
-      [22.6, 1.5, 'gamepad'], [24, 1.68, 'cube'], [25.4, 1.82, 'server'],
-      [32.2, 1.5, 'gamepad'], [33.4, 1.82, 'handheld'], [38.8, 1.5, 'joystick'], [40.2, 1.82, 'trophy'],
-      [44.2, 1.5, 'code'], [45.5, 1.82, 'pen'], [50.6, 1.5, 'layers'], [52, 1.82, 'cube'],
-      [56.2, 1.5, 'server'], [57.5, 1.82, 'cloud'], [62.6, 1.5, 'chip'], [64, 1.82, 'monitor'],
+      [10.6, 1.5, 'gamepad'], [12, 1.68, 'cube'], [13.4, 1.82, 'server'],
+      [20.2, 1.5, 'gamepad'], [21.4, 1.82, 'handheld'], [26.8, 1.5, 'joystick'], [28.2, 1.82, 'trophy'],
+      [32.2, 1.5, 'code'], [33.5, 1.82, 'pen'], [38.6, 1.5, 'layers'], [40, 1.82, 'cube'],
+      [44.2, 1.5, 'server'], [45.5, 1.82, 'cloud'], [50.6, 1.5, 'chip'], [52, 1.82, 'monitor'],
     ];
     const glyphs = makeGlyphs(ctx);
     const GUSTS = Array.from({ length: 18 }, () => ({ y: rand(), len: 1.5 + rand() * 3, delay: rand() * 0.35, width: 1.5 + rand() * 4 }));
@@ -438,7 +457,7 @@
       wide = H < 560;
       journey.classList.toggle('is-wide', wide);
       // Phones get a slightly smaller runner, so the copy above him has more room.
-      u = wide ? Math.min(H * 0.2, 110) : Math.min(H * 0.17, W * (W < 640 ? 0.22 : 0.26), 340);
+      u = wide ? Math.min(H * 0.2, 110) : Math.min(H * 0.17, W * (W < 400 ? 0.19 : W < 640 ? 0.22 : 0.26), 340);
       gy = H * (wide ? 0.84 : 0.82);
       rx = wide ? W * 0.7 : Math.max(W * 0.3, 96);
       // On a wide screen the course is stretched out, so that each world fills the screen and the
@@ -477,7 +496,7 @@
 
     // Whatever the screen, each panel has to stay clear of what happens beneath it. If the copy
     // is too tall for the room it has, it is scaled down (and widened to match) until it fits.
-    const CLEARANCE = [1.3, 1.85, 1.6, 2.15, 2.15, 2.15, 1.85, 1.3];   // runner-heights of scene under each panel
+    const CLEARANCE = [1.3, 1.6, 2.15, 2.15, 2.15, 1.75, 1.85, 1.3];   // runner-heights of scene under each panel
     function fitPanels() {
       panels.forEach((p, i) => {
         p.style.transform = p.style.width = p.style.maxWidth = '';
@@ -818,7 +837,7 @@
       ctx.stroke();
 
       // Two slabs hanging in the chasm.
-      for (const [wx, ph] of [[35.4, 0], [36.6, 2]]) {
+      for (const [wx, ph] of [[23.4, 0], [24.6, 2]]) {
         const x = X(wx), y = gy + (0.16 + Math.sin(time * 1.4 + ph) * 0.04) * u;
         if (x < -u || x > W + u) continue;
         ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.strokeStyle = 'rgba(47,208,201,0.55)'; ctx.lineWidth = 1.5;
@@ -1100,7 +1119,7 @@
       });
       // Between panels the header keeps whatever it was last showing.
       if (idx < 0) return;
-      const hash = idx === 1 ? '#about' : idx >= 2 && idx <= 5 ? '#services' : '';
+      const hash = idx >= 1 && idx <= 4 ? '#services' : idx === 5 ? '#about' : '';
       for (const a of navLinks) {
         const here = pagePath(a.pathname) === pagePath(location.pathname);
         a.classList.toggle('active', here && (a.hash ? a.hash === hash : idx === 0));
@@ -1158,9 +1177,31 @@
       last = now;
       time += dt;
 
-      const target = clamp((window.scrollY - top) / scrollLen, 0, 1) * END;
+      let target = clamp((window.scrollY - top) / scrollLen, 0, 1) * END;
       const prev = cur;
-      cur = first ? target : cur + (target - cur) * ease(dt, 7);
+      if (first) {
+        cur = target;
+        // Landing somewhere by link or dot counts as having seen everything before it.
+        STOPS.forEach((x, i) => { if (x <= cur + 0.01) released[i] = true; });
+      } else {
+        // The next mark he has not yet waited at holds him until its time is up.
+        for (let i = 1; i < STOPS.length; i++) {
+          if (released[i]) continue;
+          if (cur >= STOPS[i] - 0.02) {
+            if (i === LAST) {
+              if (arrived[i] === null) arrived[i] = window.scrollY;
+              if (window.scrollY > arrived[i] + 40) { released[i] = true; continue; }
+            } else {
+              if (arrived[i] === null) arrived[i] = time;
+              if (time - arrived[i] >= HOLD) { released[i] = true; continue; }
+            }
+          }
+          target = Math.min(target, STOPS[i]);
+          break;
+        }
+        const step = (target - cur) * ease(dt, 7);
+        cur += clamp(step, -MAX_SPEED * dt, MAX_SPEED * dt);
+      }
       if (Math.abs(target - cur) < 0.0005) cur = target;
       const dx = first ? 0 : cur - prev;
       vel += (dx / dt - vel) * ease(dt, 10);
@@ -1200,14 +1241,14 @@
       for (const [i, px] of PORTALS.entries()) drawHoop(px, i, false);
       ICONS.forEach(drawIcon);
       drawGate(-0.25, 'START');
-      for (const [i, wx] of [22.6, 24, 25.4].entries()) drawPennant(wx, 1.0 + i * 0.14, i * 1.3);
+      for (const [i, wx] of [10.6, 12, 13.4].entries()) drawPennant(wx, 1.0 + i * 0.14, i * 1.3);
       drawGate(LENGTH - 0.9, '', true);
       drawPennant(LENGTH + 1.3, 1.5, 0.7);
-      drawHurdle(JUMPS[0].x);
-      drawHurdle(JUMPS[1].x);
+      drawHurdle(JUMPS[3].x);
+      drawHurdle(JUMPS[4].x);
       placeSocials();
-      drawCrates(JUMPS[3].x);
-      drawGears(JUMPS[4].x);
+      drawCrates(JUMPS[1].x);
+      drawGears(JUMPS[2].x);
       drawOrbs();
       drawRunner(dt);
       for (const [i, px] of PORTALS.entries()) drawHoop(px, i, true);
@@ -1304,7 +1345,7 @@
     measure();
   }
 
-  /* ---------- Projects: the building site ---------- */
+  /* ---------- Products: the building site ---------- */
 
   function initSite(canvas) {
     const ctx = canvas.getContext('2d');

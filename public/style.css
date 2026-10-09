@@ -475,6 +475,50 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .is-wide .social svg { width: 19px; height: 19px; }
 .is-wide .socials { margin-top: 10px; }
 
+/* The team */
+.team {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  list-style: none;
+}
+.team li {
+  display: flex;
+  align-items: flex-start;
+  width: 330px;
+  max-width: 100%;
+  margin: 0 24px 8px 0;
+}
+.team-badge {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-right: 14px;
+  font-family: 'Questrial', 'Century Gothic', 'Futura', sans-serif;
+  font-size: 22px;
+  color: var(--teal-bright);
+  border: 1.5px solid var(--teal-bright);
+  border-radius: 50%;
+  background: rgba(20, 18, 66, 0.4);
+}
+.team-text { display: flex; flex-direction: column; }
+.team-name {
+  font-family: 'Questrial', 'Century Gothic', 'Futura', sans-serif;
+  font-size: 19px;
+  letter-spacing: 0.03em;
+  color: #fff;
+}
+.team-role { margin-top: 2px; font-size: 14px; color: var(--teal-bright); }
+.team-bio { margin-top: 2px; font-size: 14px; color: #cfd2e6; }
+.is-wide .team li { width: auto; margin: 0 0 6px; }
+.is-wide .team-badge { width: 30px; height: 30px; font-size: 15px; margin-right: 10px; }
+.is-wide .team-name { font-size: 14px; }
+.is-wide .team-role, .is-wide .team-bio { font-size: 11px; }
+
+/* One screen for the stage plus 9.2 of scrolling; wind.js lengthens this on large screens. */
 .journey.is-live { height: 1020vh; height: 1020lvh; }
 .is-live .journey-stage {
   position: -webkit-sticky;
@@ -628,6 +672,10 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 }
 @media (max-width: 640px) {
   .journey.is-live { height: 920vh; height: 920lvh; }
+  .team li { width: 100%; margin-right: 0; }
+  .team-badge { width: 40px; height: 40px; font-size: 18px; margin-right: 12px; }
+  .team-name { font-size: 17px; }
+  .team-role, .team-bio { font-size: 13px; }
   .social { width: 48px; height: 48px; border-radius: 14px; margin: 0 8px 8px 0; }
   .social svg { width: 23px; height: 23px; }
   .is-live .panel { top: 84px; top: clamp(84px, 12vh, 120px); }
@@ -675,7 +723,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 }
 /* The narrowest phones, down to 300px. */
 @media (max-width: 360px) {
-  .is-live .panel { top: 72px; right: calc(var(--gutter) + 20px); }
+  .is-live .panel { top: 84px; right: calc(var(--gutter) + 20px); }
   .is-live .panel-hero h1 { font-size: 23px; }
   .is-live .panel-hero p, .is-live .panel .lede { font-size: 14px; line-height: 1.5; }
   .is-live .panel h2 { font-size: 22px; }
@@ -683,6 +731,12 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .journey-dots button { width: 20px; height: 20px; }
   .journey-dots button::before { top: 7px; right: 7px; bottom: 7px; left: 7px; }
   .chips li { font-size: 13px; padding: 5px 12px; }
+  /* Founders: name and role only, on the narrowest phones. */
+  .team li { margin-bottom: 6px; }
+  .team-badge { width: 34px; height: 34px; font-size: 16px; margin-right: 10px; }
+  .team-name { font-size: 16px; }
+  .team-role { font-size: 13px; }
+  .team-bio { display: none; }
   .social { width: 44px; height: 44px; border-radius: 13px; margin: 0 8px 8px 0; }
   .social svg { width: 21px; height: 21px; }
 }
@@ -827,6 +881,10 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .is-live .panel-hero, .site-copy { max-width: 1040px; }
   .chips li { font-size: 18px; }
   .is-live .scroll-cue { font-size: 16px; }
+  .team li { width: 380px; }
+  .team-badge { width: 62px; height: 62px; font-size: 28px; }
+  .team-name { font-size: 24px; }
+  .team-role, .team-bio { font-size: 17px; }
   .social { width: 76px; height: 76px; border-radius: 22px; margin: 0 18px 18px 0; }
   .social svg { width: 36px; height: 36px; }
   footer { font-size: 16px; }
@@ -849,6 +907,10 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .is-live .panel-hero, .site-copy { max-width: 1500px; }
   .chips li { font-size: 25px; padding: 12px 28px; }
   .is-live .scroll-cue { font-size: 22px; }
+  .team li { width: 520px; margin-right: 48px; }
+  .team-badge { width: 84px; height: 84px; font-size: 38px; margin-right: 24px; }
+  .team-name { font-size: 32px; }
+  .team-role, .team-bio { font-size: 23px; }
   .social { width: 104px; height: 104px; border-radius: 28px; border-width: 3px; margin: 0 24px 24px 0; }
   .social svg { width: 48px; height: 48px; }
   footer { font-size: 22px; }

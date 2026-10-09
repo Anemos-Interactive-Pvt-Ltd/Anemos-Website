@@ -3,85 +3,193 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anemos Interactive — Game Development &amp; Technology Studio, Mumbai</title>
-  <meta name="description" content="Anemos Interactive Private Limited is a Mumbai-based game development and technology studio building original IP, B2B game development services, and IT consulting.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Questrial&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <title>Anemos Interactive — Game &amp; Technology Studio, Mumbai</title>
+  <meta name="description" content="Anemos Interactive is a Mumbai game development and technology studio: original games, B2B game development in Unity and Unreal, and web and app development.">
+  <link rel="canonical" href="https://anemosinteractive.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Anemos Interactive">
+  <meta property="og:title" content="Anemos Interactive — Game &amp; Technology Studio, Mumbai">
+  <meta property="og:description" content="Anemos Interactive is a Mumbai game development and technology studio: original games, B2B game development in Unity and Unreal, and web and app development.">
+  <meta property="og:url" content="https://anemosinteractive.com/">
+  <meta property="og:image" content="https://anemosinteractive.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Anemos Interactive: games and technology, built in Mumbai, made for the world.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://anemosinteractive.com/og-image.png">
+  <meta name="theme-color" content="#141242">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/questrial/v19/QdVUSTchPBm7nuUeVf70viFluW44JQ.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Anemos Interactive Private Limited",
+    "alternateName": "Anemos Interactive",
+    "url": "https://anemosinteractive.com/",
+    "logo": "https://anemosinteractive.com/apple-touch-icon.png",
+    "image": "https://anemosinteractive.com/og-image.png",
+    "description": "Independent game development and technology studio in Mumbai: original games, B2B game development in Unity and Unreal, and full-stack web and app development.",
+    "email": "contact@anemosinteractive.com",
+    "telephone": "+91 93723 62676",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "F50, 1st Floor, The Zone, Chandravarkar Road, Borivali West",
+      "addressLocality": "Mumbai",
+      "addressRegion": "Maharashtra",
+      "postalCode": "400092",
+      "addressCountry": "IN"
+    },
+    "founder": [
+      { "@type": "Person", "name": "Ronak Koshy Jacob", "jobTitle": "Founder & Managing Director" },
+      { "@type": "Person", "name": "Latika Ganesh Salian", "jobTitle": "Co-founder & Creative Director" }
+    ],
+    "sameAs": [
+      "https://www.youtube.com/@anemosinteractive",
+      "https://github.com/Anemos-Interactive-Pvt-Ltd",
+      "https://www.instagram.com/anemos_interactive/",
+      "https://x.com/anemosinteract",
+      "https://www.linkedin.com/company/anemos-interactive"
+    ]
+  }
+  </script>
+  <script>try { if (sessionStorage.getItem('wind-arrive')) document.documentElement.classList.add('wind-arriving'); } catch (e) {}</script>
 </head>
-<body>
+<body class="home">
 
 <header>
   <div class="container header-inner">
-    <a class="wordmark" href="index.html"><img src="logo.svg" alt="Anemos Interactive logo" class="logo-symbol">anemos <span>interactive</span></a>
-    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+    <a class="wordmark" href="index.html"><img src="logo-white.svg" alt="Anemos Interactive logo" class="logo-symbol">anemos <span>interactive</span></a>
+    <button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
     <nav class="nav" id="site-nav">
       <a href="index.html" class="active">Home</a>
-      <a href="index.html#about">About</a>
       <a href="index.html#services">Services</a>
-      <a href="contact.html">Contact</a>
+      <a href="products.html">Products</a>
+      <a href="index.html#courses">Courses</a>
+      <a href="index.html#follow">Socials</a>
+      <a href="index.html#about">About us</a>
+      <a href="contact.html">Contact us</a>
     </nav>
   </div>
 </header>
 
-<section class="hero">
-  <div class="container">
-    <h1>Games and technology, <em>built in Mumbai</em>, made for the world.</h1>
-    <p>Anemos Interactive is an independent game development and technology studio. We build original interactive worlds, and we build software for businesses that need it done right.</p>
-    <a class="btn" href="contact.html">Get in touch</a>
-  </div>
-</section>
+<main class="journey" id="journey">
+  <!-- Same test as setLive() in wind.js, run before the panels are parsed, so the page is laid
+       out for the run from its first paint instead of jumping into it when the script loads. -->
+  <script>try { if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(min-height: 300px)').matches) document.getElementById('journey').classList.add('is-live'); } catch (e) {}</script>
+  <div class="journey-stage">
+    <canvas class="journey-canvas" aria-hidden="true"></canvas>
+    <div class="container journey-panels">
+      <section class="panel panel-hero" id="top" data-label="Home">
+        <h1 data-wind="words">Games and technology, <em>built in Mumbai</em>, made for the world.</h1>
+        <p data-wind="words">Anemos Interactive is an independent game development and technology studio. We build original interactive worlds, and we build software for businesses that need it done right.</p>
+        <div class="scroll-cue" data-wind aria-hidden="true">
+          <span class="cue-mouse"><i></i></span>
+          <span class="cue-swipe"><i></i><b></b></span>
+          <span class="cue-text cue-text-mouse">Scroll to follow the wind</span>
+          <span class="cue-text cue-text-touch">Swipe up to follow the wind</span>
+        </div>
+      </section>
 
-<section id="about">
-  <div class="container">
-    <div class="kicker">About us</div>
-    <h2>A digital-first studio</h2>
-    <p class="lede">Anemos Interactive Private Limited is a fully online business. Our team develops, publishes, and delivers all of our work digitally — games distributed through online storefronts, and software services delivered remotely to clients. We are incorporated in Mumbai, Maharashtra, and recognised under the DPIIT Startup India programme.</p>
-  </div>
-</section>
+      <section class="panel" id="services" data-label="What we do">
+        <div class="kicker" data-wind>What we do</div>
+        <h2 data-wind="words">Three lines of work</h2>
+        <p class="lede" data-wind="words">Three lines of work, one way of working: a pro-AI studio with an AI-assisted workflow on every project.</p>
+        <ul class="chips">
+          <li data-wind>Original Games</li>
+          <li data-wind>Game Development Services</li>
+          <li data-wind>Technology Consulting</li>
+        </ul>
+      </section>
 
-<section id="services" class="alt">
-  <div class="container">
-    <div class="kicker">What we do</div>
-    <h2>Three lines of work</h2>
-    <div class="grid">
-      <div class="card">
-        <div class="dot"></div>
-        <h3>Original Games</h3>
-        <p>We develop our own intellectual property — story-driven action games designed for global digital distribution on PC and console storefronts. Our flagship original title is currently in development.</p>
-      </div>
-      <div class="card">
-        <div class="dot"></div>
-        <h3>Game Development Services</h3>
-        <p>End-to-end B2B game development for partners and clients — design, 3D art, engineering, and production, delivered remotely by our team.</p>
-      </div>
-      <div class="card">
-        <div class="dot"></div>
-        <h3>Technology Consulting</h3>
-        <p>Software engineering and IT consulting services — interactive 3D applications, real-time experiences, and custom tools for businesses.</p>
-      </div>
+      <section class="panel" id="original-games" data-label="Original Games">
+        <div class="kicker" data-wind>What we do · 01 / 03</div>
+        <h2 data-wind="words">Original Games</h2>
+        <p class="lede" data-wind="words">We develop our own intellectual property — story-driven action games for global digital distribution on PC and console storefronts. Our first title, <em>It Still Beats</em>, is a thriller, and it is coming soon.</p>
+        <a class="btn btn-ghost" href="products.html" data-wind>See what's coming</a>
+      </section>
+
+      <section class="panel" id="game-development" data-label="Game Development Services">
+        <div class="kicker" data-wind>What we do · 02 / 03</div>
+        <h2 data-wind="words">Game Development Services</h2>
+        <p class="lede" data-wind="words">End-to-end B2B game development — full games in Unity and Unreal, 3D assets in Blender, and engine-level work in C++ and C# down to OpenGL and DirectX drivers. We build WebGL projects for the browser too.</p>
+        <ul class="chips">
+          <li data-wind>Unity</li>
+          <li data-wind>Unreal</li>
+          <li data-wind>Blender</li>
+          <li data-wind>C++ / C#</li>
+          <li data-wind>OpenGL · DirectX</li>
+          <li data-wind>WebGL</li>
+        </ul>
+      </section>
+
+      <section class="panel" id="technology-consulting" data-label="Technology Consulting">
+        <div class="kicker" data-wind>What we do · 03 / 03</div>
+        <h2 data-wind="words">Technology Consulting</h2>
+        <p class="lede" data-wind="words">Full-stack web and app development — iOS and Android apps in Flutter with Firebase, web platforms on the MERN stack, and whatever else your project needs. We also build interactive 3D applications and custom tools for businesses.</p>
+        <ul class="chips">
+          <li data-wind>MERN stack</li>
+          <li data-wind>Flutter</li>
+          <li data-wind>Firebase</li>
+          <li data-wind>iOS · Android</li>
+          <li data-wind>Full-stack web</li>
+        </ul>
+      </section>
+
+      <section class="panel" id="courses" data-label="Courses">
+        <div class="kicker" data-wind>Courses · Coming soon</div>
+        <h2 data-wind="words">Learn the craft from a studio that ships it</h2>
+        <p class="lede" data-wind="words">We are building hands-on courses in game development and 3D art, taught the way we work: real engines, real pipelines, real projects. Alongside them, the Anemos Recruitment Programme, a path from the course straight into the studio.</p>
+        <ul class="chips">
+          <li data-wind>Game Development course</li>
+          <li data-wind>3D Art course</li>
+          <li data-wind>Recruitment Programme</li>
+        </ul>
+      </section>
+
+      <section class="panel" id="about" data-label="About us">
+        <div class="kicker" data-wind>About us</div>
+        <h2 data-wind="words">A digital-first studio</h2>
+        <p class="lede" data-wind="words">Anemos Interactive Private Limited is a fully online studio, incorporated in Mumbai and recognised under the DPIIT Startup India programme. Our games reach players through online storefronts; our client work is delivered remotely, anywhere in the world.</p>
+        <a class="btn btn-ghost" href="about.html" data-wind>Get to know us</a>
+      </section>
+
+      <section class="panel" id="follow" data-label="Follow us">
+        <div class="kicker" data-wind>Follow us</div>
+        <h2 data-wind="words">Follow the wind</h2>
+        <p class="lede" data-wind="words">New worlds are on the wind. Follow along and be the first to see them.</p>
+        <ul class="socials">
+          <li data-wind><a class="social" href="https://www.youtube.com/@anemosinteractive" aria-label="YouTube (opens in a new tab)" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a></li>
+          <li data-wind><a class="social" href="https://github.com/Anemos-Interactive-Pvt-Ltd" aria-label="GitHub (opens in a new tab)" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></li>
+          <li data-wind><a class="social" href="https://www.instagram.com/anemos_interactive/" aria-label="Instagram (opens in a new tab)" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.500v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.500 0 0 0 4 7.5v9A3.5 3.500 0 0 0 7.5 20h9a3.500 3.500 0 0 0 3.500-3.500v-9A3.500 3.500 0 0 0 16.500 4h-9zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.250-3.500a1.250 1.250 0 1 1 0 2.500 1.250 1.250 0 0 1 0-2.500z"/></svg></a></li>
+          <li data-wind><a class="social" href="https://x.com/anemosinteract" aria-label="X (opens in a new tab)" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a></li>
+          <li data-wind><a class="social" href="https://www.linkedin.com/company/anemos-interactive" aria-label="LinkedIn (opens in a new tab)" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+        </ul>
+      </section>
+
+      <section class="panel" id="work-with-us" data-label="Work with us">
+        <div class="kicker" data-wind>Work with us</div>
+        <h2 data-wind="words">Everything we do happens online</h2>
+        <p class="lede" data-wind="words">From client meetings to final delivery, our operations are remote and digital. If you'd like to discuss a project or partnership, the fastest way to reach us is by email.</p>
+        <a class="btn" href="contact.html" data-wind>Contact us</a>
+        <div class="scroll-cue" data-wind aria-hidden="true"><span class="cue-bar"></span>Or keep running: the wind will take you there</div>
+      </section>
     </div>
   </div>
-</section>
-
-<section>
-  <div class="container">
-    <div class="kicker">Work with us</div>
-    <h2>Everything we do happens online</h2>
-    <p class="lede">From client meetings to final delivery, our operations are remote and digital. If you'd like to discuss a project or partnership, the fastest way to reach us is by email.</p>
-    <a class="btn" href="contact.html">Contact us</a>
-  </div>
-</section>
+</main>
 
 <footer>
   <div class="container">
     <div class="wordmark"><img src="logo-white.svg" alt="" class="logo-symbol logo-symbol-footer">anemos <span>interactive</span></div>
     <div class="legal">
       Anemos Interactive Private Limited<br>
-      CIN: U58203MH2026PTC475216 &nbsp;·&nbsp; GSTIN: 27ABGCA5982P1ZU<br>
+      CIN: U58203MH2026PTC475216 &nbsp;·&nbsp; GSTIN: 27ABGCA5982P1ZU &nbsp;·&nbsp; IEC: ABGCA5982P<br>
       Registered office (mailing address): F50, 1st Floor, The Zone, Chandravarkar Road, Borivali West, Mumbai – 400092, Maharashtra, India<br>
       <a href="mailto:contact@anemosinteractive.com">contact@anemosinteractive.com</a><br><br>
       © 2026 Anemos Interactive Private Limited. All rights reserved.
@@ -104,6 +212,7 @@
     toggle.setAttribute('aria-expanded', 'false');
   }));
 </script>
+<script src="wind.js"></script>
 
 </body>
 </html>

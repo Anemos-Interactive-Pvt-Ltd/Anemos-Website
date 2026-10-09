@@ -4,37 +4,82 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact — Anemos Interactive</title>
-  <meta name="description" content="Contact Anemos Interactive Private Limited — email, phone, and mailing address.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Questrial&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <meta name="description" content="Get in touch with Anemos Interactive in Mumbai: email, phone, mailing address and a contact form. We typically reply within one business day.">
+  <link rel="canonical" href="https://anemosinteractive.com/contact.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Anemos Interactive">
+  <meta property="og:title" content="Contact — Anemos Interactive">
+  <meta property="og:description" content="Get in touch with Anemos Interactive in Mumbai: email, phone, mailing address and a contact form. We typically reply within one business day.">
+  <meta property="og:url" content="https://anemosinteractive.com/contact.html">
+  <meta property="og:image" content="https://anemosinteractive.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Anemos Interactive: games and technology, built in Mumbai, made for the world.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://anemosinteractive.com/og-image.png">
+  <meta name="theme-color" content="#141242">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/questrial/v19/QdVUSTchPBm7nuUeVf70viFluW44JQ.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="stylesheet" href="style.css">
+  <script>try { if (sessionStorage.getItem('wind-arrive')) document.documentElement.classList.add('wind-arriving'); } catch (e) {}</script>
 </head>
 <body>
 
 <header>
   <div class="container header-inner">
     <a class="wordmark" href="index.html"><img src="logo.svg" alt="Anemos Interactive logo" class="logo-symbol">anemos <span>interactive</span></a>
-    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+    <button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
     <nav class="nav" id="site-nav">
       <a href="index.html">Home</a>
-      <a href="index.html#about">About</a>
       <a href="index.html#services">Services</a>
-      <a href="contact.html" class="active">Contact</a>
+      <a href="products.html">Products</a>
+      <a href="index.html#courses">Courses</a>
+      <a href="index.html#follow">Socials</a>
+      <a href="index.html#about">About us</a>
+      <a href="contact.html" class="active">Contact us</a>
     </nav>
   </div>
 </header>
 
-<section>
+<main class="contact-main">
+<img class="contact-mark" src="brand/Anemos_Symbol_Colour.svg" alt="" aria-hidden="true">
+<section class="page-intro">
+  <canvas class="wind-ambient" aria-hidden="true"></canvas>
   <div class="container">
-    <div class="kicker">Contact</div>
-    <h2>Get in touch</h2>
-    <p class="lede">We operate as a fully online business — the best way to reach us is by email or the form below. We typically respond within one business day.</p>
+    <div class="kicker" data-wind>Contact</div>
+    <h1 class="page-title" data-wind="words">Get in touch</h1>
+    <p class="lede" data-wind="words">We operate as a fully online business — the best way to reach us is by email or the form below. We typically respond within one business day.</p>
 
-    <div class="contact-grid">
-      <div class="contact-block">
+    <!-- The form comes first in the markup, so it is first when the page stacks on phones and
+         portrait tablets. On wider screens the grid puts the details on the left of it. -->
+    <div class="contact-grid" data-wind>
+      <div class="contact-block contact-form">
+        <h3>Send us a message</h3>
+        <!-- Delivered by Web3Forms to contact@anemosinteractive.com. The access key is meant to be
+             public. With JavaScript the page sends it itself and confirms in place; without, the
+             browser posts it and Web3Forms shows its own thank-you page. -->
+        <form id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="298661da-30ce-46aa-8a7e-5281bd568837">
+          <input type="hidden" name="subject" value="New message from anemosinteractive.com">
+          <input type="hidden" name="from_name" value="Anemos Interactive website">
+          <p style="display:none"><label>Leave this box empty: <input type="checkbox" name="botcheck" tabindex="-1"></label></p>
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="6" required></textarea>
+          <button class="btn" type="submit">Send message</button>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <div class="contact-block contact-details">
         <h3>Email</h3>
         <p><a href="mailto:contact@anemosinteractive.com">contact@anemosinteractive.com</a></p>
 
@@ -51,34 +96,21 @@
         <h3>Company details</h3>
         <p>
           CIN: U58203MH2026PTC475216<br>
-          GSTIN: 27ABGCA5982P1ZU
+          GSTIN: 27ABGCA5982P1ZU<br>
+          IEC: ABGCA5982P
         </p>
-      </div>
-
-      <div class="contact-block">
-        <h3>Send us a message</h3>
-        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-          <input type="hidden" name="form-name" value="contact">
-          <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" required>
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" required>
-          <label for="message">Message</label>
-          <textarea id="message" name="message" rows="6" required></textarea>
-          <button class="btn" type="submit">Send message</button>
-        </form>
       </div>
     </div>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="container">
     <div class="wordmark"><img src="logo-white.svg" alt="" class="logo-symbol logo-symbol-footer">anemos <span>interactive</span></div>
     <div class="legal">
       Anemos Interactive Private Limited<br>
-      CIN: U58203MH2026PTC475216 &nbsp;·&nbsp; GSTIN: 27ABGCA5982P1ZU<br>
+      CIN: U58203MH2026PTC475216 &nbsp;·&nbsp; GSTIN: 27ABGCA5982P1ZU &nbsp;·&nbsp; IEC: ABGCA5982P<br>
       Registered office (mailing address): F50, 1st Floor, The Zone, Chandravarkar Road, Borivali West, Mumbai – 400092, Maharashtra, India<br>
       <a href="mailto:contact@anemosinteractive.com">contact@anemosinteractive.com</a><br><br>
       © 2026 Anemos Interactive Private Limited. All rights reserved.
@@ -101,6 +133,34 @@
     toggle.setAttribute('aria-expanded', 'false');
   }));
 </script>
+<script>
+  // Send the form from the page and confirm in place, with the plain post as the fallback.
+  const form = document.getElementById('contact-form');
+  if (form && window.fetch) {
+    const status = form.querySelector('.form-status');
+    const button = form.querySelector('button[type="submit"]');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      button.disabled = true;
+      status.classList.remove('is-error');
+      status.textContent = 'Sending…';
+      const data = {};
+      new FormData(form).forEach((v, k) => { data[k] = v; });
+      try {
+        const r = await fetch(form.action, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
+        const d = await r.json();
+        if (!d.success) throw new Error(d.message || 'not sent');
+        form.reset();
+        status.textContent = 'Thanks, your message is on its way. We typically reply within one business day.';
+      } catch (err) {
+        status.classList.add('is-error');
+        status.textContent = 'Sorry, that did not send. Please email contact@anemosinteractive.com instead.';
+      }
+      button.disabled = false;
+    });
+  }
+</script>
+<script src="wind.js"></script>
 
 </body>
 </html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>It Still Beats — Anemos Interactive</title>
+  <meta name="description" content="It Still Beats, the first original game from Anemos Interactive, is a thriller coming soon to PC and console. Follow our socials for updates.">
+  <link rel="canonical" href="https://anemosinteractive.com/products.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Anemos Interactive">
+  <meta property="og:title" content="It Still Beats — Anemos Interactive">
+  <meta property="og:description" content="It Still Beats, the first original game from Anemos Interactive, is a thriller coming soon to PC and console. Follow our socials for updates.">
+  <meta property="og:url" content="https://anemosinteractive.com/products.html">
+  <meta property="og:image" content="https://anemosinteractive.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Anemos Interactive: games and technology, built in Mumbai, made for the world.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://anemosinteractive.com/og-image.png">
+  <meta name="theme-color" content="#141242">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/questrial/v19/QdVUSTchPBm7nuUeVf70viFluW44JQ.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <script>try { if (sessionStorage.getItem('wind-arrive')) document.documentElement.classList.add('wind-arriving'); } catch (e) {}</script>
+</head>
+<body class="home">
+
+<header>
+  <div class="container header-inner">
+    <a class="wordmark" href="index.html"><img src="logo-white.svg" alt="Anemos Interactive logo" class="logo-symbol">anemos <span>interactive</span></a>
+    <button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" id="site-nav">
+      <a href="index.html">Home</a>
+      <a href="index.html#services">Services</a>
+      <a href="products.html" class="active">Products</a>
+      <a href="index.html#courses">Courses</a>
+      <a href="index.html#follow">Socials</a>
+      <a href="index.html#about">About us</a>
+      <a href="contact.html">Contact us</a>
+    </nav>
+  </div>
+</header>
+
+<main class="site-page">
+  <canvas class="site-canvas" aria-hidden="true"></canvas>
+  <div class="container">
+    <section class="panel panel-hero site-copy">
+      <div class="kicker" data-wind>Upcoming project · Thriller</div>
+      <h1 data-wind="words"><em>It Still Beats</em> is coming soon.</h1>
+      <p data-wind="words">Our first original title is a story-driven thriller, built in-house for PC and console storefronts. More will be revealed soon. Follow our socials and you will get every update as it comes.</p>
+      <a class="btn" href="index.html#follow" data-wind>Follow for updates</a>
+      <a class="btn btn-ghost" href="contact.html" data-wind>Get in touch</a>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="wordmark"><img src="logo-white.svg" alt="" class="logo-symbol logo-symbol-footer">anemos <span>interactive</span></div>
+    <div class="legal">
+      Anemos Interactive Private Limited<br>
+      CIN: U58203MH2026PTC475216 &nbsp;·&nbsp; GSTIN: 27ABGCA5982P1ZU &nbsp;·&nbsp; IEC: ABGCA5982P<br>
+      Registered office (mailing address): F50, 1st Floor, The Zone, Chandravarkar Road, Borivali West, Mumbai – 400092, Maharashtra, India<br>
+      <a href="mailto:contact@anemosinteractive.com">contact@anemosinteractive.com</a><br><br>
+      © 2026 Anemos Interactive Private Limited. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const nav = document.getElementById('site-nav');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+</script>
+<script src="wind.js"></script>
+
+</body>
+</html>

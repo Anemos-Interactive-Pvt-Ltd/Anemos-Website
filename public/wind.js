@@ -427,7 +427,7 @@
     let live = false, visible = true, first = true, wide = false;
     let activeIdx = -2;
     let gust = null;                                        // the burst set off by running through a hoop
-    const scarf = Array.from({ length: 8 }, () => ({ x: 0, y: 0, px: 0, py: 0 }));
+    const scarf = Array.from({ length: 11 }, () => ({ x: 0, y: 0, px: 0, py: 0 }));
 
     const X = wx => rx + (wx - cur) * span;
 
@@ -603,7 +603,7 @@
     }
     // The scarf: a thin teal line through the scarf points, as on the original figure.
     function drawScarf() {
-      ctx.strokeStyle = '#2fd0c9'; ctx.lineWidth = 0.04 * u; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.strokeStyle = '#2fd0c9'; ctx.lineWidth = 0.052 * u; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
       ctx.beginPath(); ctx.moveTo(scarf[0].x, scarf[0].y);
       for (let i = 1; i < scarf.length - 1; i++) {
         const a = scarf[i], b = scarf[i + 1];

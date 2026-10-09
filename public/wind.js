@@ -434,6 +434,12 @@
       // On a wide screen the course is stretched out, so that each world fills the screen and the
       // hoop into the next one is off to the right until the visitor scrolls towards it.
       span = Math.max(u, (W - rx + 0.6 * u) / PORTALS[0]);
+      // Beyond laptop width the course is stretched further still, up to 60% longer at 2560px
+      // and above, and the page is made that much taller: more ground to cover between worlds,
+      // and more scrolling to cover it.
+      const longer = wide ? 1 : 1 + 0.6 * clamp((W - 1440) / 1120, 0, 1);
+      span *= longer;
+      journey.style.height = longer > 1 ? stage.offsetHeight * (1 + 8 * longer) + 'px' : '';
       guide = new Float32Array(Math.ceil((W + PAD * 2) / STEP) + 1);
       scratch = new Float32Array(guide.length);
       top = journey.getBoundingClientRect().top + window.scrollY;
@@ -1202,6 +1208,7 @@
         start();
       } else {
         stop();
+        journey.style.height = '';
       }
     }
 

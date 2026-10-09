@@ -1,8 +1,0 @@
-# Netlify deploy configuration for the Anemos Interactive site.
-#
-# This is a plain static site: there is nothing to compile, so there is no
-# build command. Everything that should be publicly served lives in public/,
-# which keeps repo files like README.md and the CI workflow off the live domain.
-
-[build]
-  publish = "public"

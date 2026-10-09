@@ -891,7 +891,8 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .about-intro .kicker, .about-block .kicker { color: var(--teal-bright); }
 .about-block h2 { color: #fff; }
 .about-block.alt-dark { background: rgba(255, 255, 255, 0.04); }
-.about-grid { margin-top: 32px; }
+.about-grid { margin-top: 32px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+@media (min-width: 900px) { .about-grid { grid-template-columns: repeat(2, 1fr); } }
 .card-dark {
   background: rgba(20, 18, 66, 0.45);
   border-color: rgba(255, 255, 255, 0.14);

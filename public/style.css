@@ -633,6 +633,27 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .scroll-cue { font-size: 16px; }
   footer { font-size: 16px; }
 }
+/* 4K at native scale. */
+@media (min-width: 3200px) {
+  :root { --container: 2100px; --gutter: 40px; }
+  body { font-size: 28px; }
+  .wordmark { font-size: 40px; }
+  .logo-symbol { height: 62px; margin-right: 20px; }
+  .header-inner { padding: 26px var(--gutter); }
+  .nav a { font-size: 26px; }
+  .nav a + a { margin-left: 44px; }
+  .panel-hero h1 { font-size: 104px; }
+  .panel h2 { font-size: 80px; margin-bottom: 28px; }
+  .panel-hero p, .panel .lede { font-size: 32px; }
+  .panel .kicker { font-size: 22px; margin-bottom: 18px; }
+  .btn { font-size: 26px; padding: 22px 52px; margin-top: 44px; border-radius: 6px; }
+  .is-live .panel { top: 270px; max-width: 1300px; }
+  .is-live .panel-hero, .site-copy { max-width: 1500px; }
+  .chips li { font-size: 25px; padding: 12px 28px; }
+  .scroll-cue { font-size: 22px; }
+  footer { font-size: 22px; }
+  footer .wordmark { font-size: 30px; }
+}
 
 /* ============ Projects: the building site ============ */
 .site-page {

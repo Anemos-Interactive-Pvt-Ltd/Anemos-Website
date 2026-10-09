@@ -391,6 +391,7 @@
 
     // Scene state
     let W = 0, H = 0, u = 100, gy = 0, rx = 0;
+    let span = 100;                                         // pixels per unit of course: u, stretched on wide screens
     let guide = new Float32Array(0), scratch = new Float32Array(0);
     let top = 0, scrollLen = 1;
     let cur = 0, vel = 0, phase = 0, runAmt = 0, facing = 1;
@@ -400,7 +401,7 @@
     let gust = null;                                        // the burst set off by running through a hoop
     const scarf = Array.from({ length: 8 }, () => ({ x: 0, y: 0, px: 0, py: 0 }));
 
-    const X = wx => rx + (wx - cur) * u;
+    const X = wx => rx + (wx - cur) * span;
 
     function jumpAt(wx) {
       for (const j of JUMPS) {
@@ -430,6 +431,9 @@
       u = wide ? Math.min(H * 0.2, 110) : Math.min(H * 0.17, W * 0.26, 340);
       gy = H * (wide ? 0.84 : 0.82);
       rx = wide ? W * 0.7 : Math.max(W * 0.3, 96);
+      // On a wide screen the course is stretched out, so that each world fills the screen and the
+      // hoop into the next one is off to the right until the visitor scrolls towards it.
+      span = Math.max(u, (W - rx + 0.6 * u) / PORTALS[0]);
       guide = new Float32Array(Math.ceil((W + PAD * 2) / STEP) + 1);
       scratch = new Float32Array(guide.length);
       top = journey.getBoundingClientRect().top + window.scrollY;
@@ -773,7 +777,7 @@
       // Lane ticks, so the ground reads as moving.
       ctx.strokeStyle = 'rgba(47,208,201,0.3)'; ctx.lineWidth = 2;
       ctx.beginPath();
-      const firstTick = Math.floor(cur - rx / u) - 1, lastTick = Math.ceil(cur + (W - rx) / u) + 1;
+      const firstTick = Math.floor(cur - rx / span) - 1, lastTick = Math.ceil(cur + (W - rx) / span) + 1;
       for (let wx = firstTick; wx <= lastTick; wx++) {
         if (wx + 0.2 > CHASM[0] && wx < CHASM[1]) continue;
         ctx.moveTo(X(wx), gy + 0.1 * u); ctx.lineTo(X(wx + 0.2), gy + 0.1 * u);
@@ -1123,7 +1127,7 @@
       if (Math.abs(target - cur) < 0.0005) cur = target;
       const dx = first ? 0 : cur - prev;
       vel += (dx / dt - vel) * ease(dt, 10);
-      phase += Math.abs(dx) / CYCLE;
+      phase += Math.abs(dx) * (span / u) / CYCLE;
       const moving = Math.abs(vel) > 0.25;
       runAmt += ((moving ? 1 : 0) - runAmt) * ease(dt, moving ? 14 : 6);
       // Scroll back up and he turns to run back; once he stops he faces the wind's way again.
@@ -1145,7 +1149,7 @@
 
       // The wind takes the line the runner is about to take.
       for (let i = 0; i < guide.length; i++) {
-        guide[i] = gy - (0.6 + liftAt(cur + (i * STEP - PAD - rx) / u)) * u;
+        guide[i] = gy - (0.6 + liftAt(cur + (i * STEP - PAD - rx) / span)) * u;
       }
       const blur = Math.round(0.4 * u / STEP);
       soften(guide, scratch, blur);

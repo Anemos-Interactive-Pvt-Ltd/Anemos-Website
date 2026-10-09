@@ -74,12 +74,14 @@ header {
 .wordmark {
   font-size: 22px;
   letter-spacing: 0.06em;
-  color: var(--navy);
+  color: var(--teal);            /* 'anemos' in teal on light pages; dark pages restyle it below */
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
 }
+/* The flex layout drops the space between the words, so the second word carries it as a margin. */
+.wordmark span { margin-left: 0.45em; color: var(--navy); }
 .logo-symbol { height: 34px; width: auto; display: block; margin-right: 12px; }
 .logo-symbol-footer { height: 30px; }
 

@@ -351,7 +351,7 @@
       { back: 'islands', sky: ['#1c0b16', '#6b1d2a', '#e2603a'], sil: '255,214,190', ground: ['#220c14', '#12060b'], stars: 1, pixel: true },
       { back: 'grid', sky: ['#0a2463', '#12409a', '#1b5fc4'], sil: '205,226,255', ground: ['#0a1f5c', '#061236'] },
       { back: 'circuit', sky: ['#04161c', '#06323a', '#0a5a5a'], sil: '120,255,235', ground: ['#03171c', '#020c0f'] },
-      { back: 'city', sky: ['#1b1038', '#3b1a6b', '#c2417a'], sil: '255,205,235', ground: ['#1c0d38', '#0e061f'], stars: 0.8 },
+      { back: 'city', sky: ['#0a1f4d', '#1a559c', '#3f9ed6'], sil: '220,240,255', ground: ['#0b1c44', '#060f26'], stars: 0.5 },
       { back: 'hills', sky: ['#1a2466', '#2c7790', '#f2b56b'], sil: '255,236,205', ground: ['#12204f', '#090f2a'], sun: [0.35, '255,226,160'] },
       { back: 'blank', sky: ['#ffffff', '#ffffff', '#f5f6fa'], sil: '38,34,98', ground: ['#f5f6fa', '#e4e6ef'], light: true },
     ];

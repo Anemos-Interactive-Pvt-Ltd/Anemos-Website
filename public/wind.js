@@ -245,6 +245,8 @@
         box(-0.5, -0.5, 1, 1, 0.1); box(-0.2, -0.2, 0.4, 0.4, 0.04);
         for (const d of [-0.25, 0.25]) { path([d, -0.5], [d, -0.85]); path([d, 0.5], [d, 0.85]); path([-0.5, d], [-0.85, d]); path([0.5, d], [0.85, d]); }
       },
+      book() { path([-0.9, -0.7], [0, -0.5], [0.9, -0.7], [0.9, 0.7], [0, 0.9], [-0.9, 0.7], [-0.9, -0.7]); path([0, -0.5], [0, 0.9]); path([-0.6, -0.2], [-0.3, -0.27]); path([0.3, -0.27], [0.6, -0.2]); },
+      cap() { path([-1, -0.25], [0, -0.7], [1, -0.25], [0, 0.2], [-1, -0.25]); path([-0.55, 0], [-0.55, 0.45], [0, 0.75], [0.55, 0.45], [0.55, 0]); path([1, -0.25], [1, 0.45]); dot(1, 0.52, 0.08); },
       monitor() { box(-0.9, -0.7, 1.8, 1.1, 0.1); path([0, 0.4], [0, 0.75]); path([-0.4, 0.8], [0.4, 0.8]); path([-0.55, -0.4], [-0.3, -0.15], [-0.55, 0.1]); path([-0.1, 0.1], [0.3, 0.1]); },
     };
   }
@@ -345,7 +347,7 @@
     const SPACING = 12;
     const LENGTH = SPACING * (panels.length - 1);
     const REACH = 4.6;                                      // how far either side of its mark a panel stays up
-    const STOPS = [0, 9.5, 21.6, 33.8, 45.8, 57.0, 69.7, LENGTH]; // where the dots and nav links land
+    const STOPS = [0, 9.5, 21.6, 33.8, 45.8, 57.7, 69.0, 81.7, LENGTH]; // where the dots and nav links land
     const GOAL = LENGTH + 5.4;                              // the last hoop: through it, the wind carries you to the contact page
     const END = LENGTH + 6;                                 // where the scroll runs out
     // A hoop halfway between each pair of panels. The world changes on the far side of every one.
@@ -359,6 +361,7 @@
       { back: 'islands', sky: ['#1c0b16', '#6b1d2a', '#e2603a'], sil: '255,214,190', ground: ['#220c14', '#12060b'], stars: 1, pixel: true },
       { back: 'grid', sky: ['#0a2463', '#12409a', '#1b5fc4'], sil: '205,226,255', ground: ['#0a1f5c', '#061236'] },
       { back: 'circuit', sky: ['#04161c', '#06323a', '#0a5a5a'], sil: '120,255,235', ground: ['#03171c', '#020c0f'] },
+      { back: 'constellations', sky: ['#07122b', '#10264f', '#1d4a7a'], sil: '200,222,255', ground: ['#0a1a3a', '#050d20'], stars: 1 },
       { back: 'city', sky: ['#1d1552', '#5a2a7c', '#e58a6f'], sil: '255,214,220', ground: ['#22123f', '#120924'], stars: 0.4, sun: [0.15, '255,196,140'] },
       { back: 'city', sky: ['#0a1f4d', '#1a559c', '#3f9ed6'], sil: '220,240,255', ground: ['#0b1c44', '#060f26'], stars: 0.5 },
       { back: 'hills', sky: ['#1a2466', '#2c7790', '#f2b56b'], sil: '255,236,205', ground: ['#12204f', '#090f2a'], sun: [0.35, '255,226,160'] },
@@ -369,12 +372,13 @@
       { x: 24.0, hw: 1.8, h: 1.0 },     // chasm (Original Games)
       { x: 36.0, hw: 1.6, h: 1.25 },    // crates (Game Development)
       { x: 48.0, hw: 1.75, h: 1.25 },   // gears (Technology Consulting)
-      { x: 58.6, hw: 1.15, h: 0.8 },    // hurdle (About us)
-      { x: 61.4, hw: 1.15, h: 0.8 },    // hurdle (About us)
+      { x: 60.0, hw: 1.15, h: 0.8 },    // hurdle (Courses)
+      { x: 70.6, hw: 1.15, h: 0.8 },    // hurdle (About us)
+      { x: 73.4, hw: 1.15, h: 0.8 },    // hurdle (About us)
     ];
     // The social icons stand on the course as blocks, and he hops over them one by one. They are
     // the real buttons from the Follow us panel, laid over the canvas so they can be clicked.
-    const SOCIAL_X = [69.5, 70.75, 72, 73.25, 74.5];
+    const SOCIAL_X = [81.5, 82.75, 84, 85.25, 86.5];
     const SOCIAL_SIZE = 0.5;
     const socials = journey.querySelector('.socials');
     const socialTiles = [...socials.children];
@@ -394,7 +398,7 @@
 
     const ORBS = [];
     for (const j of JUMPS) for (const d of j.hop ? [0] : [-0.5, 0, 0.5]) ORBS.push(j.x + d * j.hw);
-    for (const x of [5, 6, 7, 10.5, 12, 13.5, 17, 18, 19, 29.5, 30.5, 31.5, 41, 42, 43, 53, 54, 55, 65, 66, 67, 77, 78, 79]) ORBS.push(x);
+    for (const x of [5, 6, 7, 10.5, 12, 13.5, 17, 18, 19, 29.5, 30.5, 31.5, 41, 42, 43, 53, 54, 55, 65, 66, 67, 77, 78, 79, 89, 90, 91]) ORBS.push(x);
 
     const rand = rng(7);
     const STARS = Array.from({ length: 70 }, () => ({ x: rand(), y: rand() * 0.62, r: 0.5 + rand() * 1.1, ph: rand() * TAU }));
@@ -413,6 +417,7 @@
       [20.2, 1.5, 'gamepad'], [21.4, 1.82, 'handheld'], [26.8, 1.5, 'joystick'], [28.2, 1.82, 'trophy'],
       [32.2, 1.5, 'code'], [33.5, 1.82, 'pen'], [38.6, 1.5, 'layers'], [40, 1.82, 'cube'],
       [44.2, 1.5, 'server'], [45.5, 1.82, 'cloud'], [50.6, 1.5, 'chip'], [52, 1.82, 'monitor'],
+      [56.4, 1.5, 'book'], [57.7, 1.82, 'cap'], [62.4, 1.5, 'pen'], [63.8, 1.82, 'cube'],
     ];
     const glyphs = makeGlyphs(ctx);
     const GUSTS = Array.from({ length: 18 }, () => ({ y: rand(), len: 1.5 + rand() * 3, delay: rand() * 0.35, width: 1.5 + rand() * 4 }));
@@ -468,7 +473,7 @@
       // and more scrolling to cover it.
       const longer = wide ? 1 : 1 + 0.6 * clamp((W - 1440) / 1120, 0, 1);
       span *= longer;
-      journey.style.height = longer > 1 ? stage.offsetHeight * (1 + 9.2 * longer) + 'px' : '';
+      journey.style.height = longer > 1 ? stage.offsetHeight * (1 + 10.4 * longer) + 'px' : '';
       guide = new Float32Array(Math.ceil((W + PAD * 2) / STEP) + 1);
       scratch = new Float32Array(guide.length);
       top = journey.getBoundingClientRect().top + window.scrollY;
@@ -496,7 +501,7 @@
 
     // Whatever the screen, each panel has to stay clear of what happens beneath it. If the copy
     // is too tall for the room it has, it is scaled down (and widened to match) until it fits.
-    const CLEARANCE = [1.3, 1.6, 2.15, 2.15, 2.15, 1.75, 1.85, 1.3];   // runner-heights of scene under each panel
+    const CLEARANCE = [1.3, 1.6, 2.15, 2.15, 2.15, 1.85, 1.75, 1.85, 1.3];   // runner-heights of scene under each panel
     function fitPanels() {
       panels.forEach((p, i) => {
         p.style.transform = p.style.width = p.style.maxWidth = '';
@@ -786,7 +791,31 @@
       }
     }
 
+    const CONST = Array.from({ length: 9 }, (_, i) => {
+      const pts = [], n = 3 + Math.floor(rand() * 3);
+      let x = i * 3.4 + rand() * 1.5, y = 1.4 + rand() * 2.2;
+      for (let k = 0; k < n; k++) { pts.push([x, y]); x += 0.4 + rand() * 0.7; y += (rand() - 0.5) * 1.2; }
+      return pts;
+    });
+    // Constellations: joined-up stars, the kind you learn to read.
+    function drawConstellations(th) {
+      drawStars(th);
+      const period = 32 * u, off = mod(cur * 0.1 * u, period);
+      ctx.strokeStyle = `rgba(${th.sil},0.28)`; ctx.lineWidth = 1; ctx.lineCap = 'round';
+      ctx.fillStyle = `rgba(${th.sil},0.9)`;
+      for (let k = -1; k <= Math.ceil(W / period); k++) {
+        const base = k * period - off;
+        for (const line of CONST) {
+          ctx.beginPath();
+          for (const [i, [px, py]] of line.entries()) { const x = base + px * u, y = gy - py * u; if (i) ctx.lineTo(x, y); else ctx.moveTo(x, y); }
+          ctx.stroke();
+          for (const [px, py] of line) { ctx.beginPath(); ctx.arc(base + px * u, gy - py * u, 2, 0, TAU); ctx.fill(); }
+        }
+      }
+    }
+
     const BACKS = {
+      constellations: drawConstellations,
       city(th) {
         drawStars(th);
         if (th.sun) drawSun(th);
@@ -1119,7 +1148,7 @@
       });
       // Between panels the header keeps whatever it was last showing.
       if (idx < 0) return;
-      const hash = idx >= 1 && idx <= 4 ? '#services' : idx === 5 ? '#about' : '';
+      const hash = idx >= 1 && idx <= 4 ? '#services' : idx === 5 ? '#courses' : idx === 6 ? '#about' : '';
       for (const a of navLinks) {
         const here = pagePath(a.pathname) === pagePath(location.pathname);
         a.classList.toggle('active', here && (a.hash ? a.hash === hash : idx === 0));
@@ -1246,6 +1275,7 @@
       drawPennant(LENGTH + 1.3, 1.5, 0.7);
       drawHurdle(JUMPS[3].x);
       drawHurdle(JUMPS[4].x);
+      drawHurdle(JUMPS[5].x);
       placeSocials();
       drawCrates(JUMPS[1].x);
       drawGears(JUMPS[2].x);
@@ -1318,6 +1348,7 @@
   function initAmbient(canvas) {
     const ctx = canvas.getContext('2d');
     const block = canvas.parentElement;
+    const dark = document.body.classList.contains('home');
     prepareText(block);
     if (reducedMotion.matches) return;
 
@@ -1334,7 +1365,7 @@
       const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
       last = now; time += dt; flow += dt * 110;
       ctx.clearRect(0, 0, W, H);
-      const wind = { W, u: Math.min(110, H * 0.45), t: time, flow, guide, focus: 0.45, rgb: '2,160,156', glow: '2,160,156' };
+      const wind = { W, u: Math.min(110, H * 0.45), t: time, flow, guide, focus: 0.45, rgb: dark ? '47,208,201' : '2,160,156', glow: dark ? '234,255,251' : '2,160,156' };
       for (const r of RIBBONS) strokeRibbon(ctx, r, wind);
     }
     watchSize(canvas, measure);

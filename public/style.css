@@ -518,8 +518,8 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .is-wide .team-name { font-size: 14px; }
 .is-wide .team-role, .is-wide .team-bio { font-size: 11px; }
 
-/* One screen for the stage plus 9.2 of scrolling; wind.js lengthens this on large screens. */
-.journey.is-live { height: 1020vh; height: 1020lvh; }
+/* One screen for the stage plus 10.4 of scrolling; wind.js lengthens this on large screens. */
+.journey.is-live { height: 1140vh; height: 1140lvh; }
 .is-live .journey-stage {
   position: -webkit-sticky;
   position: sticky;
@@ -572,7 +572,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   text-transform: uppercase;
   color: #aab0d8;
 }
-.scroll-cue span {
+.scroll-cue .cue-bar {
   position: relative;
   width: 44px;
   height: 2px;
@@ -582,7 +582,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   background: rgba(255, 255, 255, 0.16);
   overflow: hidden;
 }
-.scroll-cue span::after {
+.scroll-cue .cue-bar::after {
   content: '';
   position: absolute;
   top: 0;
@@ -591,6 +591,71 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   left: 0;
   background: var(--teal-bright);
   animation: cue-gust 1.8s cubic-bezier(0.5, 0, 0.2, 1) infinite;
+}
+/* The hero cue: a mouse with its wheel rolling for pointer devices, a finger swiping up for touch. */
+.cue-mouse, .cue-swipe {
+  position: relative;
+  flex: none;
+  width: 20px;
+  height: 32px;
+  margin-right: 14px;
+}
+.cue-mouse {
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  border-radius: 10px;
+}
+.cue-mouse i {
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  width: 3px;
+  height: 7px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--teal-bright);
+  animation: cue-wheel 1.6s ease-in-out infinite;
+}
+@keyframes cue-wheel {
+  0% { transform: translateY(0); opacity: 0; }
+  20% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translateY(11px); opacity: 0; }
+}
+.cue-swipe { display: none; }
+.cue-swipe i {
+  position: absolute;
+  left: 50%;
+  bottom: 2px;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  border-radius: 50%;
+  background: var(--teal-bright);
+  box-shadow: 0 0 0 4px rgba(47, 208, 201, 0.22);
+  animation: cue-swipe 1.5s ease-in-out infinite;
+}
+.cue-swipe b {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 8px;
+  height: 8px;
+  margin-left: -5px;
+  border-top: 2px solid rgba(255, 255, 255, 0.6);
+  border-left: 2px solid rgba(255, 255, 255, 0.6);
+  transform: rotate(45deg);
+}
+@keyframes cue-swipe {
+  0% { transform: translateY(0); opacity: 0; }
+  25% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { transform: translateY(-18px); opacity: 0; }
+}
+.cue-text-touch { display: none; }
+@media (hover: none) {
+  .cue-mouse, .cue-text-mouse { display: none; }
+  .cue-swipe { display: block; }
+  .cue-text-touch { display: inline; }
 }
 @keyframes cue-gust {
   from { transform: translateX(-100%); }
@@ -671,7 +736,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   body.home .nav a.active { color: var(--teal-bright); box-shadow: inset 3px 0 0 var(--teal-bright); }
 }
 @media (max-width: 640px) {
-  .journey.is-live { height: 920vh; height: 920lvh; }
+  .journey.is-live { height: 1040vh; height: 1040lvh; }
   .team li { width: 100%; margin-right: 0; }
   .team-badge { width: 40px; height: 40px; font-size: 18px; margin-right: 12px; }
   .team-name { font-size: 17px; }
@@ -716,6 +781,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .is-wide .scroll-cue { display: none; }
 .is-live .panel { transform-origin: 0 0; }
 .is-live .chips { margin-top: 2px; }
+.is-live .team + .btn { margin-top: 8px; }
 .is-live .chips li { margin-bottom: 8px; }
 
 @media (max-height: 480px) {
@@ -767,6 +833,48 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   padding-bottom: clamp(280px, 52vh, 680px);
 }
 .site-copy h1 { max-width: 24ch; margin-top: 4px; }
+
+/* ============ About page ============ */
+.about-page { color: #fff; }
+.about-intro { padding-bottom: 20px; }
+.about-intro h1 {
+  font-size: 32px;
+  font-size: clamp(28px, 4.2vw, 48px);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  max-width: 20ch;
+  margin-top: 4px;
+}
+.about-intro h1 em { color: var(--teal-bright); font-style: normal; }
+.about-intro .lede, .about-block .lede { color: #cfd2e6; }
+.about-intro .kicker, .about-block .kicker { color: var(--teal-bright); }
+.about-block h2 { color: #fff; }
+.about-block.alt-dark { background: rgba(255, 255, 255, 0.04); }
+.about-grid { margin-top: 32px; }
+.card-dark {
+  background: rgba(20, 18, 66, 0.45);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.card-dark h3 { color: #fff; }
+.card-dark p { color: #cfd2e6; }
+.founders {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 32px;
+  margin-top: 32px;
+}
+.founder {
+  padding: 28px;
+  background: rgba(20, 18, 66, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+}
+.founder-badge { width: 60px; height: 60px; font-size: 26px; margin: 0 0 18px; }
+.founder h3 { color: #fff; font-size: 22px; letter-spacing: 0.03em; }
+.founder-role { margin-top: 4px; color: var(--teal-bright); font-size: 15px; }
+.founder p { margin-top: 14px; color: #cfd2e6; font-size: 15px; }
+.chips-dark { margin-top: 22px; }
+.about-block .btn { margin-top: 32px; }
 
 /* ============ Contact: wind behind the heading ============ */
 .page-intro { position: relative; }

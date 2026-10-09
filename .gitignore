@@ -8,3 +8,6 @@ Desktop.ini
 .vscode/
 .idea/
 *.swp
+
+# Netlify CLI state
+.netlify/

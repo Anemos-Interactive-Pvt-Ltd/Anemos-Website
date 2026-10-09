@@ -189,7 +189,7 @@ section.alt { background: var(--bg-soft); }
   font-size: 13px;
   margin-bottom: 10px;
 }
-h2 {
+h2, .page-title {
   font-size: 23px;
   font-size: clamp(23px, 3vw, 32px);
   color: var(--navy);
@@ -280,9 +280,9 @@ footer {
   font-size: 13.5px;
 }
 footer .wordmark { color: #fff; font-size: 18px; }
-footer .wordmark span { color: var(--teal); }
+footer .wordmark span { color: var(--teal-bright); }
 footer .legal { margin-top: 14px; line-height: 1.9; overflow-wrap: anywhere; }
-footer a { color: var(--teal); text-decoration: none; }
+footer a { color: var(--teal-bright); text-decoration: none; }
 
 /* clamp() and min() only arrived in 2020. Wherever one is used, the same property is
    declared just before it with a fixed value that browsers back to 2018 can use. */

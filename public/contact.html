@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact — Anemos Interactive</title>
   <meta name="description" content="Contact Anemos Interactive Private Limited — email, phone, and mailing address.">
+  <link rel="canonical" href="https://anemosinteractive.com/contact.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Anemos Interactive">
+  <meta property="og:title" content="Contact — Anemos Interactive">
+  <meta property="og:description" content="Contact Anemos Interactive Private Limited — email, phone, and mailing address.">
+  <meta property="og:url" content="https://anemosinteractive.com/contact.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="theme-color" content="#141242">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Questrial&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="logo.svg">
@@ -16,7 +24,7 @@
 <header>
   <div class="container header-inner">
     <a class="wordmark" href="index.html"><img src="logo.svg" alt="Anemos Interactive logo" class="logo-symbol">anemos <span>interactive</span></a>
-    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+    <button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
     <nav class="nav" id="site-nav">
@@ -30,11 +38,12 @@
   </div>
 </header>
 
+<main>
 <section class="page-intro">
   <canvas class="wind-ambient" aria-hidden="true"></canvas>
   <div class="container">
     <div class="kicker" data-wind>Contact</div>
-    <h2 data-wind="words">Get in touch</h2>
+    <h1 class="page-title" data-wind="words">Get in touch</h1>
     <p class="lede" data-wind="words">We operate as a fully online business — the best way to reach us is by email or the form below. We typically respond within one business day.</p>
 
     <!-- The form comes first in the markup, so it is first when the page stacks on phones and
@@ -44,7 +53,7 @@
         <h3>Send us a message</h3>
         <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
           <input type="hidden" name="form-name" value="contact">
-          <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
+          <p style="display:none"><label>Don't fill this out: <input type="text" name="bot-field"></label></p>
           <label for="name">Name</label>
           <input type="text" id="name" name="name" required>
           <label for="email">Email</label>
@@ -79,6 +88,7 @@
     </div>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="container">

@@ -39,6 +39,7 @@ img { max-width: 100%; }
 header {
   border-bottom: 1px solid var(--line);
   background: var(--bg);
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -47,8 +48,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 16px 0;
+  padding: 16px var(--gutter);
 }
 .wordmark {
   font-size: 22px;
@@ -57,17 +57,14 @@ header {
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
   white-space: nowrap;
 }
-.logo-symbol { height: 34px; width: auto; display: block; }
+.logo-symbol { height: 34px; width: auto; display: block; margin-right: 12px; }
 .logo-symbol-footer { height: 30px; }
 
 /* Desktop nav (default) */
-.nav {
-  display: flex;
-  gap: 28px;
-}
+.nav { display: flex; }
+.nav a + a { margin-left: 28px; }
 .nav a {
   color: var(--ink);
   text-decoration: none;
@@ -82,7 +79,6 @@ header {
   display: none;
   flex-direction: column;
   justify-content: center;
-  gap: 5px;
   width: 44px;
   height: 44px;
   padding: 10px;
@@ -98,6 +94,8 @@ header {
   border-radius: 2px;
   transition: transform 0.25s ease, opacity 0.2s ease;
 }
+.menu-toggle span + span { margin-top: 5px; }
+.wordmark span { margin-left: 0.45em; }
 .menu-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .menu-toggle.open span:nth-child(2) { opacity: 0; }
 .menu-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
@@ -111,7 +109,6 @@ header {
     left: 0;
     right: 0;
     flex-direction: column;
-    gap: 0;
     background: var(--bg);
     border-bottom: 1px solid var(--line);
     box-shadow: 0 12px 24px rgba(28, 28, 40, 0.08);
@@ -120,6 +117,7 @@ header {
     transition: max-height 0.3s ease;
   }
   .nav.open { max-height: 320px; }
+  .nav a + a { margin-left: 0; }
   .nav a {
     padding: 15px var(--gutter);
     font-size: 16px;
@@ -146,9 +144,14 @@ header {
   cursor: pointer;
 }
 .btn:hover { background: #028f8b; }
+.btn-ghost {
+  background: none;
+  box-shadow: inset 0 0 0 1.5px var(--teal-bright);
+}
+.btn-ghost:hover { background: rgba(47, 208, 201, 0.16); }
 
 /* ============ Sections ============ */
-section { padding: clamp(48px, 8vw, 84px) 0; }
+section { padding: 48px 0; padding: clamp(48px, 8vw, 84px) 0; }
 section.alt { background: var(--bg-soft); }
 .kicker {
   color: var(--teal);
@@ -158,16 +161,17 @@ section.alt { background: var(--bg-soft); }
   margin-bottom: 10px;
 }
 h2 {
+  font-size: 23px;
   font-size: clamp(23px, 3vw, 32px);
   color: var(--navy);
   letter-spacing: 0.02em;
   margin-bottom: 18px;
 }
-.lede { max-width: 65ch; color: var(--muted); font-size: clamp(15px, 1.8vw, 17px); }
+.lede { max-width: 65ch; color: var(--muted); font-size: 15px; font-size: clamp(15px, 1.8vw, 17px); }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 24px;
   margin-top: 40px;
 }
@@ -175,6 +179,7 @@ h2 {
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: 8px;
+  padding: 20px;
   padding: clamp(20px, 3vw, 28px);
 }
 .card h3 { color: var(--navy); font-size: 19px; margin-bottom: 10px; letter-spacing: 0.03em; }
@@ -247,6 +252,9 @@ footer .wordmark span { color: var(--teal); }
 footer .legal { margin-top: 14px; line-height: 1.9; overflow-wrap: anywhere; }
 footer a { color: var(--teal); text-decoration: none; }
 
+/* clamp() and min() only arrived in 2020. Wherever one is used, the same property is
+   declared just before it with a fixed value that browsers back to 2018 can use. */
+
 /* ============ Wind text ============
    wind.js wraps each word in .w and marks other blocks .rv, each with its own
    --d delay. While a block is .wind-armed they wait upwind, arrive when it
@@ -277,6 +285,58 @@ footer a { color: var(--teal); text-decoration: none; }
 .wind-armed:not(.is-active) .rv {
   transition-duration: 0.4s;
   transition-delay: calc(var(--d, 0ms) * 0.3);
+}
+
+/* ============ Wind wipe ============
+   Bands of wind that sweep in from the left to cover the screen, then on out to
+   the right to uncover it. wind.js uses them to change page and to jump along
+   the run; WIPE_MS there must cover the longest delay plus the travel time. */
+.wind-wipe {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: none;
+}
+.wind-wipe i {
+  flex: 1;
+  width: 135%;
+  margin-bottom: -1px;
+  border-radius: 0 999px 999px 0;
+  background: linear-gradient(90deg, #141242 0%, #1b1a5c 70%, #02a09c 93%, #7ff0ea 100%);
+  transform: translateX(-101%);
+  transition: transform 0.56s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.wind-wipe i:nth-child(2) { transition-delay: 110ms; }
+.wind-wipe i:nth-child(3) { transition-delay: 40ms; }
+.wind-wipe i:nth-child(4) { transition-delay: 180ms; }
+.wind-wipe i:nth-child(5) { transition-delay: 80ms; }
+.wind-wipe i:nth-child(6) { transition-delay: 150ms; }
+.wind-wipe i:nth-child(7) { transition-delay: 20ms; }
+.wind-wipe.is-covering i { transform: translateX(0); }
+.wind-wipe.is-clearing i { transform: translateX(101%); }
+.wind-wipe.is-still i { transition: none; }
+
+/* Arriving through a wipe: the script in <head> sets this before first paint, and
+   wind.js swaps it for the bands. It lifts by itself if wind.js never runs. */
+html.wind-arriving::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 99;
+  background: #141242;
+  animation: arrive-failsafe 0.3s 2.5s forwards;
+}
+@keyframes arrive-failsafe {
+  to { opacity: 0; visibility: hidden; }
 }
 
 /* ============ Home: the wind run ============
@@ -312,12 +372,14 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .panel { scroll-margin-top: 72px; }
 .panel h2 {
   color: #fff;
+  font-size: 26px;
   font-size: clamp(26px, 3.6vw, 42px);
   line-height: 1.2;
 }
 .panel .lede { color: #cfd2e6; }
 .panel .kicker { color: var(--teal-bright); }
 .panel-hero h1 {
+  font-size: 26px;
   font-size: clamp(26px, 4.5vw, 48px);
   line-height: 1.22;
   letter-spacing: 0.02em;
@@ -327,13 +389,13 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .panel-hero p {
   margin-top: 20px;
   max-width: 60ch;
+  font-size: 15px;
   font-size: clamp(15px, 2vw, 18px);
   color: #cfd2e6;
 }
 .chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
   margin-top: 6px;
   list-style: none;
 }
@@ -345,48 +407,42 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   padding: 7px 16px;
   border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 999px;
+  margin: 0 10px 10px 0;
 }
 
-.journey.is-live { height: 850vh; height: 850lvh; }
+.journey.is-live { height: 900vh; height: 900lvh; }
 .is-live .journey-stage {
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   height: 100vh;
   height: 100lvh;
   overflow: hidden;
 }
-/* A teal glow in the sky, and a dawn that comes up along the horizon as the run goes on. */
-.is-live .journey-stage::before,
-.is-live .journey-stage::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.is-live .journey-stage::before {
-  background: radial-gradient(circle at 84% 20%, rgba(47, 208, 201, 0.2) 0, rgba(47, 208, 201, 0) 32%);
-}
-.is-live .journey-stage::after {
-  background: radial-gradient(120% 70% at 70% 100%, rgba(47, 208, 201, 0.34) 0, rgba(47, 208, 201, 0) 70%);
-  opacity: var(--p, 0);
-}
 .is-live .journey-canvas {
   display: block;
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 1;
 }
 .is-live .journey-panels {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   padding-top: 0;
   z-index: 2;
   pointer-events: none;
 }
 .is-live .panel {
   position: absolute;
+  top: 92px;
   top: clamp(92px, 15vh, 160px);
   left: var(--gutter);
   right: calc(var(--gutter) + 28px);
@@ -401,7 +457,6 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .is-live .scroll-cue {
   display: flex;
   align-items: center;
-  gap: 12px;
   margin-top: 26px;
   font-size: 13px;
   letter-spacing: 0.16em;
@@ -412,6 +467,8 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   position: relative;
   width: 44px;
   height: 2px;
+  margin-right: 12px;
+  flex: none;
   border-radius: 2px;
   background: rgba(255, 255, 255, 0.16);
   overflow: hidden;
@@ -419,7 +476,10 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .scroll-cue span::after {
   content: '';
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   background: var(--teal-bright);
   animation: cue-gust 1.8s cubic-bezier(0.5, 0, 0.2, 1) infinite;
 }
@@ -431,9 +491,9 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .is-live .journey-dots {
   display: flex;
   flex-direction: column;
-  gap: 4px;
   position: absolute;
   top: 50%;
+  right: 4px;
   right: clamp(4px, 2vw, 28px);
   transform: translateY(-50%);
   z-index: 3;
@@ -450,11 +510,15 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .journey-dots button::before {
   content: '';
   position: absolute;
-  inset: 9px;
+  top: 9px;
+  right: 9px;
+  bottom: 9px;
+  left: 9px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.32);
   transition: transform 0.3s ease, background 0.3s ease;
 }
+.journey-dots button + button { margin-top: 4px; }
 .journey-dots button:hover::before { background: #fff; }
 .journey-dots button.is-current::before {
   background: var(--teal-bright);
@@ -479,7 +543,11 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   transition: opacity 0.2s ease, transform 0.2s ease;
   pointer-events: none;
 }
-.journey-dots button:hover span,
+.journey-dots button:hover span {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+/* Kept apart from the rule above: a selector an older browser does not know voids its whole rule. */
 .journey-dots button:focus-visible span {
   opacity: 1;
   transform: translate(0, -50%);
@@ -494,21 +562,105 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   body.home .nav a.active { color: var(--teal-bright); box-shadow: inset 3px 0 0 var(--teal-bright); }
 }
 @media (max-width: 640px) {
-  .journey.is-live { height: 760vh; height: 760lvh; }
-  .is-live .panel { top: clamp(84px, 12vh, 120px); }
+  .journey.is-live { height: 810vh; height: 810lvh; }
+  .is-live .panel { top: 84px; top: clamp(84px, 12vh, 120px); }
 }
 /* Short windows: tighten the copy so it stays clear of the runner. */
 @media (max-height: 820px) {
-  .is-live .panel { top: clamp(84px, 12vh, 100px); }
-  .is-live .panel-hero h1 { font-size: clamp(26px, min(4.5vw, 6vh), 48px); }
-  .is-live .panel-hero p { margin-top: 14px; font-size: clamp(15px, 2.4vh, 18px); }
+  .is-live .panel { top: 84px; top: clamp(84px, 12vh, 100px); }
+  .is-live .panel-hero h1 { font-size: 26px; font-size: clamp(26px, min(4.5vw, 6vh), 48px); }
+  .is-live .panel-hero p { margin-top: 14px; font-size: 15px; font-size: clamp(15px, 2.4vh, 18px); }
   .is-live .panel .btn { margin-top: 22px; }
-  .is-live .panel h2 { font-size: clamp(24px, min(3.6vw, 5.4vh), 42px); margin-bottom: 12px; }
+  .is-live .panel h2 { font-size: 24px; font-size: clamp(24px, min(3.6vw, 5.4vh), 42px); margin-bottom: 12px; }
 }
 @media (max-height: 700px) {
   .is-live .scroll-cue { display: none; }
   .is-live .panel .lede { font-size: 14px; line-height: 1.55; }
 }
+
+/* A phone on its side: the copy takes the left of the stage over a dark scrim and the
+   run happens on the right. wind.js sets .is-wide when the stage is under 560px tall. */
+.is-wide .journey-stage::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 64%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(14, 13, 50, 0.9) 0%, rgba(14, 13, 50, 0.82) 68%, rgba(14, 13, 50, 0) 100%);
+}
+.is-wide .panel { top: 60px; max-width: 46%; }
+.is-wide .panel-hero h1 { font-size: 22px; }
+.is-wide .panel h2 { font-size: 20px; margin-bottom: 8px; }
+.is-wide .panel-hero p, .is-wide .panel .lede { font-size: 13px; line-height: 1.5; margin-top: 8px; }
+.is-wide .panel .kicker { font-size: 11px; margin-bottom: 4px; }
+.is-wide .panel .btn { margin-top: 12px; padding: 9px 20px; font-size: 14px; display: inline-block; }
+.is-wide .chips li { font-size: 12px; padding: 4px 12px; margin: 0 6px 6px 0; }
+.is-wide .scroll-cue { display: none; }
+.is-live .panel { transform-origin: 0 0; }
+
+@media (max-height: 480px) {
+  .header-inner { padding: 8px var(--gutter); }
+}
+/* The narrowest phones, down to 300px. */
+@media (max-width: 360px) {
+  .is-live .panel { top: 72px; right: calc(var(--gutter) + 20px); }
+  .is-live .panel-hero h1 { font-size: 23px; }
+  .is-live .panel-hero p, .is-live .panel .lede { font-size: 14px; line-height: 1.5; }
+  .is-live .panel h2 { font-size: 22px; }
+  .is-live .panel .btn { margin-top: 18px; }
+  .journey-dots button { width: 20px; height: 20px; }
+  .journey-dots button::before { top: 7px; right: 7px; bottom: 7px; left: 7px; }
+  .chips li { font-size: 13px; padding: 5px 12px; }
+}
+/* 1440p and 4K at native scale. */
+@media (min-width: 2400px) {
+  :root { --container: 1560px; }
+  body { font-size: 20px; }
+  .wordmark { font-size: 28px; }
+  .logo-symbol { height: 44px; }
+  .nav a { font-size: 19px; }
+  .panel-hero h1 { font-size: 72px; }
+  .panel h2 { font-size: 56px; }
+  .panel-hero p, .panel .lede { font-size: 23px; }
+  .panel .kicker { font-size: 16px; }
+  .btn { font-size: 19px; padding: 16px 38px; }
+  .is-live .panel { top: 190px; max-width: 900px; }
+  .is-live .panel-hero, .site-copy { max-width: 1040px; }
+  .chips li { font-size: 18px; }
+  .scroll-cue { font-size: 16px; }
+  footer { font-size: 16px; }
+}
+
+/* ============ Projects: the building site ============ */
+.site-page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100lvh;
+  overflow: hidden;
+  color: #fff;
+  background: linear-gradient(180deg, #141242 0%, #262262 55%, #1b3a66 100%);
+}
+.site-canvas {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.site-copy {
+  position: relative;
+  max-width: 760px;
+  padding-top: 92px;
+  padding-top: clamp(92px, 15vh, 160px);
+  padding-bottom: 300px;
+  padding-bottom: clamp(280px, 52vh, 680px);
+}
+.site-copy h1 { max-width: 24ch; margin-top: 4px; }
 
 /* ============ Contact: wind behind the heading ============ */
 .page-intro { position: relative; }
@@ -518,6 +670,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   top: 0;
   left: 0;
   width: 100%;
+  height: 180px;
   height: clamp(180px, 26vw, 260px);
   opacity: 0.5;
   pointer-events: none;
@@ -541,8 +694,8 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 @media (max-width: 360px) {
   :root { --gutter: 14px; }
   body { font-size: 15px; }
-  .wordmark { font-size: 15px; gap: 7px; letter-spacing: 0.04em; }
-  .logo-symbol { height: 24px; }
+  .wordmark { font-size: 15px; letter-spacing: 0.04em; }
+  .logo-symbol { height: 24px; margin-right: 7px; }
   .btn { display: block; text-align: center; padding: 12px 20px; }
   .card { padding: 18px; }
 }
@@ -550,15 +703,15 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 /* --- Small phones + iPhone Duo folded (361–480px) --- */
 @media (min-width: 361px) and (max-width: 480px) {
   :root { --gutter: 16px; }
-  .wordmark { font-size: 17px; gap: 8px; }
-  .logo-symbol { height: 26px; }
+  .wordmark { font-size: 17px; }
+  .logo-symbol { height: 26px; margin-right: 8px; }
   .btn { display: block; text-align: center; }
 }
 
 /* --- Standard phones (481–640px) --- */
 @media (min-width: 481px) and (max-width: 640px) {
-  .wordmark { font-size: 19px; gap: 10px; }
-  .logo-symbol { height: 30px; }
+  .wordmark { font-size: 19px; }
+  .logo-symbol { height: 30px; margin-right: 10px; }
 }
 
 /* --- Phones & portrait tablets: stack contact page --- */

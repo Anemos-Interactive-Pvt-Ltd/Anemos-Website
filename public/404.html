@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page not found — Anemos Interactive</title>
+  <meta name="description" content="That page is not here. Head back to the Anemos Interactive home page or get in touch.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#141242">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/questrial/v19/QdVUSTchPBm7nuUeVf70viFluW44JQ.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" type="image/svg+xml" href="/logo.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/style.css">
+  <script>try { if (sessionStorage.getItem('wind-arrive')) document.documentElement.classList.add('wind-arriving'); } catch (e) {}</script>
+</head>
+<body class="home">
+
+<header>
+  <div class="container header-inner">
+    <a class="wordmark" href="/index.html"><img src="/logo-white.svg" alt="Anemos Interactive logo" class="logo-symbol">anemos <span>interactive</span></a>
+    <button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" id="site-nav">
+      <a href="/index.html">Home</a>
+      <a href="/index.html#services">Services</a>
+      <a href="/products.html">Products</a>
+      <a href="/index.html#courses">Courses</a>
+      <a href="/index.html#follow">Socials</a>
+      <a href="/index.html#about">About us</a>
+      <a href="/contact.html">Contact us</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="page-intro notfound">
+    <canvas class="wind-ambient" aria-hidden="true"></canvas>
+    <div class="container">
+      <div class="kicker" data-wind>Error 404</div>
+      <div class="notfound-code" data-wind aria-hidden="true">4<span class="notfound-hoop"></span>4</div>
+      <h1 data-wind="words">The wind took this page somewhere else.</h1>
+      <p class="lede" data-wind="words">Whatever you were looking for is not on the other side of this hoop. The run starts again from the home page, and we are only ever an email away.</p>
+      <a class="btn" href="/index.html" data-wind>Back to the start</a>
+      <a class="btn" href="/contact.html" data-wind>Contact us</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="wordmark"><img src="/logo-white.svg" alt="" class="logo-symbol logo-symbol-footer">anemos <span>interactive</span></div>
+    <div class="legal">
+      Anemos Interactive Private Limited<br>
+      CIN: U58203MH2026PTC475216 &nbsp;·&nbsp; GSTIN: 27ABGCA5982P1ZU &nbsp;·&nbsp; IEC: ABGCA5982P<br>
+      Registered office (mailing address): F50, 1st Floor, The Zone, Chandravarkar Road, Borivali West, Mumbai – 400092, Maharashtra, India<br>
+      <a href="mailto:contact@anemosinteractive.com">contact@anemosinteractive.com</a><br><br>
+      © 2026 Anemos Interactive Private Limited. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const nav = document.getElementById('site-nav');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+</script>
+<script src="/wind.js"></script>
+
+</body>
+</html>

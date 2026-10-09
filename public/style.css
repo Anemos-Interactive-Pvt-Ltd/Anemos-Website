@@ -627,6 +627,8 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .is-live .panel-hero { max-width: 760px; }
 .is-live .panel-hero h1 { max-width: 26ch; }
 .is-live .panel.is-active { pointer-events: auto; }
+/* Laid out for the run before wind.js has armed the panels: keep them out of sight until it has. */
+.journey.is-live .panel:not(.wind-armed) { visibility: hidden; }
 
 .is-live .scroll-cue {
   display: flex;
@@ -965,6 +967,66 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 @media (max-width: 899px) {
   .contact-mark { right: -40vw; top: 300px; width: 140vw; height: auto; max-height: none; }
   .contact-form, .contact-details { padding: 20px; }
+}
+
+/* ============ 404: a hoop with nothing on the other side ============ */
+.notfound {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  padding-top: 120px;
+  padding-top: clamp(116px, 16vh, 170px);
+}
+.notfound .container { position: relative; }
+.notfound-code {
+  display: flex;
+  align-items: center;
+  font-family: 'Questrial', 'Century Gothic', 'Futura', sans-serif;
+  font-size: 120px;
+  font-size: clamp(96px, 22vw, 200px);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: #fff;
+  margin-bottom: 18px;
+}
+/* The zero is one of the run's hoops, with nothing beyond it. */
+.notfound-hoop {
+  position: relative;
+  display: inline-block;
+  width: 0.42em;
+  height: 1em;
+  margin: 0 0.08em;
+  border: 0.045em solid var(--teal-bright);
+  border-radius: 50%;
+  box-shadow: 0 0 0.12em rgba(47, 208, 201, 0.55), inset 0 0 0.12em rgba(47, 208, 201, 0.35);
+  animation: hoop-pulse 3s ease-in-out infinite;
+}
+.notfound-hoop::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: linear-gradient(180deg, rgba(234, 255, 251, 0) 0%, rgba(234, 255, 251, 0.9) 50%, rgba(234, 255, 251, 0) 100%);
+}
+@keyframes hoop-pulse {
+  0%, 100% { box-shadow: 0 0 0.12em rgba(47, 208, 201, 0.55), inset 0 0 0.12em rgba(47, 208, 201, 0.35); }
+  50% { box-shadow: 0 0 0.3em rgba(47, 208, 201, 0.9), inset 0 0 0.2em rgba(47, 208, 201, 0.55); }
+}
+.notfound h1 {
+  font-size: 28px;
+  font-size: clamp(26px, 4.2vw, 44px);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  max-width: 22ch;
+}
+.notfound .lede { color: #cfd2e6; }
+.notfound .kicker { color: var(--teal-bright); }
+.notfound .btn + .btn { margin-left: 12px; }
+@media (max-width: 480px) {
+  .notfound .btn + .btn { margin-left: 0; }
 }
 
 /* ============ Contact: wind behind the heading ============ */

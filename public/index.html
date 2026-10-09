@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anemos Interactive — Game Development &amp; Technology Studio, Mumbai</title>
-  <meta name="description" content="Anemos Interactive is a Mumbai-based game development and technology studio: original games (It Still Beats, coming soon), B2B game development in Unity, Unreal and WebGL, and full-stack web and app development.">
+  <title>Anemos Interactive — Game &amp; Technology Studio, Mumbai</title>
+  <meta name="description" content="Anemos Interactive is a Mumbai game development and technology studio: original games, B2B game development in Unity and Unreal, and web and app development.">
   <link rel="canonical" href="https://anemosinteractive.com/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Anemos Interactive">
-  <meta property="og:title" content="Anemos Interactive — Game Development &amp; Technology Studio, Mumbai">
-  <meta property="og:description" content="Anemos Interactive is a Mumbai-based game development and technology studio: original games (It Still Beats, coming soon), B2B game development in Unity, Unreal and WebGL, and full-stack web and app development.">
+  <meta property="og:title" content="Anemos Interactive — Game &amp; Technology Studio, Mumbai">
+  <meta property="og:description" content="Anemos Interactive is a Mumbai game development and technology studio: original games, B2B game development in Unity and Unreal, and web and app development.">
   <meta property="og:url" content="https://anemosinteractive.com/">
   <meta property="og:image" content="https://anemosinteractive.com/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -19,9 +19,44 @@
   <meta name="twitter:image" content="https://anemosinteractive.com/og-image.png">
   <meta name="theme-color" content="#141242">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/questrial/v19/QdVUSTchPBm7nuUeVf70viFluW44JQ.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="icon" type="image/svg+xml" href="logo.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Anemos Interactive Private Limited",
+    "alternateName": "Anemos Interactive",
+    "url": "https://anemosinteractive.com/",
+    "logo": "https://anemosinteractive.com/apple-touch-icon.png",
+    "image": "https://anemosinteractive.com/og-image.png",
+    "description": "Independent game development and technology studio in Mumbai: original games, B2B game development in Unity and Unreal, and full-stack web and app development.",
+    "email": "contact@anemosinteractive.com",
+    "telephone": "+91 93723 62676",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "F50, 1st Floor, The Zone, Chandravarkar Road, Borivali West",
+      "addressLocality": "Mumbai",
+      "addressRegion": "Maharashtra",
+      "postalCode": "400092",
+      "addressCountry": "IN"
+    },
+    "founder": [
+      { "@type": "Person", "name": "Ronak Koshy Jacob", "jobTitle": "Founder & Managing Director" },
+      { "@type": "Person", "name": "Latika Ganesh Salian", "jobTitle": "Co-founder & Creative Director" }
+    ],
+    "sameAs": [
+      "https://www.youtube.com/@anemosinteractive",
+      "https://github.com/Anemos-Interactive-Pvt-Ltd",
+      "https://www.instagram.com/anemos_interactive/",
+      "https://x.com/anemosinteract",
+      "https://www.linkedin.com/company/anemos-interactive"
+    ]
+  }
+  </script>
   <script>try { if (sessionStorage.getItem('wind-arrive')) document.documentElement.classList.add('wind-arriving'); } catch (e) {}</script>
 </head>
 <body class="home">
@@ -45,6 +80,9 @@
 </header>
 
 <main class="journey" id="journey">
+  <!-- Same test as setLive() in wind.js, run before the panels are parsed, so the page is laid
+       out for the run from its first paint instead of jumping into it when the script loads. -->
+  <script>try { if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(min-height: 300px)').matches) document.getElementById('journey').classList.add('is-live'); } catch (e) {}</script>
   <div class="journey-stage">
     <canvas class="journey-canvas" aria-hidden="true"></canvas>
     <div class="container journey-panels">

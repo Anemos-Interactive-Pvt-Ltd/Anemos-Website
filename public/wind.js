@@ -1201,11 +1201,48 @@
       tip.textContent = p.dataset.label;
       tip.setAttribute('aria-hidden', 'true');
       b.appendChild(tip);
-      b.addEventListener('click', () => travel(i));
+      b.addEventListener('click', () => { if (!dragged) travel(i); });
       dotNav.appendChild(b);
       return b;
     });
     stage.appendChild(dotNav);
+
+    // Drag along the column to scrub through the run: between two dots you are between those two
+    // sections, and the runner goes as fast as the finger. A tap without a drag still jumps.
+    let dragged = false;
+    if (window.PointerEvent) {
+      let dragging = false, startY = 0;
+      const scrub = y => {
+        const a = dots[0].getBoundingClientRect(), z = dots[dots.length - 1].getBoundingClientRect();
+        const from = a.top + a.height / 2, to = z.top + z.height / 2;
+        const f = clamp((y - from) / (to - from), 0, 1) * (dots.length - 1);
+        const i = Math.min(Math.floor(f), dots.length - 2), t = f - i;
+        window.scrollTo(0, top + (STOPS[i] + (STOPS[i + 1] - STOPS[i]) * t) / END * scrollLen);
+      };
+      dotNav.addEventListener('pointerdown', e => {
+        if (e.button) return;
+        dragging = true; dragged = false; startY = e.clientY;
+      });
+      dotNav.addEventListener('pointermove', e => {
+        if (!dragging) return;
+        if (!dragged) {
+          if (Math.abs(e.clientY - startY) < 6) return;
+          dragged = true;
+          dotNav.classList.add('is-scrubbing');
+          dotNav.setPointerCapture(e.pointerId);
+        }
+        scrub(e.clientY);
+        e.preventDefault();
+      });
+      const release = () => {
+        if (!dragging) return;
+        dragging = false;
+        dotNav.classList.remove('is-scrubbing');
+        setTimeout(() => { dragged = false; }, 0);   // after the click that follows the release
+      };
+      dotNav.addEventListener('pointerup', release);
+      dotNav.addEventListener('pointercancel', release);
+    }
 
     document.addEventListener('click', e => {
       const a = e.target.closest('a[href*="#"]');

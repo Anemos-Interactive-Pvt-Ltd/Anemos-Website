@@ -739,9 +739,29 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   top: 50%;
   right: 4px;
   right: clamp(4px, 2vw, 28px);
+  padding: 8px 10px;             /* a 44px-wide column to press and drag */
   transform: translateY(-50%);
   z-index: 3;
+  touch-action: none;            /* dragging the column scrubs the run, not the page */
+  user-select: none;
+  -webkit-user-select: none;
 }
+/* The track behind the dots, shown while dragging. */
+.journey-dots::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.22);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.journey-dots.is-scrubbing::before { opacity: 1; }
+.journey-dots.is-scrubbing, .journey-dots.is-scrubbing button { cursor: grabbing; }
 .journey-dots button {
   position: relative;
   width: 24px;

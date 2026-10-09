@@ -1,0 +1,36 @@
+// Cloudflare Workers configuration for the Anemos Interactive site.
+//
+// The site is static: Cloudflare serves everything in public/ as assets, with 404.html for
+// missing paths and clean URLs (/about.html is served at /about).
+//
+//   npx wrangler deploy                    -> production worker "anemos-website", the live domain
+//   npx wrangler deploy --env experiment   -> worker "anemos-website-experiment" at experiment.anemosinteractive.com
+//   npx wrangler deploy --env test         -> worker "anemos-website-test" at test.anemosinteractive.com
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "anemos-website",
+  "compatibility_date": "2026-10-06",
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  },
+  "routes": [
+    { "pattern": "anemosinteractive.com", "custom_domain": true },
+    { "pattern": "www.anemosinteractive.com", "custom_domain": true }
+  ],
+  "env": {
+    "experiment": {
+      "name": "anemos-website-experiment",
+      "routes": [
+        { "pattern": "experiment.anemosinteractive.com", "custom_domain": true }
+      ]
+    },
+    "test": {
+      "name": "anemos-website-test",
+      "routes": [
+        { "pattern": "test.anemosinteractive.com", "custom_domain": true }
+      ]
+    }
+  }
+}

@@ -389,6 +389,8 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   max-width: 22ch;
 }
 .panel-hero h1 em { color: var(--teal-bright); font-style: normal; }
+.panel .lede em { color: #fff; font-style: normal; }
+.panel .btn + .btn { margin-left: 12px; }
 .panel-hero p {
   margin-top: 20px;
   max-width: 60ch;
@@ -665,6 +667,8 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .is-wide .chips li { font-size: 12px; padding: 4px 12px; margin: 0 6px 6px 0; }
 .is-wide .scroll-cue { display: none; }
 .is-live .panel { transform-origin: 0 0; }
+.is-live .chips { margin-top: 2px; }
+.is-live .chips li { margin-bottom: 8px; }
 
 @media (max-height: 480px) {
   .header-inner { padding: 8px var(--gutter); }

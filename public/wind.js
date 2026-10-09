@@ -390,10 +390,10 @@
     const TRACES = Array.from({ length: 16 }, () => ({ x: rand() * 24, y: 0.3 + rand() * 2.7, a: 0.6 + rand() * 1.8, d: (rand() < 0.5 ? -1 : 1) * (0.2 + rand() * 0.4), b: 0.5 + rand() * 1.6, ph: rand() }));
     // Icons hanging in the air, [where, how high, which]. The wind uncovers each as he nears it.
     const ICONS = [
-      [22.6, 1.6, 'gamepad'], [24, 1.78, 'cube'], [25.4, 1.95, 'server'],
-      [32.2, 1.6, 'gamepad'], [33.4, 1.95, 'handheld'], [38.8, 1.6, 'joystick'], [40.2, 1.95, 'trophy'],
-      [44.2, 1.6, 'code'], [45.5, 1.95, 'pen'], [50.6, 1.6, 'layers'], [52, 1.95, 'cube'],
-      [56.2, 1.6, 'server'], [57.5, 1.95, 'cloud'], [62.6, 1.6, 'chip'], [64, 1.95, 'monitor'],
+      [22.6, 1.5, 'gamepad'], [24, 1.68, 'cube'], [25.4, 1.82, 'server'],
+      [32.2, 1.5, 'gamepad'], [33.4, 1.82, 'handheld'], [38.8, 1.5, 'joystick'], [40.2, 1.82, 'trophy'],
+      [44.2, 1.5, 'code'], [45.5, 1.82, 'pen'], [50.6, 1.5, 'layers'], [52, 1.82, 'cube'],
+      [56.2, 1.5, 'server'], [57.5, 1.82, 'cloud'], [62.6, 1.5, 'chip'], [64, 1.82, 'monitor'],
     ];
     const glyphs = makeGlyphs(ctx);
     const GUSTS = Array.from({ length: 18 }, () => ({ y: rand(), len: 1.5 + rand() * 3, delay: rand() * 0.35, width: 1.5 + rand() * 4 }));
@@ -437,7 +437,8 @@
       // A short, wide window (a phone on its side) puts the copy on the left and the run on the right.
       wide = H < 560;
       journey.classList.toggle('is-wide', wide);
-      u = wide ? Math.min(H * 0.2, 110) : Math.min(H * 0.17, W * 0.26, 340);
+      // Phones get a slightly smaller runner, so the copy above him has more room.
+      u = wide ? Math.min(H * 0.2, 110) : Math.min(H * 0.17, W * (W < 640 ? 0.22 : 0.26), 340);
       gy = H * (wide ? 0.84 : 0.82);
       rx = wide ? W * 0.7 : Math.max(W * 0.3, 96);
       // On a wide screen the course is stretched out, so that each world fills the screen and the
@@ -476,7 +477,7 @@
 
     // Whatever the screen, each panel has to stay clear of what happens beneath it. If the copy
     // is too tall for the room it has, it is scaled down (and widened to match) until it fits.
-    const CLEARANCE = [1.3, 1.85, 1.6, 2.3, 2.3, 2.3, 1.85, 1.3];   // runner-heights of scene under each panel
+    const CLEARANCE = [1.3, 1.85, 1.6, 2.15, 2.15, 2.15, 1.85, 1.3];   // runner-heights of scene under each panel
     function fitPanels() {
       panels.forEach((p, i) => {
         p.style.transform = p.style.width = p.style.maxWidth = '';
@@ -1390,9 +1391,9 @@
     }
 
     function drawSign(sx) {
-      const w = 1.5 * u, h = 0.66 * u, x = sx - w / 2, y = gy - 1.3 * u;
+      const w = 1.7 * u, h = 0.84 * u, x = sx - w / 2, y = gy - 1.45 * u;
       ctx.strokeStyle = 'rgba(223,227,255,0.55)'; ctx.lineWidth = 0.035 * u; ctx.lineCap = 'round';
-      seg(sx - 0.55 * u, gy, sx - 0.55 * u, y + h); seg(sx + 0.55 * u, gy, sx + 0.55 * u, y + h);
+      seg(sx - 0.65 * u, gy, sx - 0.65 * u, y + h); seg(sx + 0.65 * u, gy, sx + 0.65 * u, y + h);
       ctx.fillStyle = 'rgba(20,18,66,0.94)'; ctx.fillRect(x, y, w, h);
       // Hazard tape along the top.
       ctx.save();
@@ -1402,11 +1403,13 @@
       for (let d = -0.2 * u; d < w + 0.2 * u; d += 0.17 * u) seg(x + d, y + 0.15 * u, x + d + 0.14 * u, y - 0.04 * u);
       ctx.restore();
       ctx.strokeStyle = YELLOW; ctx.lineWidth = 1.5; ctx.strokeRect(x, y, w, h);
-      ctx.fillStyle = '#f3f5ff'; ctx.font = `${0.155 * u}px Questrial, sans-serif`;
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('COMING SOON', sx, y + 0.32 * u);
+      ctx.fillStyle = '#f3f5ff'; ctx.font = `${0.15 * u}px Questrial, sans-serif`;
+      ctx.fillText('IT STILL BEATS', sx, y + 0.33 * u);
+      ctx.fillStyle = '#2fd0c9'; ctx.font = `${0.085 * u}px Questrial, sans-serif`;
+      ctx.fillText('COMING SOON', sx, y + 0.52 * u);
       // A progress bar that never quite gets there.
-      const bw = 1.1 * u, by = y + 0.49 * u;
+      const bw = 1.2 * u, by = y + 0.65 * u;
       ctx.strokeStyle = 'rgba(223,227,255,0.5)'; ctx.lineWidth = 1; ctx.strokeRect(sx - bw / 2, by, bw, 0.07 * u);
       ctx.fillStyle = '#2fd0c9'; ctx.fillRect(sx - bw / 2, by, bw * (0.58 + 0.2 * Math.sin(time * 0.6)), 0.07 * u);
     }
@@ -1449,7 +1452,7 @@
     function draw() {
       ctx.clearRect(0, 0, W, H);
       drawBackdrop();
-      const worker = W * 0.2, sign = worker + 1.25 * u;
+      const worker = W * 0.2, sign = worker + 1.35 * u;
       const site = Math.max(W * 0.64, sign + 2 * u), crane = Math.min(site + 1.7 * u, W - 0.5 * u);
       drawCrane(crane);
       drawScaffold(site);

@@ -1006,13 +1006,14 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   50% { box-shadow: 0 0 0.3em rgba(47, 208, 201, 0.9), inset 0 0 0.2em rgba(47, 208, 201, 0.55); }
 }
 .notfound h1 {
-  font-size: 28px;
-  font-size: clamp(26px, 4.2vw, 44px);
+  font-size: 30px;
+  font-size: clamp(28px, 4.4vw, 48px);
   line-height: 1.2;
   letter-spacing: 0.02em;
-  max-width: 22ch;
+  max-width: 20ch;
+  color: #fff;
 }
-.notfound .lede { color: #cfd2e6; }
+.notfound .lede { color: #e4e6f5; font-size: 17px; font-size: clamp(16px, 1.9vw, 19px); max-width: 52ch; }
 .notfound .kicker { color: var(--teal-bright); }
 .notfound .btn + .btn { margin-left: 12px; }
 @media (max-width: 480px) {

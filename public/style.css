@@ -782,13 +782,6 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   opacity: 1;
   transform: translate(0, -50%);
 }
-/* No hover on a touch screen, so the current section's name stays beside its dot. */
-@media (hover: none) {
-  .journey-dots button.is-current span {
-    opacity: 1;
-    transform: translate(0, -50%);
-  }
-}
 /* Kept apart from the rule above: a selector an older browser does not know voids its whole rule. */
 .journey-dots button:focus-visible span {
   opacity: 1;

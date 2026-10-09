@@ -564,16 +564,23 @@
       ctx.strokeStyle = '#2fd0c9'; ctx.lineWidth = 0.026 * u; ctx.lineCap = 'butt';
       line(s.ux * 0.07 + fx * 0.06, s.uy * 0.07 + fy * 0.06, s.ux * 0.07 + bx * 0.06, s.uy * 0.07 + by * 0.06);
       ctx.lineCap = 'round';
-      // Hood: a point (along his up vector a, along his front b) in head space.
+      // Hood: a round head with a soft point trailing behind. H(a, b) is a point in head space,
+      // a along his up vector and b along his front.
       const H = (a, b) => [(s.hx + s.ux * a + fx * b) * u, (s.hy + s.uy * a + fy * b) * u];
-      const hood = [H(0.10, -0.01), H(0.07, 0.07), H(0.015, 0.09), H(-0.065, 0.05), H(-0.085, -0.04), H(-0.035, -0.17), H(0.06, -0.11)];
-      ctx.fillStyle = ink; ctx.strokeStyle = ink;
-      ctx.beginPath(); hood.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = ink;
+      const [hcx, hcy] = H(0.004, -0.012);
+      ctx.beginPath(); ctx.arc(hcx, hcy, 0.094 * u, 0, TAU); ctx.fill();
+      const [t1x, t1y] = H(0.075, -0.065), [c1x, c1y] = H(0.07, -0.16), [tipx, tipy] = H(-0.02, -0.2), [c2x, c2y] = H(-0.09, -0.12), [t2x, t2y] = H(-0.07, -0.05);
+      ctx.beginPath();
+      ctx.moveTo(t1x, t1y);
+      ctx.quadraticCurveTo(c1x, c1y, tipx, tipy);
+      ctx.quadraticCurveTo(c2x, c2y, t2x, t2y);
+      ctx.closePath(); ctx.fill();
       // The face in shadow, with two glowing eyes inside it.
-      const [cx, cy] = H(-0.005, 0.035);
+      const [cx, cy] = H(-0.002, 0.03);
       ctx.fillStyle = faceTone;
-      ctx.beginPath(); ctx.ellipse(cx, cy, 0.052 * u, 0.06 * u, Math.atan2(s.uy, s.ux) + Math.PI / 2, 0, TAU); ctx.fill();
-      for (const [ex, ey] of [H(0.008, 0.012), H(0.008, 0.058)]) {
+      ctx.beginPath(); ctx.arc(cx, cy, 0.056 * u, 0, TAU); ctx.fill();
+      for (const [ex, ey] of [H(0.008, 0.008), H(0.008, 0.054)]) {
         ctx.fillStyle = 'rgba(127,240,234,0.3)';
         ctx.beginPath(); ctx.arc(ex, ey, 0.024 * u, 0, TAU); ctx.fill();
         ctx.fillStyle = '#7ff0ea';

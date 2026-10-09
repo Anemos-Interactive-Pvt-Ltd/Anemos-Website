@@ -1051,7 +1051,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .panel h2 { font-size: 80px; margin-bottom: 28px; }
   .panel-hero p, .panel .lede { font-size: 32px; }
   .panel .kicker { font-size: 22px; margin-bottom: 18px; }
-  .btn { font-size: 26px; padding: 22px 52px; margin-top: 44px; border-radius: 6px; }
+  .btn { font-size: 26px; padding: 22px 52px; margin-top: 44px; }
   .is-live .panel { top: 270px; max-width: 1300px; }
   .is-live .panel-hero, .site-copy { max-width: 1500px; }
   .chips li { font-size: 25px; padding: 12px 28px; }

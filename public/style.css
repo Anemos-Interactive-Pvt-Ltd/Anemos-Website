@@ -963,7 +963,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   z-index: 0;
 }
 @media (max-width: 899px) {
-  .contact-mark { right: -24vw; top: 300px; height: 78vh; max-height: 720px; }
+  .contact-mark { right: -40vw; top: 300px; width: 140vw; height: auto; max-height: none; }
   .contact-form, .contact-details { padding: 20px; }
 }
 
@@ -1080,6 +1080,14 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .is-live .panel-hero, .site-copy { max-width: 1040px; }
   .chips li { font-size: 18px; }
   .is-live .scroll-cue { font-size: 16px; }
+  .page-title, .about-block h2 { font-size: 40px; }
+  .lede, .about-intro .lede { font-size: 22px; }
+  .kicker { font-size: 15px; }
+  .contact-block h3 { font-size: 22px; }
+  .contact-block p, form label, form input, form textarea, .card p, .founder p, .founder-role { font-size: 19px; }
+  .card h3, .founder h3 { font-size: 24px; }
+  .about-intro h1 { font-size: 60px; }
+  .contact-form, .contact-details { padding: 36px; }
   .team li { width: 380px; }
   .team-badge { width: 62px; height: 62px; font-size: 28px; }
   .team-name { font-size: 24px; }
@@ -1106,6 +1114,21 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .is-live .panel-hero, .site-copy { max-width: 1500px; }
   .chips li { font-size: 25px; padding: 12px 28px; }
   .is-live .scroll-cue { font-size: 22px; }
+  .page-title, .about-block h2 { font-size: 56px; margin-bottom: 28px; }
+  .lede, .about-intro .lede { font-size: 32px; max-width: 60ch; }
+  .kicker { font-size: 22px; margin-bottom: 18px; }
+  .contact-block h3 { font-size: 30px; margin: 40px 0 10px; }
+  .contact-block p, form label, form input, form textarea, .card p, .founder p, .founder-role { font-size: 26px; }
+  form input, form textarea { padding: 18px; }
+  form label { margin: 26px 0 10px; }
+  .card h3, .founder h3 { font-size: 34px; }
+  .card { padding: 40px; }
+  .about-intro h1 { font-size: 84px; }
+  .contact-form, .contact-details { padding: 52px; border-radius: 18px; }
+  .contact-grid { gap: 80px; margin-top: 64px; }
+  .contact-mark { height: 118%; max-height: 2200px; }
+  .founders { gap: 48px; }
+  .founder { padding: 44px; }
   .team li { width: 520px; margin-right: 48px; }
   .team-badge { width: 84px; height: 84px; font-size: 38px; margin-right: 24px; }
   .team-name { font-size: 32px; }

@@ -121,6 +121,7 @@ header {
     right: 0;
     flex-direction: column;
     padding: 4px 0 10px;
+    overflow: hidden;
     background: var(--bg);
     border-bottom: 1px solid var(--line);
     box-shadow: 0 12px 24px rgba(28, 28, 40, 0.08);
@@ -168,18 +169,15 @@ header {
   color: #fff;
   text-decoration: none;
   padding: 13px 30px;
-  border-radius: 4px;
+  border-radius: 999px;
   letter-spacing: 0.05em;
   font-size: 15px;
   border: none;
   cursor: pointer;
 }
 .btn:hover { background: #028f8b; }
-.btn-ghost {
-  background: none;
-  box-shadow: inset 0 0 0 1.5px var(--teal-bright);
-}
-.btn-ghost:hover { background: rgba(47, 208, 201, 0.16); }
+.btn-ghost { background: var(--teal); }
+.btn-ghost:hover { background: #028f8b; }
 
 /* ============ Sections ============ */
 section { padding: 48px 0; padding: clamp(48px, 8vw, 84px) 0; }

@@ -569,19 +569,16 @@
       const hood = [H(0.10, -0.01), H(0.07, 0.07), H(0.015, 0.09), H(-0.065, 0.05), H(-0.085, -0.04), H(-0.035, -0.17), H(0.06, -0.11)];
       ctx.fillStyle = ink; ctx.strokeStyle = ink;
       ctx.beginPath(); hood.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); ctx.fill(); ctx.stroke();
-      // The face in shadow, and the visor lit inside it: the glow is clipped to the face.
+      // The face in shadow, with two glowing eyes inside it.
       const [cx, cy] = H(-0.005, 0.035);
       ctx.fillStyle = faceTone;
       ctx.beginPath(); ctx.ellipse(cx, cy, 0.052 * u, 0.06 * u, Math.atan2(s.uy, s.ux) + Math.PI / 2, 0, TAU); ctx.fill();
-      ctx.save();
-      ctx.clip();
-      const [vx1, vy1] = H(0.008, -0.03), [vx2, vy2] = H(0.014, 0.1);
-      ctx.strokeStyle = 'rgba(127,240,234,0.3)'; ctx.lineWidth = 0.055 * u; ctx.lineCap = 'butt';
-      ctx.beginPath(); ctx.moveTo(vx1, vy1); ctx.lineTo(vx2, vy2); ctx.stroke();
-      ctx.strokeStyle = '#7ff0ea'; ctx.lineWidth = 0.022 * u;
-      ctx.beginPath(); ctx.moveTo(vx1, vy1); ctx.lineTo(vx2, vy2); ctx.stroke();
-      ctx.restore();
-      ctx.lineCap = 'round';
+      for (const [ex, ey] of [H(0.008, 0.012), H(0.008, 0.058)]) {
+        ctx.fillStyle = 'rgba(127,240,234,0.3)';
+        ctx.beginPath(); ctx.arc(ex, ey, 0.024 * u, 0, TAU); ctx.fill();
+        ctx.fillStyle = '#7ff0ea';
+        ctx.beginPath(); ctx.arc(ex, ey, 0.012 * u, 0, TAU); ctx.fill();
+      }
     }
 
     function stepScarf(ax, ay, dt, rel) {

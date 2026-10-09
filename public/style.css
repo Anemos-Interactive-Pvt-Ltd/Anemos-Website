@@ -873,6 +873,11 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .is-live .team + .btn { margin-top: 8px; }
 .is-live .chips li { margin-bottom: 8px; }
 
+/* A phone on its side: the menu's seven links in two columns, so they fit without scrolling. */
+@media (max-width: 1180px) and (max-height: 480px) {
+  .nav { flex-direction: row; flex-wrap: wrap; }
+  .nav a { width: 50%; padding: 10px var(--gutter); }
+}
 @media (max-height: 480px) {
   .header-inner { padding: 8px var(--gutter); }
   /* Short screens: smaller, tighter dots, and the column starts below the fixed header. */
@@ -881,9 +886,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .journey-dots button { width: 20px; height: 20px; }
   .journey-dots button + button { margin-top: 2px; }
   .journey-dots button::before { top: 7px; right: 7px; bottom: 7px; left: 7px; }
-  /* A phone on its side: the menu's seven links in two columns, so they fit without scrolling. */
-  .nav { flex-direction: row; flex-wrap: wrap; }
-  .nav a { width: 50%; padding: 10px var(--gutter); }
+
 }
 /* The narrowest phones, down to 300px. */
 @media (max-width: 360px) {

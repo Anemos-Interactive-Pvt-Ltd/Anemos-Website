@@ -410,7 +410,38 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   margin: 0 10px 10px 0;
 }
 
-.journey.is-live { height: 900vh; height: 900lvh; }
+/* One screen for the stage plus 9.2 of scrolling; wind.js lengthens this on large screens. */
+/* Social icons. Each is a plain tile until it is given a link and becomes an <a>. */
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 22px;
+  list-style: none;
+}
+.social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 12px 12px 0;
+  color: #fff;
+  background: rgba(20, 18, 66, 0.55);
+  border: 1.5px solid var(--teal-bright);
+  border-radius: 16px;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.social svg { width: 26px; height: 26px; fill: currentColor; }
+a.social:hover, a.social:focus {
+  color: #141242;
+  background: var(--teal-bright);
+  transform: translateY(-3px);
+}
+.is-wide .social { width: 40px; height: 40px; border-radius: 12px; margin: 0 8px 8px 0; }
+.is-wide .social svg { width: 19px; height: 19px; }
+.is-wide .socials { margin-top: 10px; }
+
+.journey.is-live { height: 1020vh; height: 1020lvh; }
 .is-live .journey-stage {
   position: -webkit-sticky;
   position: sticky;
@@ -562,7 +593,9 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   body.home .nav a.active { color: var(--teal-bright); box-shadow: inset 3px 0 0 var(--teal-bright); }
 }
 @media (max-width: 640px) {
-  .journey.is-live { height: 810vh; height: 810lvh; }
+  .journey.is-live { height: 920vh; height: 920lvh; }
+  .social { width: 48px; height: 48px; border-radius: 14px; margin: 0 8px 8px 0; }
+  .social svg { width: 23px; height: 23px; }
   .is-live .panel { top: 84px; top: clamp(84px, 12vh, 120px); }
 }
 /* Short windows: tighten the copy so it stays clear of the runner. */
@@ -614,6 +647,8 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .journey-dots button { width: 20px; height: 20px; }
   .journey-dots button::before { top: 7px; right: 7px; bottom: 7px; left: 7px; }
   .chips li { font-size: 13px; padding: 5px 12px; }
+  .social { width: 44px; height: 44px; border-radius: 13px; margin: 0 8px 8px 0; }
+  .social svg { width: 21px; height: 21px; }
 }
 /* ============ Projects: the building site ============ */
 .site-page {
@@ -755,6 +790,8 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .is-live .panel-hero, .site-copy { max-width: 1040px; }
   .chips li { font-size: 18px; }
   .is-live .scroll-cue { font-size: 16px; }
+  .social { width: 76px; height: 76px; border-radius: 22px; margin: 0 18px 18px 0; }
+  .social svg { width: 36px; height: 36px; }
   footer { font-size: 16px; }
 }
 /* 4K at native scale. */
@@ -775,6 +812,8 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .is-live .panel-hero, .site-copy { max-width: 1500px; }
   .chips li { font-size: 25px; padding: 12px 28px; }
   .is-live .scroll-cue { font-size: 22px; }
+  .social { width: 104px; height: 104px; border-radius: 28px; border-width: 3px; margin: 0 24px 24px 0; }
+  .social svg { width: 48px; height: 48px; }
   footer { font-size: 22px; }
   footer .wordmark { font-size: 30px; }
 }

@@ -336,7 +336,7 @@
     const SPACING = 12;
     const LENGTH = SPACING * (panels.length - 1);
     const REACH = 4.6;                                      // how far either side of its mark a panel stays up
-    const STOPS = [0, 8.6, 21.5, 33.6, 45.8, 57.7, LENGTH]; // where the dots and nav links land
+    const STOPS = [0, 8.6, 21.5, 33.6, 45.8, 57.7, 69.8, LENGTH]; // where the dots and nav links land
     const GOAL = LENGTH + 5.4;                              // the last hoop: through it, the wind carries you to the contact page
     const END = LENGTH + 6;                                 // where the scroll runs out
     // A hoop halfway between each pair of panels. The world changes on the far side of every one.
@@ -351,6 +351,7 @@
       { back: 'islands', sky: ['#1a0b3d', '#44137a', '#a63492'], sil: '255,196,250', ground: ['#1d0a40', '#0e0522'], stars: 1, pixel: true },
       { back: 'grid', sky: ['#0a2463', '#12409a', '#1b5fc4'], sil: '205,226,255', ground: ['#0a1f5c', '#061236'] },
       { back: 'circuit', sky: ['#04161c', '#06323a', '#0a5a5a'], sil: '120,255,235', ground: ['#03171c', '#020c0f'] },
+      { back: 'city', sky: ['#1b1038', '#3b1a6b', '#c2417a'], sil: '255,205,235', ground: ['#1c0d38', '#0e061f'], stars: 0.8 },
       { back: 'hills', sky: ['#1a2466', '#2c7790', '#f2b56b'], sil: '255,236,205', ground: ['#12204f', '#090f2a'], sun: [0.35, '255,226,160'] },
       { back: 'blank', sky: ['#ffffff', '#ffffff', '#f5f6fa'], sil: '38,34,98', ground: ['#f5f6fa', '#e4e6ef'], light: true },
     ];
@@ -360,13 +361,14 @@
       { x: 36.0, hw: 1.8, h: 1.0 },     // chasm
       { x: 48.0, hw: 1.6, h: 1.25 },    // crates
       { x: 60.0, hw: 1.75, h: 1.25 },   // gears
+      { x: 72.0, hw: 1.15, h: 0.8 },    // hurdle
     ];
     const CHASM = [34.7, 37.3];
     const CYCLE = 1.5;                                      // ground covered by one full stride cycle
 
     const ORBS = [];
     for (const j of JUMPS) for (const d of [-0.5, 0, 0.5]) ORBS.push(j.x + d * j.hw);
-    for (const x of [5, 6, 7, 18, 19, 20, 22.5, 24, 25.5, 29.5, 30.5, 31.5, 41, 42, 43, 53, 54, 55, 65, 66, 67]) ORBS.push(x);
+    for (const x of [5, 6, 7, 18, 19, 20, 22.5, 24, 25.5, 29.5, 30.5, 31.5, 41, 42, 43, 53, 54, 55, 65, 66, 67, 77, 78, 79]) ORBS.push(x);
 
     const rand = rng(7);
     const STARS = Array.from({ length: 70 }, () => ({ x: rand(), y: rand() * 0.62, r: 0.5 + rand() * 1.1, ph: rand() * TAU }));
@@ -439,7 +441,7 @@
       // and more scrolling to cover it.
       const longer = wide ? 1 : 1 + 0.6 * clamp((W - 1440) / 1120, 0, 1);
       span *= longer;
-      journey.style.height = longer > 1 ? stage.offsetHeight * (1 + 8 * longer) + 'px' : '';
+      journey.style.height = longer > 1 ? stage.offsetHeight * (1 + 9.2 * longer) + 'px' : '';
       guide = new Float32Array(Math.ceil((W + PAD * 2) / STEP) + 1);
       scratch = new Float32Array(guide.length);
       top = journey.getBoundingClientRect().top + window.scrollY;
@@ -450,7 +452,7 @@
 
     // Whatever the screen, each panel has to stay clear of what happens beneath it. If the copy
     // is too tall for the room it has, it is scaled down (and widened to match) until it fits.
-    const CLEARANCE = [1.3, 1.85, 1.6, 2.3, 2.3, 2.3, 1.3];   // runner-heights of scene under each panel
+    const CLEARANCE = [1.3, 1.85, 1.6, 2.3, 2.3, 2.3, 1.85, 1.3];   // runner-heights of scene under each panel
     function fitPanels() {
       panels.forEach((p, i) => {
         p.style.transform = p.style.width = p.style.maxWidth = '';
@@ -1174,6 +1176,7 @@
       drawPennant(LENGTH + 1.3, 1.5, 0.7);
       drawHurdle(JUMPS[0].x);
       drawHurdle(JUMPS[1].x);
+      drawHurdle(JUMPS[5].x);
       drawCrates(JUMPS[3].x);
       drawGears(JUMPS[4].x);
       drawOrbs();

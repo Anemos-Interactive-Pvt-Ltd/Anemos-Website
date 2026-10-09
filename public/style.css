@@ -1,6 +1,7 @@
 :root {
   --navy: #262262;
   --teal: #02A09C;
+  --teal-bright: #2fd0c9;
   --ink: #1c1c28;
   --muted: #5a5a6e;
   --bg: #ffffff;
@@ -130,25 +131,7 @@ header {
   }
 }
 
-/* ============ Hero ============ */
-.hero {
-  background: linear-gradient(135deg, var(--navy) 0%, #1a1750 60%, #133a58 100%);
-  color: #fff;
-  padding: clamp(56px, 10vw, 110px) 0;
-}
-.hero h1 {
-  font-size: clamp(26px, 4.5vw, 48px);
-  line-height: 1.22;
-  letter-spacing: 0.02em;
-  max-width: 22ch;
-}
-.hero h1 em { color: var(--teal); font-style: normal; }
-.hero p {
-  margin-top: 20px;
-  max-width: 60ch;
-  font-size: clamp(15px, 2vw, 18px);
-  color: #cfd2e6;
-}
+/* ============ Buttons ============ */
 .btn {
   display: inline-block;
   margin-top: 30px;
@@ -264,6 +247,282 @@ footer .wordmark span { color: var(--teal); }
 footer .legal { margin-top: 14px; line-height: 1.9; overflow-wrap: anywhere; }
 footer a { color: var(--teal); text-decoration: none; }
 
+/* ============ Wind text ============
+   wind.js wraps each word in .w and marks other blocks .rv, each with its own
+   --d delay. While a block is .wind-armed they wait upwind, arrive when it
+   turns .is-active, and are carried off downwind when it turns .is-past. */
+.w { display: inline-block; }
+.wind-armed .w,
+.wind-armed .rv {
+  opacity: 0;
+  transform: translate3d(-28px, 10px, 0) skewX(-14deg);
+  filter: blur(6px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.9s cubic-bezier(0.16, 0.84, 0.3, 1),
+    filter 0.7s ease;
+  transition-delay: var(--d, 0ms);
+}
+.wind-armed.is-active .w,
+.wind-armed.is-active .rv {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+.wind-armed.is-past .w,
+.wind-armed.is-past .rv {
+  transform: translate3d(40px, -12px, 0) skewX(-10deg);
+}
+.wind-armed:not(.is-active) .w,
+.wind-armed:not(.is-active) .rv {
+  transition-duration: 0.4s;
+  transition-delay: calc(var(--d, 0ms) * 0.3);
+}
+
+/* ============ Home: the wind run ============
+   Without .is-live (no JavaScript, reduced motion, or a very short window)
+   the panels are ordinary stacked sections. With it, the stage pins to the
+   viewport and the scroll distance of .journey drives the run in wind.js. */
+body.home { background: #141242; }
+body.home header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  background: rgba(20, 18, 66, 0.62);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+body.home header .wordmark { color: #fff; }
+body.home header .wordmark span { color: var(--teal-bright); }
+body.home .nav a { color: #dfe2f5; }
+body.home .nav a:hover, body.home .nav a.active { color: var(--teal-bright); }
+body.home .menu-toggle span { background: #fff; }
+body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
+
+.journey {
+  position: relative;
+  color: #fff;
+  background: linear-gradient(180deg, #141242 0%, #262262 55%, #173b63 100%);
+}
+.journey-stage { position: relative; }
+.journey-panels { padding-top: 68px; }
+.journey-canvas, .journey-dots, .scroll-cue { display: none; }
+
+.panel { scroll-margin-top: 72px; }
+.panel h2 {
+  color: #fff;
+  font-size: clamp(26px, 3.6vw, 42px);
+  line-height: 1.2;
+}
+.panel .lede { color: #cfd2e6; }
+.panel .kicker { color: var(--teal-bright); }
+.panel-hero h1 {
+  font-size: clamp(26px, 4.5vw, 48px);
+  line-height: 1.22;
+  letter-spacing: 0.02em;
+  max-width: 22ch;
+}
+.panel-hero h1 em { color: var(--teal-bright); font-style: normal; }
+.panel-hero p {
+  margin-top: 20px;
+  max-width: 60ch;
+  font-size: clamp(15px, 2vw, 18px);
+  color: #cfd2e6;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+  list-style: none;
+}
+.chips li {
+  font-family: 'Questrial', 'Century Gothic', 'Futura', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: #e6e8f7;
+  padding: 7px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+}
+
+.journey.is-live { height: 850vh; height: 850lvh; }
+.is-live .journey-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100lvh;
+  overflow: hidden;
+}
+/* A teal glow in the sky, and a dawn that comes up along the horizon as the run goes on. */
+.is-live .journey-stage::before,
+.is-live .journey-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.is-live .journey-stage::before {
+  background: radial-gradient(circle at 84% 20%, rgba(47, 208, 201, 0.2) 0, rgba(47, 208, 201, 0) 32%);
+}
+.is-live .journey-stage::after {
+  background: radial-gradient(120% 70% at 70% 100%, rgba(47, 208, 201, 0.34) 0, rgba(47, 208, 201, 0) 70%);
+  opacity: var(--p, 0);
+}
+.is-live .journey-canvas {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.is-live .journey-panels {
+  position: absolute;
+  inset: 0;
+  padding-top: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.is-live .panel {
+  position: absolute;
+  top: clamp(92px, 15vh, 160px);
+  left: var(--gutter);
+  right: calc(var(--gutter) + 28px);
+  max-width: 660px;
+  padding: 0;
+  pointer-events: none;
+}
+.is-live .panel-hero { max-width: 760px; }
+.is-live .panel-hero h1 { max-width: 26ch; }
+.is-live .panel.is-active { pointer-events: auto; }
+
+.is-live .scroll-cue {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 26px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #aab0d8;
+}
+.scroll-cue span {
+  position: relative;
+  width: 44px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+}
+.scroll-cue span::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--teal-bright);
+  animation: cue-gust 1.8s cubic-bezier(0.5, 0, 0.2, 1) infinite;
+}
+@keyframes cue-gust {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+.is-live .journey-dots {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: absolute;
+  top: 50%;
+  right: clamp(4px, 2vw, 28px);
+  transform: translateY(-50%);
+  z-index: 3;
+}
+.journey-dots button {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.journey-dots button::before {
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.32);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+.journey-dots button:hover::before { background: #fff; }
+.journey-dots button.is-current::before {
+  background: var(--teal-bright);
+  transform: scale(1.7);
+}
+.journey-dots button:focus-visible { outline: 2px solid var(--teal-bright); border-radius: 50%; }
+.journey-dots span {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  margin-right: 6px;
+  padding: 4px 10px;
+  font-family: 'Questrial', 'Century Gothic', 'Futura', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  color: #fff;
+  background: rgba(20, 18, 66, 0.8);
+  border-radius: 4px;
+  opacity: 0;
+  transform: translate(6px, -50%);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+.journey-dots button:hover span,
+.journey-dots button:focus-visible span {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+@media (max-width: 1180px) {
+  body.home .nav {
+    background: #141242;
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+  }
+  body.home .nav a { border-top-color: rgba(255, 255, 255, 0.08); }
+  body.home .nav a.active { color: var(--teal-bright); box-shadow: inset 3px 0 0 var(--teal-bright); }
+}
+@media (max-width: 640px) {
+  .journey.is-live { height: 760vh; height: 760lvh; }
+  .is-live .panel { top: clamp(84px, 12vh, 120px); }
+}
+/* Short windows: tighten the copy so it stays clear of the runner. */
+@media (max-height: 820px) {
+  .is-live .panel { top: clamp(84px, 12vh, 100px); }
+  .is-live .panel-hero h1 { font-size: clamp(26px, min(4.5vw, 6vh), 48px); }
+  .is-live .panel-hero p { margin-top: 14px; font-size: clamp(15px, 2.4vh, 18px); }
+  .is-live .panel .btn { margin-top: 22px; }
+  .is-live .panel h2 { font-size: clamp(24px, min(3.6vw, 5.4vh), 42px); margin-bottom: 12px; }
+}
+@media (max-height: 700px) {
+  .is-live .scroll-cue { display: none; }
+  .is-live .panel .lede { font-size: 14px; line-height: 1.55; }
+}
+
+/* ============ Contact: wind behind the heading ============ */
+.page-intro { position: relative; }
+.page-intro .container { position: relative; }
+.wind-ambient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(180px, 26vw, 260px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 /* ==================================================
    Breakpoints — device coverage
    ==================================================
@@ -323,7 +582,6 @@ footer a { color: var(--teal); text-decoration: none; }
 
 /* --- Phone held sideways (short landscape screens) --- */
 @media (max-height: 480px) and (orientation: landscape) {
-  .hero { padding: 40px 0; }
   section { padding: 40px 0; }
 }
 
@@ -341,7 +599,7 @@ footer a { color: var(--teal); text-decoration: none; }
 @media (min-width: 1800px) {
   :root { --container: 1280px; }
   body { font-size: 17px; }
-  .hero h1 { font-size: 54px; }
+  .panel-hero h1 { font-size: 54px; }
   .card h3 { font-size: 20px; }
   .card p, .contact-block p { font-size: 16px; }
 }

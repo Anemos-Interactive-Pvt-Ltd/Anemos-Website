@@ -10,11 +10,11 @@
   <link rel="icon" type="image/svg+xml" href="logo.svg">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="home">
 
 <header>
   <div class="container header-inner">
-    <a class="wordmark" href="index.html"><img src="logo.svg" alt="Anemos Interactive logo" class="logo-symbol">anemos <span>interactive</span></a>
+    <a class="wordmark" href="index.html"><img src="logo-white.svg" alt="Anemos Interactive logo" class="logo-symbol">anemos <span>interactive</span></a>
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
@@ -27,54 +27,62 @@
   </div>
 </header>
 
-<section class="hero">
-  <div class="container">
-    <h1>Games and technology, <em>built in Mumbai</em>, made for the world.</h1>
-    <p>Anemos Interactive is an independent game development and technology studio. We build original interactive worlds, and we build software for businesses that need it done right.</p>
-    <a class="btn" href="contact.html">Get in touch</a>
-  </div>
-</section>
+<main class="journey" id="journey">
+  <div class="journey-stage">
+    <canvas class="journey-canvas" aria-hidden="true"></canvas>
+    <div class="container journey-panels">
 
-<section id="about">
-  <div class="container">
-    <div class="kicker">About us</div>
-    <h2>A digital-first studio</h2>
-    <p class="lede">Anemos Interactive Private Limited is a fully online business. Our team develops, publishes, and delivers all of our work digitally — games distributed through online storefronts, and software services delivered remotely to clients. We are incorporated in Mumbai, Maharashtra, and recognised under the DPIIT Startup India programme.</p>
-  </div>
-</section>
+      <section class="panel panel-hero" id="top" data-label="Home">
+        <h1 data-wind="words">Games and technology, <em>built in Mumbai</em>, made for the world.</h1>
+        <p data-wind="words">Anemos Interactive is an independent game development and technology studio. We build original interactive worlds, and we build software for businesses that need it done right.</p>
+        <a class="btn" href="contact.html" data-wind>Get in touch</a>
+        <div class="scroll-cue" data-wind aria-hidden="true"><span></span>Scroll to follow the wind</div>
+      </section>
 
-<section id="services" class="alt">
-  <div class="container">
-    <div class="kicker">What we do</div>
-    <h2>Three lines of work</h2>
-    <div class="grid">
-      <div class="card">
-        <div class="dot"></div>
-        <h3>Original Games</h3>
-        <p>We develop our own intellectual property — story-driven action games designed for global digital distribution on PC and console storefronts. Our flagship original title is currently in development.</p>
-      </div>
-      <div class="card">
-        <div class="dot"></div>
-        <h3>Game Development Services</h3>
-        <p>End-to-end B2B game development for partners and clients — design, 3D art, engineering, and production, delivered remotely by our team.</p>
-      </div>
-      <div class="card">
-        <div class="dot"></div>
-        <h3>Technology Consulting</h3>
-        <p>Software engineering and IT consulting services — interactive 3D applications, real-time experiences, and custom tools for businesses.</p>
-      </div>
+      <section class="panel" id="about" data-label="About us">
+        <div class="kicker" data-wind>About us</div>
+        <h2 data-wind="words">A digital-first studio</h2>
+        <p class="lede" data-wind="words">Anemos Interactive Private Limited is a fully online business. Our team develops, publishes, and delivers all of our work digitally — games distributed through online storefronts, and software services delivered remotely to clients. We are incorporated in Mumbai, Maharashtra, and recognised under the DPIIT Startup India programme.</p>
+      </section>
+
+      <section class="panel" id="services" data-label="What we do">
+        <div class="kicker" data-wind>What we do</div>
+        <h2 data-wind="words">Three lines of work</h2>
+        <ul class="chips">
+          <li data-wind>Original Games</li>
+          <li data-wind>Game Development Services</li>
+          <li data-wind>Technology Consulting</li>
+        </ul>
+      </section>
+
+      <section class="panel" id="original-games" data-label="Original Games">
+        <div class="kicker" data-wind>What we do · 01 / 03</div>
+        <h2 data-wind="words">Original Games</h2>
+        <p class="lede" data-wind="words">We develop our own intellectual property — story-driven action games designed for global digital distribution on PC and console storefronts. Our flagship original title is currently in development.</p>
+      </section>
+
+      <section class="panel" id="game-development" data-label="Game Development Services">
+        <div class="kicker" data-wind>What we do · 02 / 03</div>
+        <h2 data-wind="words">Game Development Services</h2>
+        <p class="lede" data-wind="words">End-to-end B2B game development for partners and clients — design, 3D art, engineering, and production, delivered remotely by our team.</p>
+      </section>
+
+      <section class="panel" id="technology-consulting" data-label="Technology Consulting">
+        <div class="kicker" data-wind>What we do · 03 / 03</div>
+        <h2 data-wind="words">Technology Consulting</h2>
+        <p class="lede" data-wind="words">Software engineering and IT consulting services — interactive 3D applications, real-time experiences, and custom tools for businesses.</p>
+      </section>
+
+      <section class="panel" id="work-with-us" data-label="Work with us">
+        <div class="kicker" data-wind>Work with us</div>
+        <h2 data-wind="words">Everything we do happens online</h2>
+        <p class="lede" data-wind="words">From client meetings to final delivery, our operations are remote and digital. If you'd like to discuss a project or partnership, the fastest way to reach us is by email.</p>
+        <a class="btn" href="contact.html" data-wind>Contact us</a>
+      </section>
+
     </div>
   </div>
-</section>
-
-<section>
-  <div class="container">
-    <div class="kicker">Work with us</div>
-    <h2>Everything we do happens online</h2>
-    <p class="lede">From client meetings to final delivery, our operations are remote and digital. If you'd like to discuss a project or partnership, the fastest way to reach us is by email.</p>
-    <a class="btn" href="contact.html">Contact us</a>
-  </div>
-</section>
+</main>
 
 <footer>
   <div class="container">
@@ -104,6 +112,7 @@
     toggle.setAttribute('aria-expanded', 'false');
   }));
 </script>
+<script src="wind.js"></script>
 
 </body>
 </html>

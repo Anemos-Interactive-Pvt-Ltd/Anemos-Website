@@ -27,13 +27,14 @@
   </div>
 </header>
 
-<section>
+<section class="page-intro">
+  <canvas class="wind-ambient" aria-hidden="true"></canvas>
   <div class="container">
-    <div class="kicker">Contact</div>
-    <h2>Get in touch</h2>
-    <p class="lede">We operate as a fully online business — the best way to reach us is by email or the form below. We typically respond within one business day.</p>
+    <div class="kicker" data-wind>Contact</div>
+    <h2 data-wind="words">Get in touch</h2>
+    <p class="lede" data-wind="words">We operate as a fully online business — the best way to reach us is by email or the form below. We typically respond within one business day.</p>
 
-    <div class="contact-grid">
+    <div class="contact-grid" data-wind>
       <div class="contact-block">
         <h3>Email</h3>
         <p><a href="mailto:contact@anemosinteractive.com">contact@anemosinteractive.com</a></p>
@@ -101,6 +102,7 @@
     toggle.setAttribute('aria-expanded', 'false');
   }));
 </script>
+<script src="wind.js"></script>
 
 </body>
 </html>

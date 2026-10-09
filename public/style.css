@@ -951,7 +951,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   body { font-size: 15px; }
   .wordmark { font-size: 15px; letter-spacing: 0.04em; }
   .logo-symbol { height: 24px; margin-right: 7px; }
-  .btn { display: block; text-align: center; padding: 12px 20px; }
+  .btn { padding: 12px 22px; }
   .card { padding: 18px; }
 }
 
@@ -960,7 +960,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   :root { --gutter: 16px; }
   .wordmark { font-size: 17px; }
   .logo-symbol { height: 26px; margin-right: 8px; }
-  .btn { display: block; text-align: center; }
+  .btn { padding: 12px 24px; }
 }
 
 /* --- Standard phones (481–640px) --- */

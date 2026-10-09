@@ -411,7 +411,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 }
 
 /* One screen for the stage plus 9.2 of scrolling; wind.js lengthens this on large screens. */
-/* Social icons. Each is a plain tile until it is given a link and becomes an <a>. */
+/* Social icons: buttons for now, links once each has somewhere to go. */
 .socials {
   display: flex;
   flex-wrap: wrap;
@@ -425,6 +425,9 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   width: 56px;
   height: 56px;
   margin: 0 12px 12px 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
   color: #fff;
   background: rgba(20, 18, 66, 0.55);
   border: 1.5px solid var(--teal-bright);
@@ -432,7 +435,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 .social svg { width: 26px; height: 26px; fill: currentColor; }
-a.social:hover, a.social:focus {
+.social:hover, .social:focus {
   color: #141242;
   background: var(--teal-bright);
   transform: translateY(-3px);

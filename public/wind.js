@@ -564,18 +564,12 @@
       ctx.strokeStyle = '#2fd0c9'; ctx.lineWidth = 0.026 * u; ctx.lineCap = 'butt';
       line(s.ux * 0.07 + fx * 0.06, s.uy * 0.07 + fy * 0.06, s.ux * 0.07 + bx * 0.06, s.uy * 0.07 + by * 0.06);
       ctx.lineCap = 'round';
-      // Hood: a round head with a soft point trailing behind. H(a, b) is a point in head space,
-      // a along his up vector and b along his front.
+      // A round helmet of a head. H(a, b) is a point in head space, a along his up vector and
+      // b along his front.
       const H = (a, b) => [(s.hx + s.ux * a + fx * b) * u, (s.hy + s.uy * a + fy * b) * u];
       ctx.fillStyle = ink;
       const [hcx, hcy] = H(0.004, -0.012);
       ctx.beginPath(); ctx.arc(hcx, hcy, 0.094 * u, 0, TAU); ctx.fill();
-      const [t1x, t1y] = H(0.075, -0.065), [c1x, c1y] = H(0.07, -0.16), [tipx, tipy] = H(-0.02, -0.2), [c2x, c2y] = H(-0.09, -0.12), [t2x, t2y] = H(-0.07, -0.05);
-      ctx.beginPath();
-      ctx.moveTo(t1x, t1y);
-      ctx.quadraticCurveTo(c1x, c1y, tipx, tipy);
-      ctx.quadraticCurveTo(c2x, c2y, t2x, t2y);
-      ctx.closePath(); ctx.fill();
       // The face in shadow, with two glowing eyes inside it.
       const [cx, cy] = H(-0.002, 0.03);
       ctx.fillStyle = faceTone;

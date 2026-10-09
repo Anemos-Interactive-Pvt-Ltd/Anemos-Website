@@ -348,7 +348,7 @@
       { back: 'city', sky: ['#141242', '#262262', '#1b3a66'], sil: '190,200,255', ground: ['#0f0e3c', '#090822'], stars: 1, link: true },
       { back: 'city', sky: ['#1d1552', '#5a2a7c', '#e58a6f'], sil: '255,214,220', ground: ['#22123f', '#120924'], stars: 0.4, sun: [0.15, '255,196,140'] },
       { back: 'hills', sky: ['#0d2547', '#11505f', '#1f8f88'], sil: '205,255,244', ground: ['#0a2733', '#06151d'], turbines: true },
-      { back: 'islands', sky: ['#1a0b3d', '#44137a', '#a63492'], sil: '255,196,250', ground: ['#1d0a40', '#0e0522'], stars: 1, pixel: true },
+      { back: 'islands', sky: ['#1c0b16', '#6b1d2a', '#e2603a'], sil: '255,214,190', ground: ['#220c14', '#12060b'], stars: 1, pixel: true },
       { back: 'grid', sky: ['#0a2463', '#12409a', '#1b5fc4'], sil: '205,226,255', ground: ['#0a1f5c', '#061236'] },
       { back: 'circuit', sky: ['#04161c', '#06323a', '#0a5a5a'], sil: '120,255,235', ground: ['#03171c', '#020c0f'] },
       { back: 'city', sky: ['#1b1038', '#3b1a6b', '#c2417a'], sil: '255,205,235', ground: ['#1c0d38', '#0e061f'], stars: 0.8 },
@@ -1231,7 +1231,12 @@
 
     setLive();
     const startAt = hashIndex(location.hash);
-    if (live && startAt > 0) requestAnimationFrame(() => goTo(startAt));
+    if (live && startAt > 0) {
+      // The browser also scrolls to the hash by itself, to wherever the pinned panel happens to
+      // sit, and does so late. Go to the right place now and again once the page has loaded.
+      requestAnimationFrame(() => goTo(startAt));
+      window.addEventListener('load', () => setTimeout(() => { if (live) goTo(startAt); }, 0));
+    }
   }
 
   /* ---------- Contact: wind behind the heading ---------- */

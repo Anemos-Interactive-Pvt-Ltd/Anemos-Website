@@ -615,46 +615,6 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .journey-dots button::before { top: 7px; right: 7px; bottom: 7px; left: 7px; }
   .chips li { font-size: 13px; padding: 5px 12px; }
 }
-/* 1440p and 4K at native scale. */
-@media (min-width: 2400px) {
-  :root { --container: 1560px; }
-  body { font-size: 20px; }
-  .wordmark { font-size: 28px; }
-  .logo-symbol { height: 44px; }
-  .nav a { font-size: 19px; }
-  .panel-hero h1 { font-size: 72px; }
-  .panel h2 { font-size: 56px; }
-  .panel-hero p, .panel .lede { font-size: 23px; }
-  .panel .kicker { font-size: 16px; }
-  .btn { font-size: 19px; padding: 16px 38px; }
-  .is-live .panel { top: 190px; max-width: 900px; }
-  .is-live .panel-hero, .site-copy { max-width: 1040px; }
-  .chips li { font-size: 18px; }
-  .scroll-cue { font-size: 16px; }
-  footer { font-size: 16px; }
-}
-/* 4K at native scale. */
-@media (min-width: 3200px) {
-  :root { --container: 2100px; --gutter: 40px; }
-  body { font-size: 28px; }
-  .wordmark { font-size: 40px; }
-  .logo-symbol { height: 62px; margin-right: 20px; }
-  .header-inner { padding: 26px var(--gutter); }
-  .nav a { font-size: 26px; }
-  .nav a + a { margin-left: 44px; }
-  .panel-hero h1 { font-size: 104px; }
-  .panel h2 { font-size: 80px; margin-bottom: 28px; }
-  .panel-hero p, .panel .lede { font-size: 32px; }
-  .panel .kicker { font-size: 22px; margin-bottom: 18px; }
-  .btn { font-size: 26px; padding: 22px 52px; margin-top: 44px; border-radius: 6px; }
-  .is-live .panel { top: 270px; max-width: 1300px; }
-  .is-live .panel-hero, .site-copy { max-width: 1500px; }
-  .chips li { font-size: 25px; padding: 12px 28px; }
-  .scroll-cue { font-size: 22px; }
-  footer { font-size: 22px; }
-  footer .wordmark { font-size: 30px; }
-}
-
 /* ============ Projects: the building site ============ */
 .site-page {
   position: relative;
@@ -776,4 +736,45 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .panel-hero h1 { font-size: 54px; }
   .card h3 { font-size: 20px; }
   .card p, .contact-block p { font-size: 16px; }
+}
+
+/* These two come last so that they win over the large-desktop rule above. */
+/* 1440p and 4K at native scale. */
+@media (min-width: 2400px) {
+  :root { --container: 1560px; }
+  body { font-size: 20px; }
+  .wordmark { font-size: 28px; }
+  .logo-symbol { height: 44px; }
+  .nav a { font-size: 19px; }
+  .panel-hero h1 { font-size: 72px; }
+  .panel h2 { font-size: 56px; }
+  .panel-hero p, .panel .lede { font-size: 23px; }
+  .panel .kicker { font-size: 16px; }
+  .btn { font-size: 19px; padding: 16px 38px; }
+  .is-live .panel { top: 190px; max-width: 900px; }
+  .is-live .panel-hero, .site-copy { max-width: 1040px; }
+  .chips li { font-size: 18px; }
+  .is-live .scroll-cue { font-size: 16px; }
+  footer { font-size: 16px; }
+}
+/* 4K at native scale. */
+@media (min-width: 3200px) {
+  :root { --container: 2100px; --gutter: 40px; }
+  body { font-size: 28px; }
+  .wordmark { font-size: 40px; }
+  .logo-symbol { height: 62px; margin-right: 20px; }
+  .header-inner { padding: 26px var(--gutter); }
+  .nav a { font-size: 26px; }
+  .nav a + a { margin-left: 44px; }
+  .panel-hero h1 { font-size: 104px; }
+  .panel h2 { font-size: 80px; margin-bottom: 28px; }
+  .panel-hero p, .panel .lede { font-size: 32px; }
+  .panel .kicker { font-size: 22px; margin-bottom: 18px; }
+  .btn { font-size: 26px; padding: 22px 52px; margin-top: 44px; border-radius: 6px; }
+  .is-live .panel { top: 270px; max-width: 1300px; }
+  .is-live .panel-hero, .site-copy { max-width: 1500px; }
+  .chips li { font-size: 25px; padding: 12px 28px; }
+  .is-live .scroll-cue { font-size: 22px; }
+  footer { font-size: 22px; }
+  footer .wordmark { font-size: 30px; }
 }

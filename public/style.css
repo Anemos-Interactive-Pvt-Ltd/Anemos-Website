@@ -1001,16 +1001,6 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   box-shadow: 0 0 0.12em rgba(47, 208, 201, 0.55), inset 0 0 0.12em rgba(47, 208, 201, 0.35);
   animation: hoop-pulse 3s ease-in-out infinite;
 }
-.notfound-hoop::before {
-  content: '';
-  position: absolute;
-  top: 10%;
-  bottom: 10%;
-  left: 50%;
-  width: 2px;
-  margin-left: -1px;
-  background: linear-gradient(180deg, rgba(234, 255, 251, 0) 0%, rgba(234, 255, 251, 0.9) 50%, rgba(234, 255, 251, 0) 100%);
-}
 @keyframes hoop-pulse {
   0%, 100% { box-shadow: 0 0 0.12em rgba(47, 208, 201, 0.55), inset 0 0 0.12em rgba(47, 208, 201, 0.35); }
   50% { box-shadow: 0 0 0.3em rgba(47, 208, 201, 0.9), inset 0 0 0.2em rgba(47, 208, 201, 0.55); }

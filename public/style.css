@@ -198,6 +198,9 @@ h2 {
   gap: 48px;
   margin-top: 40px;
 }
+/* Wide screens: details on the left, form on the right, whatever their order in the markup. */
+.contact-details { grid-column: 1; grid-row: 1; }
+.contact-form { grid-column: 2; grid-row: 1; }
 
 .contact-block h3 {
   color: var(--navy);
@@ -762,6 +765,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 /* --- Phones & portrait tablets: stack contact page --- */
 @media (max-width: 899px) {
   .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .contact-details, .contact-form { grid-column: auto; grid-row: auto; }
 }
 
 /* --- Foldables unfolded + tablets portrait (641–899px) --- */

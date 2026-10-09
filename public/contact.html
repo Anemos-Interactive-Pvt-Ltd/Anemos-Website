@@ -60,9 +60,14 @@
     <div class="contact-grid" data-wind>
       <div class="contact-block contact-form">
         <h3>Send us a message</h3>
-        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-          <input type="hidden" name="form-name" value="contact">
-          <p style="display:none"><label>Don't fill this out: <input type="text" name="bot-field"></label></p>
+        <!-- Delivered by Web3Forms to contact@anemosinteractive.com. The access key is meant to be
+             public. With JavaScript the page sends it itself and confirms in place; without, the
+             browser posts it and Web3Forms shows its own thank-you page. -->
+        <form id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="298661da-30ce-46aa-8a7e-5281bd568837">
+          <input type="hidden" name="subject" value="New message from anemosinteractive.com">
+          <input type="hidden" name="from_name" value="Anemos Interactive website">
+          <p style="display:none"><label>Leave this box empty: <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off"></label></p>
           <label for="name">Name</label>
           <input type="text" id="name" name="name" required>
           <label for="email">Email</label>
@@ -70,6 +75,7 @@
           <label for="message">Message</label>
           <textarea id="message" name="message" rows="6" required></textarea>
           <button class="btn" type="submit">Send message</button>
+          <p class="form-status" role="status" aria-live="polite"></p>
         </form>
       </div>
 
@@ -126,6 +132,33 @@
     toggle.classList.remove('open');
     toggle.setAttribute('aria-expanded', 'false');
   }));
+</script>
+<script>
+  // Send the form from the page and confirm in place, with the plain post as the fallback.
+  const form = document.getElementById('contact-form');
+  if (form && window.fetch) {
+    const status = form.querySelector('.form-status');
+    const button = form.querySelector('button[type="submit"]');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      button.disabled = true;
+      status.classList.remove('is-error');
+      status.textContent = 'Sending…';
+      const data = {};
+      new FormData(form).forEach((v, k) => { data[k] = v; });
+      try {
+        const r = await fetch(form.action, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
+        const d = await r.json();
+        if (!d.success) throw new Error(d.message || 'not sent');
+        form.reset();
+        status.textContent = 'Thanks, your message is on its way. We typically reply within one business day.';
+      } catch (err) {
+        status.classList.add('is-error');
+        status.textContent = 'Sorry, that did not send. Please email contact@anemosinteractive.com instead.';
+      }
+      button.disabled = false;
+    });
+  }
 </script>
 <script src="wind.js"></script>
 

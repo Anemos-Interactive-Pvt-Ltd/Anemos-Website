@@ -305,6 +305,9 @@ form input:focus, form textarea:focus {
   border-color: var(--teal);
 }
 form .btn { width: auto; }
+.form-status { margin-top: 14px; font-size: 15px; color: var(--muted); min-height: 1.5em; }
+.form-status.is-error { color: #b4232c; }
+.form-status:empty { display: none; }
 
 /* ============ Footer ============ */
 footer {

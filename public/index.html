@@ -85,14 +85,19 @@
   var html = document.documentElement, loader = document.getElementById('loader');
   var bar = loader.querySelector('.loader-bar i'), pct = loader.querySelector('.loader-pct');
   var weight = { css: 20, js: 40, questrial: 20, inter: 20 }, got = {}, shown = 0, finished = false;
+  var demo = /[?&]loader\b/.test(location.search);   // ?loader shows the screen slowly, to review its design
   html.classList.add('is-loading');
   var block = function (e) { e.preventDefault(); };
   loader.addEventListener('touchmove', block, { passive: false });
   loader.addEventListener('wheel', block, { passive: false });
   function loaded() { var p = 0; for (var k in got) p += weight[k]; return p; }
   function render() { var p = loaded(); bar.style.width = p + '%'; pct.textContent = p + '%'; }
-  function tick(k) { if (got[k]) return; got[k] = true; render(); if (got.css && got.js && loaded() >= 60) finish(); }
-  var showTimer = setTimeout(function () { if (!finished) { loader.hidden = false; shown = Date.now(); render(); } }, 400);
+  function tick(k) { if (got[k] || demo) return; got[k] = true; render(); if (got.css && got.js && loaded() >= 60) finish(); }
+  var showTimer = setTimeout(function () { if (!finished) { loader.hidden = false; shown = Date.now(); render(); } }, demo ? 0 : 400);
+  if (demo) {
+    var steps = ['css', 'js', 'questrial', 'inter'], n = 0;
+    var step = setInterval(function () { got[steps[n++]] = true; render(); if (n >= steps.length) { clearInterval(step); setTimeout(finish, 900); } }, 1100);
+  }
   function finish() {
     if (finished) return;
     finished = true; clearTimeout(showTimer);
@@ -114,7 +119,7 @@
   var css = function () { tick('css'); if (got.js) fonts(); };
   if (link.sheet) css(); else { link.addEventListener('load', css); link.addEventListener('error', css); }
   window.__windReady = function () { tick('js'); if (got.css) fonts(); else setTimeout(fonts, 1500); };   // called by the wind.js script tag once it has run
-  window.addEventListener('load', function () { finish(); fonts(); });   // whatever happens, the page's own load event ends it
+  window.addEventListener('load', function () { if (!demo) finish(); fonts(); });   // whatever happens, the page's own load event ends it
   setTimeout(finish, 20000);                         // and nothing waits longer than 20 seconds
 })();
 </script>

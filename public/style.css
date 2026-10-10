@@ -1052,6 +1052,24 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .notfound .btn + .btn { margin-left: 0; }
 }
 
+/* ============ Book a call: Microsoft Bookings, framed ============ */
+.book-page .about-intro { padding-bottom: 36px; }
+.book-calendar { padding-top: 0; }
+.book-frame {
+  background: #f3f3f3;              /* the booking page's own grey, so the frame edge disappears */
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.book-frame iframe { display: block; width: 100%; height: 1900px; border: 0; }
+.book-fallback { margin-top: 18px; color: #cfd2e6; font-size: 15px; }
+.book-fallback .btn { margin: 0 0 0 10px; padding: 10px 22px; font-size: 14px; vertical-align: middle; }
+.contact-book a { color: var(--teal); text-decoration: none; }
+.contact-book a:hover { text-decoration: underline; }
+@media (max-width: 480px) {
+  .book-fallback .btn { display: inline-block; margin: 10px 0 0; }
+}
+
 /* ============ Contact: wind behind the heading ============ */
 .page-intro { position: relative; }
 .page-intro .container { position: relative; }

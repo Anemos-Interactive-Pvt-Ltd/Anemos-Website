@@ -18,9 +18,18 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://anemosinteractive.com/og-image.png">
   <meta name="theme-color" content="#141242">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="https://fonts.gstatic.com/s/questrial/v19/QdVUSTchPBm7nuUeVf70viFluW44JQ.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- The loading screen's own styles live here, so it paints before any file has arrived. -->
+  <style>
+    .loader { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 200; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #141242; touch-action: none; transition: opacity 0.5s ease; }
+    .loader[hidden] { display: none; }
+    .loader-mark { height: 56px; width: auto; margin-bottom: 30px; }
+    .loader-bar { width: 180px; height: 3px; border-radius: 3px; background: rgba(255, 255, 255, 0.14); overflow: hidden; }
+    .loader-bar i { display: block; height: 100%; width: 0; background: #2fd0c9; transition: width 0.35s ease; }
+    .loader-pct { margin-top: 16px; font: 12px 'Century Gothic', CenturyGothic, 'Futura', sans-serif; letter-spacing: 0.2em; color: #8f97cf; }
+    .loader.is-done { opacity: 0; pointer-events: none; }
+    html.is-loading { overflow: hidden; }
+    @media (prefers-reduced-motion: reduce) { .loader, .loader-bar i { transition: none; } }
+  </style>
   <link rel="icon" type="image/svg+xml" href="logo.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="stylesheet" href="style.css">
@@ -60,6 +69,49 @@
   <script>try { if (sessionStorage.getItem('wind-arrive')) document.documentElement.classList.add('wind-arriving'); } catch (e) {}</script>
 </head>
 <body class="home">
+
+<!-- Loading screen. Hidden unless the files take longer than 400 ms to arrive (a slow connection on a
+     first visit); on a fast connection or a revisit it never shows. It waits for the stylesheet, the
+     fonts and wind.js, so the run is ready the moment it fades. -->
+<div class="loader" id="loader" role="status" aria-label="Loading" hidden>
+  <img class="loader-mark" src="logo-white.svg" alt="">
+  <div class="loader-bar"><i></i></div>
+  <div class="loader-pct">0%</div>
+</div>
+<script>
+(function () {
+  var html = document.documentElement, loader = document.getElementById('loader');
+  var bar = loader.querySelector('.loader-bar i'), pct = loader.querySelector('.loader-pct');
+  var total = 4, done = 0, shown = 0, finished = false;   // stylesheet, two fonts, wind.js
+  html.classList.add('is-loading');
+  var block = function (e) { e.preventDefault(); };
+  loader.addEventListener('touchmove', block, { passive: false });
+  loader.addEventListener('wheel', block, { passive: false });
+  function render() { var p = Math.round(done / total * 100); bar.style.width = p + '%'; pct.textContent = p + '%'; }
+  function tick() { if (!finished) { done++; render(); if (done >= total) finish(); } }
+  var showTimer = setTimeout(function () { if (!finished) { loader.hidden = false; shown = Date.now(); render(); } }, 400);
+  function finish() {
+    if (finished) return;
+    finished = true; clearTimeout(showTimer);
+    done = total; render();
+    var wait = shown ? Math.max(0, 800 - (Date.now() - shown)) : 0;
+    setTimeout(function () {
+      loader.classList.add('is-done'); html.classList.remove('is-loading');
+      setTimeout(function () { loader.hidden = true; }, 500);
+    }, wait);
+  }
+  var link = document.querySelector('link[rel="stylesheet"]');
+  function fonts() {
+    if (!document.fonts || !document.fonts.load) { tick(); tick(); return; }
+    document.fonts.load("16px Questrial").then(tick, tick);
+    document.fonts.load("500 16px Inter").then(tick, tick);
+  }
+  if (link.sheet) { tick(); fonts(); } else { link.addEventListener('load', function () { tick(); fonts(); }); link.addEventListener('error', function () { tick(); fonts(); }); }
+  window.__windReady = tick;                       // called by the wind.js script tag once it has run
+  window.addEventListener('load', finish);           // whatever happens, the page's own load event ends it
+  setTimeout(finish, 20000);                         // and nothing waits longer than 20 seconds
+})();
+</script>
 
 <header>
   <div class="container header-inner">
@@ -212,7 +264,7 @@
     toggle.setAttribute('aria-expanded', 'false');
   }));
 </script>
-<script src="wind.js"></script>
+<script src="wind.js" fetchpriority="high" onload="window.__windReady && window.__windReady()" onerror="window.__windReady && window.__windReady()"></script>
 
 </body>
 </html>

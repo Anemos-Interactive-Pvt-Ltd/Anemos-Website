@@ -1,0 +1,16 @@
+# How long browsers may keep each file. Fonts and the logo set never change; the page files
+# are re-checked after ten minutes, so a change shows to returning visitors within that.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+/brand/*
+  Cache-Control: public, max-age=31536000, immutable
+/*.png
+  Cache-Control: public, max-age=604800
+/*.svg
+  Cache-Control: public, max-age=604800
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+/style.css
+  Cache-Control: public, max-age=600
+/wind.js
+  Cache-Control: public, max-age=600

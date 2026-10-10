@@ -71,8 +71,10 @@
 <body class="home">
 
 <!-- Loading screen. Hidden unless the files take longer than 400 ms to arrive (a slow connection on a
-     first visit); on a fast connection or a revisit it never shows. It waits for the stylesheet, the
-     fonts and wind.js, so the run is ready the moment it fades. -->
+     first visit); on a fast connection or a revisit it never shows. The files load in order: the
+     stylesheet, then wind.js, then the two fonts. The bar is the whole site (stylesheet 20%, wind.js
+     40%, each font 20%); the page is revealed once at least 60% is in, which is exactly when the
+     stylesheet and the script are ready, and the fonts finish behind it. -->
 <div class="loader" id="loader" role="status" aria-label="Loading" hidden>
   <img class="loader-mark" src="logo-white.svg" alt="">
   <div class="loader-bar"><i></i></div>
@@ -82,18 +84,18 @@
 (function () {
   var html = document.documentElement, loader = document.getElementById('loader');
   var bar = loader.querySelector('.loader-bar i'), pct = loader.querySelector('.loader-pct');
-  var total = 4, done = 0, shown = 0, finished = false;   // stylesheet, two fonts, wind.js
+  var weight = { css: 20, js: 40, questrial: 20, inter: 20 }, got = {}, shown = 0, finished = false;
   html.classList.add('is-loading');
   var block = function (e) { e.preventDefault(); };
   loader.addEventListener('touchmove', block, { passive: false });
   loader.addEventListener('wheel', block, { passive: false });
-  function render() { var p = Math.round(done / total * 100); bar.style.width = p + '%'; pct.textContent = p + '%'; }
-  function tick() { if (!finished) { done++; render(); if (done >= total) finish(); } }
+  function loaded() { var p = 0; for (var k in got) p += weight[k]; return p; }
+  function render() { var p = loaded(); bar.style.width = p + '%'; pct.textContent = p + '%'; }
+  function tick(k) { if (got[k]) return; got[k] = true; render(); if (got.css && got.js && loaded() >= 60) finish(); }
   var showTimer = setTimeout(function () { if (!finished) { loader.hidden = false; shown = Date.now(); render(); } }, 400);
   function finish() {
     if (finished) return;
     finished = true; clearTimeout(showTimer);
-    done = total; render();
     var wait = shown ? Math.max(0, 800 - (Date.now() - shown)) : 0;
     setTimeout(function () {
       loader.classList.add('is-done'); html.classList.remove('is-loading');
@@ -101,14 +103,18 @@
     }, wait);
   }
   var link = document.querySelector('link[rel="stylesheet"]');
-  function fonts() {
-    if (!document.fonts || !document.fonts.load) { tick(); tick(); return; }
-    document.fonts.load("16px Questrial").then(tick, tick);
-    document.fonts.load("500 16px Inter").then(tick, tick);
+  var fontsStarted = false;
+  function fonts() {                                 // after the script, so the two never compete
+    if (fontsStarted) return; fontsStarted = true;
+    if (!document.fonts || !document.fonts.load) { tick('questrial'); tick('inter'); return; }
+    var q = function () { tick('questrial'); }, i = function () { tick('inter'); };
+    document.fonts.load("16px Questrial").then(q, q);
+    document.fonts.load("500 16px Inter").then(i, i);
   }
-  if (link.sheet) { tick(); fonts(); } else { link.addEventListener('load', function () { tick(); fonts(); }); link.addEventListener('error', function () { tick(); fonts(); }); }
-  window.__windReady = tick;                       // called by the wind.js script tag once it has run
-  window.addEventListener('load', finish);           // whatever happens, the page's own load event ends it
+  var css = function () { tick('css'); if (got.js) fonts(); };
+  if (link.sheet) css(); else { link.addEventListener('load', css); link.addEventListener('error', css); }
+  window.__windReady = function () { tick('js'); if (got.css) fonts(); else setTimeout(fonts, 1500); };   // called by the wind.js script tag once it has run
+  window.addEventListener('load', function () { finish(); fonts(); });   // whatever happens, the page's own load event ends it
   setTimeout(finish, 20000);                         // and nothing waits longer than 20 seconds
 })();
 </script>

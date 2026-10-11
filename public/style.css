@@ -1077,6 +1077,18 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .book-fallback .btn { display: inline-block; margin: 10px 0 0; }
 }
 
+/* ============ Legal pages ============ */
+.legal-body .container { max-width: 760px; }
+.legal-body h2 { font-size: 22px; margin: 36px 0 10px; }
+.legal-body h2:first-child { margin-top: 0; }
+.legal-body h3 { color: #fff; font-size: 17px; letter-spacing: 0.03em; margin: 22px 0 6px; }
+.legal-body p, .legal-body li { color: #cfd2e6; font-size: 16px; line-height: 1.7; margin-bottom: 12px; }
+.legal-body ul { padding-left: 22px; margin-bottom: 12px; }
+.legal-body a { color: var(--teal-bright); text-decoration: none; }
+.legal-body a:hover { text-decoration: underline; }
+.legal-body code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.9em; color: #fff; }
+@media (min-width: 2400px) { .legal-body .container { max-width: 1040px; } .legal-body p, .legal-body li { font-size: 22px; } .legal-body h2 { font-size: 30px; } .legal-body h3 { font-size: 23px; } }
+
 /* ============ The cookie line ============ */
 .consent {
   position: fixed;
@@ -1102,6 +1114,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .consent.is-in { opacity: 1; transform: none; }
 .consent.is-gone { opacity: 0; transform: translateY(12px); }
 .consent p { flex: 1 1 220px; margin: 4px 12px 4px 0; }
+.consent a { color: var(--teal-bright); text-decoration: underline; }
 .consent .btn { margin: 4px 8px 4px 0; padding: 8px 18px; font-size: 14px; }
 .consent-decline {
   margin: 4px 0;

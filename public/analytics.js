@@ -52,7 +52,8 @@
   bar.className = 'consent';
   bar.setAttribute('role', 'region');
   bar.setAttribute('aria-label', 'Cookies');
-  bar.innerHTML = '<p>We use cookies to see how the site is used.</p><button type="button" class="btn consent-accept">Accept</button><button type="button" class="consent-decline">Decline</button>';
+  var root = /^\/[^/]*\/.+/.test(location.pathname) ? '/' : '';   // a 404 can be served from any depth
+  bar.innerHTML = '<p>We use cookies to see how the site is used. <a href="' + root + 'privacy.html">Privacy policy</a></p><button type="button" class="btn consent-accept">Accept</button><button type="button" class="consent-decline">Decline</button>';
   function decide(value) {
     try { localStorage.setItem('anemos-consent', value); } catch (e) { /* fine without */ }
     gtag('consent', 'update', { analytics_storage: value });

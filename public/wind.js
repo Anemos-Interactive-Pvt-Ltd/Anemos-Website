@@ -376,14 +376,16 @@
       { x: 70.6, hw: 1.15, h: 0.8 },    // hurdle (About us)
       { x: 73.4, hw: 1.15, h: 0.8 },    // hurdle (About us)
     ];
-    // The social icons stand on the course as blocks, and he hops over them one by one. They are
-    // the real buttons from the Follow us panel, laid over the canvas so they can be clicked.
+    // The social icons stand on the course as blocks, and he takes them in turn: over the first,
+    // under the second (it floats above head height), over the third, and so on. They are the
+    // real links from the Follow us panel, laid over the canvas so they can be clicked.
     const SOCIAL_X = [81.5, 82.75, 84, 85.25, 86.5];
+    const SOCIAL_RAISED = 1.2;                                  // how high the floating ones sit, in runner-heights
     const SOCIAL_SIZE = 0.5;
     const socials = journey.querySelector('.socials');
     const socialTiles = [...socials.children];
     const socialHome = socials.parentNode;
-    for (const x of SOCIAL_X) JUMPS.push({ x, hw: 0.55, h: 0.85, hop: true });
+    SOCIAL_X.forEach((x, i) => { if (i % 2 === 0) JUMPS.push({ x, hw: 0.55, h: 0.85, hop: true }); });
     const CHASM = [22.7, 25.3];
     const CYCLE = 1.5;                                      // ground covered by one full stride cycle
     // How much scrolling the course takes: SCREENS screen-heights at a laptop, times SLOW so the
@@ -485,12 +487,16 @@
         const x = X(SOCIAL_X[i]);
         const k = smooth(edge, edge - 1.4 * u, x);
         const grow = (0.3 + 0.7 * k) * (1 + Math.sin(k * Math.PI) * 0.2);
-        tile.style.transform = `translate3d(${x - size / 2}px, ${gy - size}px, 0) scale(${grow})`;
+        const raised = i % 2 === 1;
+        const bob = raised ? Math.sin(time * 1.6 + i) * 0.03 * u : 0;
+        const y = raised ? gy - SOCIAL_RAISED * u - size + bob : gy - size;
+        tile.style.transform = `translate3d(${x - size / 2}px, ${y}px, 0) scale(${grow})`;
         tile.style.opacity = k;
         tile.style.pointerEvents = k > 0.5 ? 'auto' : 'none';
         if (k <= 0 || x < -size || x > W + size) return;
-        ctx.fillStyle = `rgba(4,4,24,${0.3 * k})`;
-        ctx.beginPath(); ctx.ellipse(x, gy + 0.02 * u, size * 0.62, 0.03 * u, 0, 0, TAU); ctx.fill();
+        // Shadow on the ground: full under a block he hops, faint under one floating overhead.
+        ctx.fillStyle = `rgba(4,4,24,${(raised ? 0.14 : 0.3) * k})`;
+        ctx.beginPath(); ctx.ellipse(x, gy + 0.02 * u, size * (raised ? 0.42 : 0.62), 0.03 * u, 0, 0, TAU); ctx.fill();
       });
     }
 

@@ -1169,7 +1169,19 @@
 
     /* ----- Page state ----- */
 
+    // What the visitor saw: each section reached, and how long they spent in the one before.
+    let sectionSince = 0;
+    function report(idx) {
+      if (activeIdx >= 0 && sectionSince) window.track('section_time', { section: panels[activeIdx].id, seconds: Math.round((performance.now() - sectionSince) / 1000) });
+      if (idx >= 0) {
+        window.track('section_view', { section: panels[idx].id });
+        if (idx === panels.length - 1) window.track('run_complete');
+      }
+      sectionSince = idx >= 0 ? performance.now() : 0;
+    }
+
     function setActive(idx) {
+      report(idx);
       activeIdx = idx;
       panels.forEach((p, i) => {
         p.classList.toggle('is-active', i === idx);
@@ -1207,7 +1219,7 @@
       tip.textContent = p.dataset.label;
       tip.setAttribute('aria-hidden', 'true');
       b.appendChild(tip);
-      b.addEventListener('click', () => { if (!dragged) travel(i); });
+      b.addEventListener('click', () => { if (!dragged) { window.track('dot_click', { section: p.id }); travel(i); } });
       dotNav.appendChild(b);
       return b;
     });
@@ -1234,6 +1246,7 @@
         if (!dragged) {
           if (Math.abs(e.clientY - startY) < 6) return;
           dragged = true;
+          window.track('scrub');
           dotNav.classList.add('is-scrubbing');
           dotNav.setPointerCapture(e.pointerId);
         }
@@ -1298,7 +1311,7 @@
         for (const px of PORTALS) {
           if ((prev < px) === (cur < px)) continue;
           gust = { at: time, dir: cur > prev ? 1 : -1 };
-          if (px === GOAL && cur > prev) wipe.leaveTo(contactUrl);
+          if (px === GOAL && cur > prev) { window.track('hoop_exit'); wipe.leaveTo(contactUrl); }
         }
       }
 

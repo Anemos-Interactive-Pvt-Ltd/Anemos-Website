@@ -35,6 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="logo.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="stylesheet" href="style.css">
+  <script>window.__trackQ = []; window.track = function (n, p) { window.__trackQ.push([n, p]); };</script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -104,6 +105,7 @@
     if (finished) return;
     finished = true; clearTimeout(showTimer);
     var wait = shown ? Math.max(0, 800 - (Date.now() - shown)) : 0;
+    if (shown) window.track('loader_shown', { seconds: Math.round((Date.now() - shown) / 100) / 10 });
     setTimeout(function () {
       loader.classList.add('is-done'); html.classList.remove('is-loading');
       setTimeout(function () { loader.hidden = true; }, 500);
@@ -280,6 +282,8 @@
   }));
 </script>
 <script src="wind.js" fetchpriority="high" onload="window.__windReady && window.__windReady()" onerror="window.__windReady && window.__windReady()"></script>
+
+<script src="analytics.js" defer></script>
 
 </body>
 </html>

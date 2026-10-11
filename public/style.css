@@ -1077,6 +1077,48 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .book-fallback .btn { display: inline-block; margin: 10px 0 0; }
 }
 
+/* ============ The cookie line ============ */
+.consent {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 560px;
+  padding: 12px 16px;
+  background: rgba(20, 18, 66, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  color: #e4e6f5;
+  font-size: 14px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.consent.is-in { opacity: 1; transform: none; }
+.consent.is-gone { opacity: 0; transform: translateY(12px); }
+.consent p { flex: 1 1 220px; margin: 4px 12px 4px 0; }
+.consent .btn { margin: 4px 8px 4px 0; padding: 8px 18px; font-size: 14px; }
+.consent-decline {
+  margin: 4px 0;
+  padding: 8px 10px;
+  background: none;
+  border: none;
+  color: #aab0d8;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.consent-decline:hover { color: #fff; }
+@media (max-width: 480px) {
+  .consent { left: 10px; right: 10px; bottom: 10px; padding: 10px 12px; font-size: 13px; }
+}
+
 /* ============ Contact: wind behind the heading ============ */
 .page-intro { position: relative; }
 .page-intro .container { position: relative; }

@@ -413,6 +413,10 @@ html.wind-arriving::before {
    the panels are ordinary stacked sections. With it, the stage pins to the
    viewport and the scroll distance of .journey drives the run in wind.js. */
 body.home { background: #141242; }
+/* The home page is one long scroll driven by the run; the side dots show where you are, so the
+   browser's own scrollbar is hidden (scrolling itself is untouched). Firefox cannot hide it. */
+html.home-page { scrollbar-width: none; -ms-overflow-style: none; }
+html.home-page::-webkit-scrollbar { width: 0; height: 0; display: none; }
 body.home header {
   position: fixed;
   left: 0;

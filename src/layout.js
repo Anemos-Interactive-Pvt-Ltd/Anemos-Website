@@ -1,6 +1,7 @@
 // The page shell for the blog pages: the same header, nav, footer and scripts as the static
 // pages (about.html is the reference), with absolute paths because posts live under /blogs/.
 import { esc } from './util.js';
+import { STAMP } from './stamp.js';
 
 export function pageShell({ title, description, canonical, ogType = 'website', ogImage, ogImageAlt, bodyClass = 'home', main, jsonLd, extraHead = '', analytics = true }) {
   const image = ogImage || 'https://anemosinteractive.com/og-image.png';
@@ -32,7 +33,7 @@ export function pageShell({ title, description, canonical, ogType = 'website', o
   <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="icon" type="image/svg+xml" href="/logo.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/style.css?v=${STAMP['style.css']}">
   ${extraHead}
   <script>window.__trackQ = []; window.track = function (n, p) { window.__trackQ.push([n, p]); };</script>
   <script>try { if (sessionStorage.getItem('wind-arrive')) document.documentElement.classList.add('wind-arriving'); } catch (e) {}</script>
@@ -90,8 +91,8 @@ ${main}
     toggle.setAttribute('aria-expanded', 'false');
   }));
 </script>
-<script src="/wind.js"></script>
-${analytics ? '\n<script src="/analytics.js" defer></script>\n' : ''}
+<script src="/wind.js?v=${STAMP['wind.js']}"></script>
+${analytics ? '\n<script src="/analytics.js?v=' + STAMP['analytics.js'] + '" defer></script>\n' : ''}
 </body>
 </html>
 `; }

@@ -16,3 +16,6 @@ Desktop.ini
 node_modules/
 .wrangler/
 .dev.vars
+
+# Generated before each deploy by scripts/stamp.mjs
+src/stamp.js

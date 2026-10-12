@@ -18,6 +18,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "anemos-website",
   "main": "src/worker.js",
+  "build": { "command": "node scripts/stamp.mjs" },
   "compatibility_date": "2026-10-06",
   "assets": {
     "directory": "./public",

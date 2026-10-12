@@ -1362,7 +1362,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .post-body th { color: #fff; }
 .post-body input[type="checkbox"] { margin-right: 8px; }
 .post-back { margin-top: 44px; }
-.post-back .btn { margin-top: 0; }
+.post-back .btn { margin-top: 0; color: #fff; }
 @media (min-width: 2400px) {
   .post-page .page-intro .container, .post-page .about-block .container { max-width: 1040px; }
   .post-body { font-size: 23px; }

@@ -5,6 +5,7 @@ import { renderMarkdown } from './markdown.js';
 import { renderPost, media } from './public.js';
 import * as db from './db.js';
 import { esc, fmtDate, html, json, now, redirect, slugify } from './util.js';
+import { STAMP } from './stamp.js';
 
 const NOINDEX = { 'x-robots-tag': 'noindex, nofollow', 'cache-control': 'no-store' };
 const ASSET = /^\/(style\.css|admin\.css|admin\.js|wind\.js|logo(-white)?\.svg|apple-touch-icon\.png|fonts\/[\w.-]+|brand\/[\w.-]+)$/;
@@ -52,8 +53,8 @@ function shell(title, body, user, editor = false) {
   <title>${esc(title)} — Blogs admin</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/svg+xml" href="/logo.svg">
-  <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/admin.css">
+  <link rel="stylesheet" href="/style.css?v=${STAMP['style.css']}">
+  <link rel="stylesheet" href="/admin.css?v=${STAMP['admin.css']}">
 </head>
 <body class="admin-body">
 <header class="admin-top">
@@ -66,7 +67,7 @@ function shell(title, body, user, editor = false) {
 <main class="container admin-main">
 ${body}
 </main>
-${editor ? '<script src="/admin.js"></script>' : ''}
+${editor ? `<script src="/admin.js?v=${STAMP['admin.js']}"></script>` : ''}
 </body>
 </html>
 `;

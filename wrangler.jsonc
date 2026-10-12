@@ -1,35 +1,98 @@
 // Cloudflare Workers configuration for the Anemos Interactive site.
 //
-// The site is static: Cloudflare serves everything in public/ as assets, with 404.html for
-// missing paths and clean URLs (/about.html is served at /about).
+// The pages in public/ are served as static assets (404.html for missing paths, clean URLs so
+// /about.html is served at /about). The Worker in src/ adds the blog: /blogs and the posts
+// under it, the RSS feed, the sitemap with posts included, images under /media/, and the
+// blog admin on the admin.* hostname. Only the paths in run_worker_first reach the Worker;
+// everything else is served straight from the assets.
 //
 //   npx wrangler deploy                    -> production worker "anemos-website", the live domain
 //   npx wrangler deploy --env experiment   -> worker "anemos-website-experiment" at experiment.anemosinteractive.com
 //   npx wrangler deploy --env test         -> worker "anemos-website-test" at test.anemosinteractive.com
+//
+// Each environment has its own database and image bucket, so nothing written on test or
+// experiment can appear on the live site. The admin sign-in (Cloudflare Access with the
+// Microsoft 365 accounts) is configured per hostname with ACCESS_TEAM_DOMAIN and ACCESS_AUD;
+// until those are set, the admin uses the DEV_KEY secret (npx wrangler secret put DEV_KEY --env …).
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "anemos-website",
+  "main": "src/worker.js",
   "compatibility_date": "2026-10-06",
   "assets": {
     "directory": "./public",
+    "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "html_handling": "auto-trailing-slash"
+    "html_handling": "auto-trailing-slash",
+    "run_worker_first": [
+      "/blogs", "/blogs/*", "/media/*", "/sitemap.xml", "/robots.txt", "/admin", "/admin/*", "/api/*",
+      "/", "/index.html", "/products", "/products.html", "/about", "/about.html", "/book", "/book.html",
+      "/contact", "/contact.html", "/privacy", "/privacy.html", "/terms", "/terms.html", "/404.html"
+    ]
   },
+  "vars": {
+    "SITE_ORIGIN": "https://anemosinteractive.com",
+    "ADMIN_HOST": "admin.anemosinteractive.com",
+    "ALLOWED_DOMAIN": "anemosinteractive.com",
+    "ADMIN_EMAILS": "ronak.jacob@anemosinteractive.com",
+    "ACCESS_TEAM_DOMAIN": "",
+    "ACCESS_AUD": "",
+    "INDEXNOW_KEY": "a27d56b48e034ce6914a721e3666ef76"
+  },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "anemos-blog", "database_id": "c29317a9-b8ce-49c5-b3f8-7611315bb4ad" }
+  ],
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "anemos-blog" }
+  ],
   "routes": [
     { "pattern": "anemosinteractive.com", "custom_domain": true },
-    { "pattern": "www.anemosinteractive.com", "custom_domain": true }
+    { "pattern": "www.anemosinteractive.com", "custom_domain": true },
+    { "pattern": "admin.anemosinteractive.com", "custom_domain": true }
   ],
   "env": {
     "experiment": {
       "name": "anemos-website-experiment",
+      "vars": {
+        "SITE_ORIGIN": "https://experiment.anemosinteractive.com",
+        "ADMIN_HOST": "admin-experiment.anemosinteractive.com",
+        "ALLOWED_DOMAIN": "anemosinteractive.com",
+        "ADMIN_EMAILS": "ronak.jacob@anemosinteractive.com",
+        "ACCESS_TEAM_DOMAIN": "",
+        "ACCESS_AUD": "",
+        "INDEXNOW_KEY": ""
+      },
+      "d1_databases": [
+        { "binding": "DB", "database_name": "anemos-blog-experiment", "database_id": "ecab29b0-afa3-413d-8e0d-4e590ce8240c" }
+      ],
+      "r2_buckets": [
+        { "binding": "MEDIA", "bucket_name": "anemos-blog-experiment" }
+      ],
       "routes": [
-        { "pattern": "experiment.anemosinteractive.com", "custom_domain": true }
+        { "pattern": "experiment.anemosinteractive.com", "custom_domain": true },
+        { "pattern": "admin-experiment.anemosinteractive.com", "custom_domain": true }
       ]
     },
     "test": {
       "name": "anemos-website-test",
+      "vars": {
+        "SITE_ORIGIN": "https://test.anemosinteractive.com",
+        "ADMIN_HOST": "admin-test.anemosinteractive.com",
+        "ALLOWED_DOMAIN": "anemosinteractive.com",
+        "ADMIN_EMAILS": "ronak.jacob@anemosinteractive.com",
+        "ACCESS_TEAM_DOMAIN": "",
+        "ACCESS_AUD": "",
+        "INDEXNOW_KEY": ""
+      },
+      "d1_databases": [
+        { "binding": "DB", "database_name": "anemos-blog-test", "database_id": "e0f5514e-b924-4c10-8912-c9bfff149bd0" }
+      ],
+      "r2_buckets": [
+        { "binding": "MEDIA", "bucket_name": "anemos-blog-test" }
+      ],
       "routes": [
-        { "pattern": "test.anemosinteractive.com", "custom_domain": true }
+        { "pattern": "test.anemosinteractive.com", "custom_domain": true },
+        { "pattern": "admin-test.anemosinteractive.com", "custom_domain": true }
       ]
     }
   }

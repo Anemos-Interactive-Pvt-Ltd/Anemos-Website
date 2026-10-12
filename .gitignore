@@ -11,3 +11,8 @@ Desktop.ini
 
 # Netlify CLI state
 .netlify/
+
+# Dependencies and Wrangler state
+node_modules/
+.wrangler/
+.dev.vars

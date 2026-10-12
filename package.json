@@ -1,0 +1,15 @@
+{
+  "name": "anemos-website",
+  "private": true,
+  "type": "module",
+  "description": "anemosinteractive.com: the static site plus the blog Worker",
+  "scripts": {
+    "dev": "wrangler dev --env experiment",
+    "deploy": "wrangler deploy",
+    "deploy:test": "wrangler deploy --env test",
+    "deploy:experiment": "wrangler deploy --env experiment"
+  },
+  "dependencies": {
+    "marked": "^15.0.12"
+  }
+}

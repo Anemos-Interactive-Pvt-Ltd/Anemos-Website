@@ -2,10 +2,13 @@
 // pages (about.html is the reference), with absolute paths because posts live under /blogs/.
 import { esc } from './util.js';
 
-export function pageShell({ title, description, canonical, ogType = 'website', ogImage, ogImageAlt, bodyClass = 'home', main, jsonLd, extraHead = '' }) {
+export function pageShell({ title, description, canonical, ogType = 'website', ogImage, ogImageAlt, bodyClass = 'home', main, jsonLd, extraHead = '', analytics = true }) {
   const image = ogImage || 'https://anemosinteractive.com/og-image.png';
   const imageAlt = ogImageAlt || 'Anemos Interactive: games and technology, built in Mumbai, made for the world.';
-  return `<!DOCTYPE html>
+  // Lines left empty by an optional tag are dropped, so the output validates cleanly.
+  return page().replace(/\n[ \t]+(?=\n)/g, '');
+
+  function page() { return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -88,10 +91,8 @@ ${main}
   }));
 </script>
 <script src="/wind.js"></script>
-
-<script src="/analytics.js" defer></script>
-
+${analytics ? '\n<script src="/analytics.js" defer></script>\n' : ''}
 </body>
 </html>
-`;
+`; }
 }

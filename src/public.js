@@ -101,7 +101,7 @@ export function renderPost(p, { preview = false } = {}) {
       <div class="post-body">
 ${p.body_html}
       </div>
-      <p class="post-back"><a href="/blogs">All posts</a></p>
+      <p class="post-back"><a class="btn" href="/blogs">All posts</a></p>
     </div>
   </article>
 </main>`;

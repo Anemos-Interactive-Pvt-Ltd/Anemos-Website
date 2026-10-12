@@ -1338,7 +1338,8 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .pagination a { color: var(--teal-bright); text-decoration: none; font-size: 15px; }
 .pagination a:hover { text-decoration: underline; }
 
-.post-page .about-block .container { max-width: 760px; }
+.post-page .page-intro .container, .post-page .about-block .container { max-width: 760px; }
+.post-page .about-intro h1 { max-width: none; }
 .post-cover { display: block; width: 100%; border-radius: 8px; margin: 0 0 32px; }
 .post-body { color: #cfd2e6; font-size: 17px; line-height: 1.75; overflow-wrap: anywhere; }
 .post-body > * + * { margin-top: 18px; }
@@ -1359,14 +1360,13 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .post-body th, .post-body td { text-align: left; padding: 8px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.14); }
 .post-body th { color: #fff; }
 .post-body input[type="checkbox"] { margin-right: 8px; }
-.post-back { margin-top: 44px; font-size: 15px; }
-.post-back a { color: var(--teal-bright); text-decoration: none; }
-.post-back a:hover { text-decoration: underline; }
+.post-back { margin-top: 44px; }
+.post-back .btn { margin-top: 0; }
 @media (min-width: 2400px) {
-  .post-page .about-block .container { max-width: 1040px; }
+  .post-page .page-intro .container, .post-page .about-block .container { max-width: 1040px; }
   .post-body { font-size: 23px; }
   .post-body h2 { font-size: 34px; }
   .post-body h3 { font-size: 27px; }
   .post-card h2 { font-size: 26px; }
-  .post-card p, .pagination a, .post-back { font-size: 19px; }
+  .post-card p, .pagination a { font-size: 19px; }
 }

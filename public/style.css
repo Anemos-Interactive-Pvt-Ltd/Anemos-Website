@@ -1340,6 +1340,7 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 
 .post-page .page-intro .container, .post-page .about-block .container { max-width: 760px; }
 .post-page .about-intro h1 { max-width: none; }
+.post-page article.about-block { padding: 48px 0; padding: clamp(48px, 8vw, 84px) 0; }
 .post-cover { display: block; width: 100%; border-radius: 8px; margin: 0 0 32px; }
 .post-body { color: #cfd2e6; font-size: 17px; line-height: 1.75; overflow-wrap: anywhere; }
 .post-body > * + * { margin-top: 18px; }

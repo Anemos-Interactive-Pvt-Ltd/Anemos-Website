@@ -88,9 +88,23 @@
   };
   form.querySelectorAll('.toolbar [data-md]').forEach((b) => b.addEventListener('click', () => { if (body.hidden) return; actions[b.dataset.md](); }));
   body.addEventListener('keydown', (e) => {
-    if (!(e.metaKey || e.ctrlKey) || e.altKey) return;
-    const key = { b: 'bold', i: 'italic', u: 'underline', k: 'link' }[e.key.toLowerCase()];
-    if (key) { e.preventDefault(); actions[key](); }
+    if ((e.metaKey || e.ctrlKey) && !e.altKey) {
+      const key = { b: 'bold', i: 'italic', u: 'underline', k: 'link' }[e.key.toLowerCase()];
+      if (key) { e.preventDefault(); actions[key](); }
+      return;
+    }
+    // Enter inside a list, checklist or quote continues it; Enter on an empty item ends it.
+    if (e.key !== 'Enter' || e.shiftKey || e.altKey || body.selectionStart !== body.selectionEnd) return;
+    const s = body.selectionStart; const lineStart = body.value.lastIndexOf('\n', s - 1) + 1;
+    const m = body.value.slice(lineStart, s).match(/^(\s*)(- \[[ x]\] |[-*] |(\d+)\. |> )(.*)$/);
+    if (!m) return;
+    e.preventDefault();
+    const indent = m[1], marker = m[2], num = m[3], rest = m[4];
+    if (!rest.trim()) { put(lineStart, s, indent, lineStart + indent.length, lineStart + indent.length); return; }
+    const next = num ? (parseInt(num, 10) + 1) + '. ' : marker.startsWith('- [') ? '- [ ] ' : marker;
+    const ins = '\n' + indent + next;
+    put(s, s, ins, s + ins.length, s + ins.length);
+    body.dispatchEvent(new Event('input'));
   });
 
   // Word count and reading time

@@ -96,7 +96,17 @@
     // Enter inside a list, checklist or quote continues it; Enter on an empty item ends it.
     if (e.key !== 'Enter' || e.shiftKey || e.altKey || body.selectionStart !== body.selectionEnd) return;
     const s = body.selectionStart; const lineStart = body.value.lastIndexOf('\n', s - 1) + 1;
-    const m = body.value.slice(lineStart, s).match(/^(\s*)(- \[[ x]\] |[-*] |(\d+)\. |> )(.*)$/);
+    const line = body.value.slice(lineStart, s);
+    const row = line.match(/^\|(.*)\|\s*$/);
+    if (row) {
+      e.preventDefault();
+      const cells = row[1].split('|');
+      if (cells.every((c) => !c.trim())) { put(lineStart, s, '', lineStart, lineStart); return; }
+      const ins = '\n|' + cells.map(() => '  ').join('|') + '|';
+      put(s, s, ins, s + 3, s + 3);
+      return;
+    }
+    const m = line.match(/^(\s*)(- \[[ x]\] |[-*] |(\d+)\. |> )(.*)$/);
     if (!m) return;
     e.preventDefault();
     const indent = m[1], marker = m[2], num = m[3], rest = m[4];

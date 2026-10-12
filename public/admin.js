@@ -97,13 +97,14 @@
     if (e.key !== 'Enter' || e.shiftKey || e.altKey || body.selectionStart !== body.selectionEnd) return;
     const s = body.selectionStart; const lineStart = body.value.lastIndexOf('\n', s - 1) + 1;
     const line = body.value.slice(lineStart, s);
-    const row = line.match(/^\|(.*)\|\s*$/);
+    const nl = body.value.indexOf('\n', s); const lineEnd = nl === -1 ? body.value.length : nl;
+    const row = body.value.slice(lineStart, lineEnd).match(/^\|(.*)\|\s*$/);
     if (row) {
       e.preventDefault();
       const cells = row[1].split('|');
-      if (cells.every((c) => !c.trim())) { put(lineStart, s, '', lineStart, lineStart); return; }
+      if (cells.every((c) => !c.trim())) { put(lineStart, lineEnd, '', lineStart, lineStart); return; }
       const ins = '\n|' + cells.map(() => '  ').join('|') + '|';
-      put(s, s, ins, s + 3, s + 3);
+      put(lineEnd, lineEnd, ins, lineEnd + 3, lineEnd + 3);
       return;
     }
     const m = line.match(/^(\s*)(- \[[ x]\] |[-*] |(\d+)\. |> )(.*)$/);

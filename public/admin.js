@@ -63,6 +63,41 @@
     insertFile.value = '';
   });
 
+  // Formatting toolbar: wraps the selection in Markdown (or the few HTML tags Markdown lacks)
+  const sel = () => ({ s: body.selectionStart, e: body.selectionEnd, t: body.value.slice(body.selectionStart, body.selectionEnd) });
+  function put(s, e, text, selStart, selEnd) { body.focus(); body.setRangeText(text, s, e, 'end'); body.setSelectionRange(selStart, selEnd); }
+  function wrap(before, after, placeholder) { const r = sel(); const inner = r.t || placeholder; put(r.s, r.e, before + inner + after, r.s + before.length, r.s + before.length + inner.length); }
+  function prefixLines(prefix, numbered) {
+    const r = sel(); const start = body.value.lastIndexOf('\n', r.s - 1) + 1; let end = body.value.indexOf('\n', r.e); if (end === -1) end = body.value.length;
+    const out = body.value.slice(start, end).split('\n').map((l, i) => (numbered ? (i + 1) + '. ' : prefix) + l.replace(/^(#{1,6} |- \[[ x]\] |- |\d+\. |> )/, '')).join('\n');
+    put(start, end, out, start, start + out.length);
+  }
+  function block(text) {
+    const r = sel(); const before = body.value.slice(0, r.s); const pad = !before ? '' : before.endsWith('\n\n') ? '' : before.endsWith('\n') ? '\n' : '\n\n';
+    put(r.s, r.e, pad + text + '\n', r.s + pad.length, r.s + pad.length + text.length);
+  }
+  const actions = {
+    h2: () => prefixLines('## '), h3: () => prefixLines('### '), h4: () => prefixLines('#### '),
+    bold: () => wrap('**', '**', 'bold text'), italic: () => wrap('*', '*', 'italic text'),
+    underline: () => wrap('<u>', '</u>', 'underlined text'), strike: () => wrap('~~', '~~', 'struck-out text'),
+    sub: () => wrap('<sub>', '</sub>', '2'), sup: () => wrap('<sup>', '</sup>', '2'),
+    link: () => { const r = sel(); const url = prompt('Link address', 'https://'); if (!url || url === 'https://') return; const text = r.t || 'link text'; put(r.s, r.e, '[' + text + '](' + url + ')', r.s + 1, r.s + 1 + text.length); },
+    ul: () => prefixLines('- '), ol: () => prefixLines('', true), task: () => prefixLines('- [ ] '), quote: () => prefixLines('> '),
+    code: () => wrap('`', '`', 'code'), codeblock: () => block('```\ncode\n```'),
+    table: () => block('| Column | Column |\n| --- | --- |\n| Cell | Cell |'), hr: () => block('---'),
+  };
+  form.querySelectorAll('.toolbar [data-md]').forEach((b) => b.addEventListener('click', () => { if (body.hidden) return; actions[b.dataset.md](); }));
+  body.addEventListener('keydown', (e) => {
+    if (!(e.metaKey || e.ctrlKey) || e.altKey) return;
+    const key = { b: 'bold', i: 'italic', u: 'underline', k: 'link' }[e.key.toLowerCase()];
+    if (key) { e.preventDefault(); actions[key](); }
+  });
+
+  // Word count and reading time
+  const count = document.getElementById('count');
+  const recount = () => { const words = (body.value.match(/\S+/g) || []).length; count.textContent = words ? words + ' words · ' + Math.max(1, Math.round(words / 220)) + ' min read' : ''; };
+  body.addEventListener('input', recount); recount();
+
   // Preview
   const toggle = document.getElementById('toggle-preview');
   toggle.addEventListener('click', async () => {

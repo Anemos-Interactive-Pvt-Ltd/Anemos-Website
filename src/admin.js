@@ -138,17 +138,37 @@ async function editorPage(env, user, admin, id) {
     </label>
   </div>
   <div class="field">
-    <div class="body-head">
-      <span class="label">Post</span>
-      <div class="tools">
-        <input type="file" id="insert-file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
-        <button type="button" class="link" id="insert-image">Insert image</button>
-        <button type="button" class="link" id="toggle-preview">Preview</button>
-      </div>
+    <span class="label">Post</span>
+    <div class="toolbar" role="toolbar" aria-label="Formatting">
+      <button type="button" data-md="h2" title="Heading">H2</button>
+      <button type="button" data-md="h3" title="Subheading">H3</button>
+      <button type="button" data-md="h4" title="Small heading">H4</button>
+      <span class="sep"></span>
+      <button type="button" data-md="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+      <button type="button" data-md="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+      <button type="button" data-md="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+      <button type="button" data-md="strike" title="Strikethrough"><s>S</s></button>
+      <button type="button" data-md="sub" title="Subscript, as in H₂O">x<sub>2</sub></button>
+      <button type="button" data-md="sup" title="Superscript, as in 2²">x<sup>2</sup></button>
+      <span class="sep"></span>
+      <button type="button" data-md="link" title="Link (Ctrl+K)">Link</button>
+      <input type="file" id="insert-file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+      <button type="button" id="insert-image" title="Insert an image">Image</button>
+      <span class="sep"></span>
+      <button type="button" data-md="ul" title="Bulleted list">• List</button>
+      <button type="button" data-md="ol" title="Numbered list">1. List</button>
+      <button type="button" data-md="task" title="Checklist">☐ Checklist</button>
+      <button type="button" data-md="quote" title="Quote">Quote</button>
+      <button type="button" data-md="code" title="Inline code">Code</button>
+      <button type="button" data-md="codeblock" title="Code block">Code block</button>
+      <button type="button" data-md="table" title="Table">Table</button>
+      <button type="button" data-md="hr" title="Divider line">Divider</button>
+      <span class="grow"></span>
+      <button type="button" id="toggle-preview" class="preview-toggle">Preview</button>
     </div>
     <textarea name="body_md" id="body" rows="22" spellcheck="true">${esc(d.body_md)}</textarea>
     <div id="preview" class="post-body preview" hidden></div>
-    <p class="hint">Markdown: # Heading · **bold** · *italic* · [link](https://…) · ![description](image) · - list · > quote · \`code\` · \`\`\` code block \`\`\`</p>
+    <p class="hint hint-row"><span>Select text and use the bar above, or type Markdown: **bold**, *italic*, [link](https://…), - list, > quote.</span><span id="count"></span></p>
   </div>
   <div class="actions-bar">
     <button type="submit" class="btn" data-action="${published ? 'publish' : 'draft'}">${published ? 'Update' : 'Save draft'}</button>

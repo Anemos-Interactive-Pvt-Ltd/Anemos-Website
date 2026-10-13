@@ -2,7 +2,7 @@
 
 This is the source of **[anemosinteractive.com](https://anemosinteractive.com)**, the website of Anemos Interactive Private Limited, a game and technology studio.
 
-![The home page: a runner at the start line, with the wind picking up](docs/screenshots/home.png)
+![The home page: a runner at the start line, with the wind picking up](docs/screenshots/home.webp)
 
 - [The idea](#the-idea)
 - [How it came together](#how-it-came-together)
@@ -25,7 +25,7 @@ We didn't want a brochure. We make games, so the site should feel like one.
 
 The home page is a single run. A runner stands at a start line; as you scroll, the wind pushes them along an obstacle course, and each stop on the course is a section of the site: what we do, the game we're building, courses, where to follow us, who we are. The copy for each stop blows in word by word as the runner reaches it. At the end of a section there's a hoop; run through it and the wind carries you to another page. Every page you land on arrives on the same gust, so the whole site feels like one place.
 
-![Services: the runner between windmills, with the service icons floating over the course](docs/screenshots/home-services.png)
+![Services: the runner between windmills, with the service icons floating over the course](docs/screenshots/home-services.webp)
 
 Everything on the course is drawn live: the runner, the wind lines, the hoops, the start gate, the windmills, the construction site, the social-media tiles the runner has to hop over. The words are ordinary HTML laid over the canvas, so search engines, screen readers and people with JavaScript off all get the full text.
 
@@ -41,7 +41,7 @@ It started as one line: *"a runner on an obstacle course, guided by wind, and th
 - **Copy.** Friends and a few people in the industry read it and told us where it was vague, where it overclaimed and where it sounded like every other studio. "Technology consulting" became "software & app development" because that is what it is; a line about rendering layers was softened until it was true.
 - **The small things people noticed.** The purple that looked off, the logo touching the edge on small phones, the social tiles that made the runner jump too often (now they alternate: hop one, duck under the next), the title on a blog post that didn't line up with the text below it. Most of what is good about the site came from someone saying "that looks wrong".
 
-![Socials: the runner hopping the GitHub tile with YouTube and Instagram on the ground](docs/screenshots/home-socials.png)
+![Socials: the runner hopping the GitHub tile with YouTube and Instagram on the ground](docs/screenshots/home-socials.webp)
 
 The timeline, roughly: a plain static site in late September 2026; the run, the worlds and the responsive work in the first ten days of October; live on 10 October; the loading screen, booking page, analytics and legal pages over the following two days; the blog and its admin after that.
 
@@ -58,9 +58,9 @@ The timeline, roughly: a plain static site in late September 2026; the run, the 
 | **Privacy, Terms** | Written for visitors in the EU, India and elsewhere, and kept in step with what the site actually collects |
 | **404** | "The wind took this page somewhere else" |
 
-![Products: It Still Beats, coming soon](docs/screenshots/products.png)
+![Products: It Still Beats, coming soon](docs/screenshots/products.webp)
 
-![About us](docs/screenshots/about.png)
+![About us](docs/screenshots/about.webp)
 
 ## How the run works
 
@@ -172,7 +172,7 @@ How it is laid out:
 - **Forms and bookings:** the contact form posts to Web3Forms with a honeypot against bots; the booking page embeds Microsoft Bookings, which shows free slots in the visitor's own time zone and books straight into our calendar.
 - **Checks before anything goes out:** the resolution matrix, an interaction run (dots, drag, hoops, menu, socials, forms), HTML validation, an accessibility audit, Lighthouse, and the cross-engine run. Changes go to the test site first and to the live site only after all of that passes.
 
-![Contact](docs/screenshots/contact.png)
+![Contact](docs/screenshots/contact.webp)
 
 ## Running it yourself
 
@@ -194,7 +194,7 @@ npx wrangler dev --env test
 
 Deploying is one command per environment: `npx wrangler deploy --env test`, or plain `npx wrangler deploy` for the live site. The admin's sign-in is configured per environment with `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` in `wrangler.jsonc`; until those are set, a `DEV_KEY` secret and a simple sign-in form stand in.
 
-<p align="center"><img src="docs/screenshots/home-phone.png" width="300" alt="The home page on a phone"></p>
+<p align="center"><img src="docs/screenshots/home-phone.webp" width="300" alt="The home page on a phone"></p>
 
 ## Folder map
 

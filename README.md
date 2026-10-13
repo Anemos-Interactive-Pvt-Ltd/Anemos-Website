@@ -95,7 +95,7 @@ The blog is the only dynamic part of the site. It runs in a Cloudflare Worker ([
 - **Public pages:** `/blogs` (cards, newest first, twelve per page) and `/blogs/<address>` for each post, in the same style as the rest of the site, with a share image, structured data for search engines, an RSS feed at `/blogs/feed.xml`, and every published post added to `sitemap.xml` automatically. Posts without a cover get a panel with the studio mark so the grid stays even.
 - **Admin:** on its own hostname, behind Cloudflare Access. Only the team's Microsoft 365 accounts can sign in; the Worker verifies the signed token on every request rather than trusting the gate alone. The author's name comes from their Microsoft account, so a rename there changes old posts too. The founder can edit anything; everyone else edits only their own posts.
 - **Writing:** Markdown in a plain text box with a formatting bar (headings, bold, italic, underline, strikethrough, sub- and superscript, links, images, lists, checklists, quotes, code, tables, dividers), a live preview, and the list continuation you'd expect from an editor — Enter continues a list, a second Enter ends it. Images are shrunk in the browser before upload and shown at a consistent width in posts, whatever size they were.
-- **Safety:** everything typed is rendered through an allow-list, so a post can never carry scripts or styles onto the site; uploads are limited to images under 8 MB; the editor's requests carry a header the API insists on; each environment (live, test, experiment) has its own database and bucket.
+- **Safety:** everything typed is rendered through an allow-list, so a post can never carry scripts or styles onto the site; uploads are limited to images under 8 MB; the editor's requests carry a header the API insists on; each environment (live and test) has its own database and bucket.
 - **Search engines:** publishing a post pings IndexNow, so Bing and the engines that share its index pick it up within hours.
 
 ## Screens, browsers and speed
@@ -161,16 +161,16 @@ The site started on Netlify with a GitHub Actions deploy. We moved to Cloudflare
 
 How it is laid out:
 
-- **One Worker, three environments.** [`wrangler.jsonc`](wrangler.jsonc) describes `anemos-website` (live, on anemosinteractive.com and www), `anemos-website-test` (test.anemosinteractive.com) and `anemos-website-experiment` (experiment.anemosinteractive.com). Each has its own admin hostname, D1 database and R2 bucket, so nothing written on test can reach the live site. Deploying is `npx wrangler deploy --env <name>`; Cloudflare creates the DNS records and certificates for the hostnames itself.
+- **One Worker, two environments.** [`wrangler.jsonc`](wrangler.jsonc) describes `anemos-website` (live, on anemosinteractive.com and www) and `anemos-website-test` (test.anemosinteractive.com). Each has its own admin hostname, D1 database and R2 bucket, so nothing written on test can reach the live site. Deploying is `npx wrangler deploy --env <name>`; Cloudflare creates the DNS records and certificates for the hostnames itself.
 - **Static assets first.** Everything in `public/` is uploaded as static assets and served from Cloudflare's edge without running any code — those requests are free and unlimited. The Worker only runs for the paths that need it: the blog, the images, the sitemap, and the HTML pages (so the admin hostname can refuse to serve them). Clean URLs come from the assets layer: `/about.html` is served at `/about`.
 - **Caching** is set in [`public/_headers`](public/_headers): a year for fonts and the brand set, a week for logos and the share image, ten minutes for the stylesheet and scripts. The blog and admin pages avoid even that wait by stamping their stylesheet and script URLs with a content hash on every deploy ([`scripts/stamp.mjs`](scripts/stamp.mjs)).
 - **Limits that matter.** The Workers free plan allows 100,000 Worker requests a day — tens of thousands of page views; past that, Worker-served pages error rather than bill. D1's free tier is five million reads a day; R2's is ten gigabytes stored with no egress charge; Access is free for up to fifty users. If the blog ever needs more, the paid Workers plan is five dollars a month.
-- **Branches match environments.** `main` is the live site, `test` is the next release, `experiment` is where new things are built. Nothing reaches `main` without passing the checks on `test` first.
+- **Branches match environments.** `main` is the live site, `test` is where the next release is built and checked. Nothing reaches `main` without passing the checks on `test` first.
 
 ## How it's built
 
 - **Forms and bookings:** the contact form posts to Web3Forms with a honeypot against bots; the booking page embeds Microsoft Bookings, which shows free slots in the visitor's own time zone and books straight into our calendar.
-- **Checks before anything goes out:** the resolution matrix, an interaction run (dots, drag, hoops, menu, socials, forms), HTML validation, an accessibility audit, Lighthouse, and the cross-engine run. Changes go to the experiment or test site first and to the live site only after all of that passes.
+- **Checks before anything goes out:** the resolution matrix, an interaction run (dots, drag, hoops, menu, socials, forms), HTML validation, an accessibility audit, Lighthouse, and the cross-engine run. Changes go to the test site first and to the live site only after all of that passes.
 
 ![Contact](docs/screenshots/contact.png)
 
@@ -188,11 +188,11 @@ The blog needs a Cloudflare account with a D1 database and an R2 bucket named as
 ```sh
 npm install
 npx wrangler login
-npx wrangler d1 execute anemos-blog-experiment --env experiment --remote --file=schema.sql   # once per database
-npx wrangler dev --env experiment
+npx wrangler d1 execute anemos-blog-test --env test --remote --file=schema.sql   # once per database
+npx wrangler dev --env test
 ```
 
-Deploying is one command per environment: `npx wrangler deploy --env experiment`, `npx wrangler deploy --env test`, or plain `npx wrangler deploy` for the live site. The admin's sign-in is configured per environment with `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` in `wrangler.jsonc`; until those are set, a `DEV_KEY` secret and a simple sign-in form stand in.
+Deploying is one command per environment: `npx wrangler deploy --env test`, or plain `npx wrangler deploy` for the live site. The admin's sign-in is configured per environment with `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` in `wrangler.jsonc`; until those are set, a `DEV_KEY` secret and a simple sign-in form stand in.
 
 <p align="center"><img src="docs/screenshots/home-phone.png" width="300" alt="The home page on a phone"></p>
 
@@ -210,7 +210,7 @@ src/db.js          the database queries
 src/layout.js      the shared page shell: header, nav, footer, scripts
 schema.sql         the blog's tables
 scripts/stamp.mjs  runs before each deploy; stamps stylesheet and script URLs
-wrangler.jsonc     hosting configuration for the three environments
+wrangler.jsonc     hosting configuration for the two environments
 docs/screenshots/  the images in this file
 ```
 

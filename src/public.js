@@ -74,6 +74,7 @@ async function blogIndex(request, env, url) {
     <div class="container">${posts.length ? `
       <div class="blog-list">${cards}
       </div>` : ''}${pager}
+      <p class="blog-admin"><a href="https://${esc(env.ADMIN_HOST)}/admin" rel="nofollow">Admin</a></p>
     </div>
   </section>
 </main>`;
@@ -177,11 +178,19 @@ async function sitemap(request, env) {
 
 export async function media(request, env, key) {
   if (!MEDIA_KEY.test(key)) return notFound(env, request);
-  const obj = await env.MEDIA.get(key);
+  // A PNG or JPEG can have a WebP copy stored beside it (same key, .webp). Browsers that say
+  // they accept WebP get the copy; everything else, including share-preview crawlers and
+  // browsers too old to read WebP, gets the original.
+  let obj = null;
+  if (/\.(png|jpg)$/.test(key) && (request.headers.get('accept') || '').includes('image/webp')) {
+    obj = await env.MEDIA.get(key.replace(/\.(png|jpg)$/, '.webp'));
+  }
+  if (!obj) obj = await env.MEDIA.get(key);
   if (!obj) return notFound(env, request);
   const headers = new Headers();
   obj.writeHttpMetadata(headers);
   headers.set('etag', obj.httpEtag);
   headers.set('cache-control', 'public, max-age=31536000, immutable');
+  headers.set('vary', 'Accept');
   return new Response(obj.body, { headers });
 }

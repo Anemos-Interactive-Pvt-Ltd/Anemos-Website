@@ -1363,6 +1363,9 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .pagination { display: flex; justify-content: space-between; gap: 16px; margin-top: 32px; }
 .pagination a { color: var(--teal-bright); text-decoration: none; font-size: 15px; }
 .pagination a:hover { text-decoration: underline; }
+.blog-admin { margin-top: 28px; text-align: right; font-size: 13px; letter-spacing: 0.06em; }
+.blog-admin a { display: inline-block; padding: 8px 0 8px 12px; color: #aab0d8; text-decoration: none; }
+.blog-admin a:hover { color: var(--teal-bright); text-decoration: underline; }
 
 .post-page .page-intro .container, .post-page .about-block .container { max-width: 760px; }
 .post-page .about-intro h1 { max-width: none; }
@@ -1396,4 +1399,5 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .post-body h3 { font-size: 27px; }
   .post-card h2 { font-size: 26px; }
   .post-card p, .pagination a { font-size: 19px; }
+  .blog-admin { font-size: 17px; }
 }

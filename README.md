@@ -12,6 +12,7 @@ This is the source of **[anemosinteractive.com](https://anemosinteractive.com)**
 - [Screens, browsers and speed](#screens-browsers-and-speed)
 - [Search, sharing and analytics](#search-sharing-and-analytics)
 - [The stack, and why](#the-stack-and-why)
+- [The brainstorm, honestly](#the-brainstorm-honestly)
 - [Hosting on Cloudflare](#hosting-on-cloudflare)
 - [How it's built](#how-its-built)
 - [Running it yourself](#running-it-yourself)
@@ -123,6 +124,36 @@ The blog is the only dynamic part of the site. It runs in a Cloudflare Worker ([
 | **Web3Forms** for the contact form | A static site cannot receive a form post. Web3Forms delivers the message to our inbox with a honeypot against bots and no account for the visitor to make. |
 | **Google Analytics 4** with Consent Mode | We wanted to know how many people visit, from where, on what devices, and which part of the run they use — without setting a cookie until someone agrees. |
 | **Markdown** for blog posts | Plain text that any editor can open, easy to render safely, and it keeps authors writing instead of styling. |
+
+## The brainstorm, honestly
+
+Every "why" in the table above has a longer, less flattering story. Here they are, in the order we argued about them.
+
+**"Should we use a framework?"** The first ten minutes of any website project. We listed what the site needed to do: show nine pages and make a small person run. React, Vue and friends are superb at managing state across hundreds of components; we had one component, and it was a canvas. We'd have spent a day setting up a build pipeline to ship a runtime larger than our entire site. So: no framework. The site is files in a folder. You can open it from your desktop. It's wonderful.
+
+**"Canvas, WebGL, or just export a video?"** The video idea lasted until someone asked how you'd make a video responsive to fourteen screen sizes and a scroll wheel. WebGL was tempting — we're a game studio, it would have been on brand — but it means shaders, GPU quirks on cheap phones, and a blank rectangle on anything eight years old. Canvas 2D draws lines and circles. Our runner is lines and circles. Every browser since roughly the Obama administration can do it. Sold.
+
+**"The text has to be real text."** This one wasn't a debate so much as a rule we had to keep re-learning. It is very easy, when you're drawing a world, to draw the words into it too. Then Google can't read them, screen readers can't read them, and the one visitor with JavaScript turned off gets a beautiful empty sky. Every word is HTML laid over the canvas. The canvas only ever draws things that don't need reading, like a sign that says START.
+
+**"Fonts from Google, or our own?"** Google Fonts is the easy answer and it is one extra request to a third party on every first visit, which the privacy policy would then have to explain. We serve two font files from our own domain, preload them, and keep Google as a fallback for the day our copies go missing. Layout shift went to zero, which made us unreasonably happy.
+
+**"Netlify was fine. Why did we move?"** It was fine. It also put a login wall in front of our preview link, which is a problem when the whole point of a preview link is sending it to someone. Meanwhile our domain's DNS was already at Cloudflare because that's where the Microsoft 365 mail records live. Cloudflare's Workers host static files for free, with no bandwidth charges and no login wall, and the deploy is one command. The move took an afternoon and we have not thought about hosting since, which is the highest compliment hosting can get.
+
+**"How does a static site receive a form?"** It doesn't. That's what static means. Options were: write a backend (for one form), use a mail-sending API (and build the form handling ourselves), or use a service whose entire job is turning a form post into an email. Web3Forms does the last one, with a honeypot field that bots fill in and humans never see. Our inbox has been quiet in exactly the right way.
+
+**"Booking calls: build or buy?"** We briefly sketched a calendar widget with time-zone handling. Then we remembered we pay for Microsoft 365, which includes Bookings, which already does time zones, buffers, confirmations and reminders, and puts the call straight in the calendar. The sketch was deleted with great dignity.
+
+**"Analytics without being creepy."** We wanted numbers: visits, countries, devices, which part of the run people actually reach. We did not want a cookie set on anyone who hadn't agreed to it. Google Analytics 4 has a consent mode that sends anonymous, cookieless pings until someone says yes, and the full picture after. One short line at the bottom of the page asks. It is not a banner. We have strong feelings about banners.
+
+**"The blog: WordPress? Ghost? A folder of Markdown files?"** WordPress would have meant a second server, PHP, plugins and a lifetime of updates for a blog that posts a few times a month. A folder of Markdown files in the repo would have meant a git commit every time Latika wanted to fix a typo. The middle path: posts in a small database at the edge (Cloudflare D1), images in a bucket next to it (R2, free bandwidth again), rendered by the same Worker that serves the site. There is nothing to patch. It costs nothing. It's about 900 lines, and we understand every one of them.
+
+**"Who gets to post, and how do we know it's them?"** First plan: email one-time codes to anyone with an @anemosinteractive.com address. Reasonable, until we noticed we'd be building a login system — codes, expiry, rate limits, the lot — to prove something Microsoft already proves every morning when staff sign in to their email. So the admin sits behind Cloudflare Access with Microsoft 365 as the identity provider. Sign-in is your Microsoft password plus your second factor; the author name on a post is whatever your Microsoft account says. Disable someone's account and they're out of the blog too. We built nothing and got multi-factor authentication for free, which is the sort of trade you take.
+
+**"Rich text editor or Markdown?"** Rich text editors are either enormous or buggy, and usually both. Markdown is a text box. We added a bar of buttons so nobody has to remember that two asterisks mean bold, taught the box to continue a list when you press Enter, and called it done. The posts are plain text that will open in anything, forever.
+
+**"What about the giant image problem?"** The first test post had a 4000-pixel cover that took over the page, and a 200-pixel icon you needed a magnifying glass for. Now the editor shrinks big images before they upload and the page shows every image at the same width. Tiny images get scaled up and look a bit soft about it, which we've decided is a lesson rather than a bug.
+
+**"How do search engines find a new post?"** Normally: whenever they get round to it. IndexNow is a one-line request that says "this address changed", and Bing and friends come within hours. It took five minutes to add. It will matter more than most of the things that took five days.
 
 ## Hosting on Cloudflare
 

@@ -38,7 +38,7 @@ async function blogIndex(request, env, url) {
 
   const cards = posts.map((p) => `
         <a class="post-card" href="/blogs/${esc(p.slug)}">
-          ${p.cover_key ? `<img src="/media/${esc(p.cover_key)}" alt="${esc(p.cover_alt)}" loading="lazy">` : ''}
+          ${p.cover_key ? `<img src="/media/${esc(p.cover_key)}" alt="${esc(p.cover_alt)}" loading="lazy">` : '<div class="post-card-mark" aria-hidden="true"><img src="/logo-white.svg" alt=""></div>'}
           <div class="post-card-body">
             <div class="post-meta">${fmtDate(p.published_at)} · ${esc(p.author_name)}</div>
             <h2>${esc(p.title)}</h2>

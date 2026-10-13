@@ -59,8 +59,8 @@
         "ADMIN_HOST": "admin-experiment.anemosinteractive.com",
         "ALLOWED_DOMAIN": "anemosinteractive.com",
         "ADMIN_EMAILS": "ronak.jacob@anemosinteractive.com",
-        "ACCESS_TEAM_DOMAIN": "",
-        "ACCESS_AUD": "",
+        "ACCESS_TEAM_DOMAIN": "anemosinteractive.cloudflareaccess.com",
+        "ACCESS_AUD": "433208e7f67507377c6ae418d781f5815cdb1b06dc4c1eda81202a56daec2b15",
         "INDEXNOW_KEY": ""
       },
       "d1_databases": [

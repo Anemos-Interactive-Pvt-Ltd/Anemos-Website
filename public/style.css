@@ -988,6 +988,19 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 }
 .founder-badge { width: 60px; height: 60px; font-size: 26px; margin: 0 0 18px; }
 .founder h3 { color: #fff; font-size: 22px; letter-spacing: 0.03em; }
+.founder-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-left: 6px;
+  vertical-align: -3px;
+  color: var(--teal-bright);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.founder-link:hover { color: #fff; transform: translateY(-1px); }
+.founder-link svg { width: 20px; height: 20px; fill: currentColor; }
 .founder-role { margin-top: 4px; color: var(--teal-bright); font-size: 15px; }
 .founder p { margin-top: 14px; color: #cfd2e6; font-size: 15px; }
 .chips-dark { margin-top: 22px; }

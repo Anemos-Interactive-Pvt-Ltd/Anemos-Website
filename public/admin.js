@@ -21,22 +21,9 @@
     if (!res.ok) throw new Error(out.error || ('Request failed (' + res.status + ')'));
     return out;
   }
-  // Anything larger than 1600px on its longest side is scaled down in the browser before upload.
-  async function shrink(file) {
-    if (!/^image\/(png|jpeg|webp)$/.test(file.type)) return file;
-    const MAX = 1600;
-    const bmp = await createImageBitmap(file).catch(() => null);
-    if (!bmp) return file;
-    if (bmp.width <= MAX && bmp.height <= MAX) { bmp.close(); return file; }
-    const scale = MAX / Math.max(bmp.width, bmp.height);
-    const c = document.createElement('canvas'); c.width = Math.round(bmp.width * scale); c.height = Math.round(bmp.height * scale);
-    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height); bmp.close();
-    const blob = await new Promise((r) => c.toBlob(r, file.type, 0.86));
-    return blob ? new File([blob], file.name, { type: file.type }) : file;
-  }
-  // Privacy-hardened browsers hand back blank or random pixels when a page reads a canvas, and a
-  // copy made from those would be garbage. Check that a known colour survives the round trip;
-  // the few levels of noise some browsers add on purpose are fine.
+  // Privacy-hardened browsers hand back blank or random pixels when a page reads a canvas, and
+  // anything made from those (a resized image, a WebP copy) would be garbage. Check that a known
+  // colour survives the round trip; the few levels of noise some browsers add on purpose are fine.
   function canvasReadsBack() {
     try {
       const c = document.createElement('canvas'); c.width = c.height = 4;
@@ -48,6 +35,20 @@
       }
       return true;
     } catch (e) { return false; }
+  }
+  // Anything larger than 1600px on its longest side is scaled down in the browser before upload.
+  // Where the canvas cannot be trusted, the picture goes up as it is.
+  async function shrink(file) {
+    if (!/^image\/(png|jpeg|webp)$/.test(file.type)) return file;
+    const MAX = 1600;
+    const bmp = await createImageBitmap(file).catch(() => null);
+    if (!bmp) return file;
+    if ((bmp.width <= MAX && bmp.height <= MAX) || !canvasReadsBack()) { bmp.close(); return file; }
+    const scale = MAX / Math.max(bmp.width, bmp.height);
+    const c = document.createElement('canvas'); c.width = Math.round(bmp.width * scale); c.height = Math.round(bmp.height * scale);
+    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height); bmp.close();
+    const blob = await new Promise((r) => c.toBlob(r, file.type, 0.86));
+    return blob ? new File([blob], file.name, { type: file.type }) : file;
   }
   // A lighter WebP copy of a PNG or JPEG, sent along with the original. The site serves the copy
   // to browsers that accept WebP and the original to the rest. A browser that cannot encode WebP

@@ -7,11 +7,10 @@
 // everything else is served straight from the assets.
 //
 //   npx wrangler deploy                    -> production worker "anemos-website", the live domain
-//   npx wrangler deploy --env experiment   -> worker "anemos-website-experiment" at experiment.anemosinteractive.com
 //   npx wrangler deploy --env test         -> worker "anemos-website-test" at test.anemosinteractive.com
 //
-// Each environment has its own database and image bucket, so nothing written on test or
-// experiment can appear on the live site. The admin sign-in (Cloudflare Access with the
+// Each environment has its own database and image bucket, so nothing written on test can
+// appear on the live site. The admin sign-in (Cloudflare Access with the
 // Microsoft 365 accounts) is configured per hostname with ACCESS_TEAM_DOMAIN and ACCESS_AUD;
 // until those are set, the admin uses the DEV_KEY secret (npx wrangler secret put DEV_KEY --env …).
 {
@@ -52,28 +51,6 @@
     { "pattern": "admin.anemosinteractive.com", "custom_domain": true }
   ],
   "env": {
-    "experiment": {
-      "name": "anemos-website-experiment",
-      "vars": {
-        "SITE_ORIGIN": "https://experiment.anemosinteractive.com",
-        "ADMIN_HOST": "admin-experiment.anemosinteractive.com",
-        "ALLOWED_DOMAIN": "anemosinteractive.com",
-        "ADMIN_EMAILS": "ronak.jacob@anemosinteractive.com",
-        "ACCESS_TEAM_DOMAIN": "anemosinteractive.cloudflareaccess.com",
-        "ACCESS_AUD": "433208e7f67507377c6ae418d781f5815cdb1b06dc4c1eda81202a56daec2b15",
-        "INDEXNOW_KEY": ""
-      },
-      "d1_databases": [
-        { "binding": "DB", "database_name": "anemos-blog-experiment", "database_id": "ecab29b0-afa3-413d-8e0d-4e590ce8240c" }
-      ],
-      "r2_buckets": [
-        { "binding": "MEDIA", "bucket_name": "anemos-blog-experiment" }
-      ],
-      "routes": [
-        { "pattern": "experiment.anemosinteractive.com", "custom_domain": true },
-        { "pattern": "admin-experiment.anemosinteractive.com", "custom_domain": true }
-      ]
-    },
     "test": {
       "name": "anemos-website-test",
       "vars": {

@@ -3,6 +3,7 @@
 import { pageShell } from './layout.js';
 import * as db from './db.js';
 import { esc, fmtDate, html, notFound, redirect } from './util.js';
+import { STAMP } from './stamp.js';
 
 const SITE = 'https://anemosinteractive.com';
 const PER_PAGE = 12;
@@ -26,7 +27,16 @@ export async function handlePublic(request, env, ctx, url) {
   if (path === '/sitemap.xml') return sitemap(request, env);
   if (path.startsWith('/media/')) return media(request, env, path.slice(7));
   if (path === '/admin' || path.startsWith('/admin/') || path.startsWith('/api/')) return notFound(env, request);
-  return env.ASSETS.fetch(request);
+  return stampAssets(await env.ASSETS.fetch(request));
+}
+
+// The static pages reference style.css and the scripts by plain name; add the deploy stamp so a
+// change is picked up on the next load instead of after the browser's cache expires.
+const STAMPED = /^\/?(style\.css|wind\.js|analytics\.js)$/;
+function stampAssets(res) {
+  if (!(res.headers.get('content-type') || '').includes('text/html')) return res;
+  const fix = (attr) => ({ element(el) { const v = el.getAttribute(attr) || ''; const m = v.match(STAMPED); if (m) el.setAttribute(attr, `${v}?v=${STAMP[m[1]]}`); } });
+  return new HTMLRewriter().on('link[rel="stylesheet"]', fix('href')).on('script[src]', fix('src')).transform(res);
 }
 
 async function blogIndex(request, env, url) {

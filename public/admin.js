@@ -21,7 +21,21 @@
     if (!res.ok) throw new Error(out.error || ('Request failed (' + res.status + ')'));
     return out;
   }
+  // Anything larger than 1600px on its longest side is scaled down in the browser before upload.
+  async function shrink(file) {
+    if (!/^image\/(png|jpeg|webp)$/.test(file.type)) return file;
+    const MAX = 1600;
+    const bmp = await createImageBitmap(file).catch(() => null);
+    if (!bmp) return file;
+    if (bmp.width <= MAX && bmp.height <= MAX) { bmp.close(); return file; }
+    const scale = MAX / Math.max(bmp.width, bmp.height);
+    const c = document.createElement('canvas'); c.width = Math.round(bmp.width * scale); c.height = Math.round(bmp.height * scale);
+    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height); bmp.close();
+    const blob = await new Promise((r) => c.toBlob(r, file.type, 0.86));
+    return blob ? new File([blob], file.name, { type: file.type }) : file;
+  }
   async function upload(file) {
+    file = await shrink(file);
     const fd = new FormData(); fd.append('file', file);
     const res = await fetch('/api/media', { method: 'POST', headers: { 'X-Requested-With': 'anemos-admin' }, body: fd });
     const out = await res.json().catch(() => ({}));

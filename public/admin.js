@@ -34,9 +34,38 @@
     const blob = await new Promise((r) => c.toBlob(r, file.type, 0.86));
     return blob ? new File([blob], file.name, { type: file.type }) : file;
   }
+  // Privacy-hardened browsers hand back blank or random pixels when a page reads a canvas, and a
+  // copy made from those would be garbage. Check that a known colour survives the round trip;
+  // the few levels of noise some browsers add on purpose are fine.
+  function canvasReadsBack() {
+    try {
+      const c = document.createElement('canvas'); c.width = c.height = 4;
+      const x = c.getContext('2d'); x.fillStyle = 'rgb(18, 200, 100)'; x.fillRect(0, 0, 4, 4);
+      const d = x.getImageData(0, 0, 4, 4).data;
+      const near = (v, want) => Math.abs(v - want) <= 8;
+      for (let i = 0; i < d.length; i += 4) {
+        if (!near(d[i], 18) || !near(d[i + 1], 200) || !near(d[i + 2], 100) || !near(d[i + 3], 255)) return false;
+      }
+      return true;
+    } catch (e) { return false; }
+  }
+  // A lighter WebP copy of a PNG or JPEG, sent along with the original. The site serves the copy
+  // to browsers that accept WebP and the original to the rest. A browser that cannot encode WebP
+  // (Safari) sends no copy.
+  async function webpCopy(file) {
+    if (!/^image\/(png|jpeg)$/.test(file.type) || !canvasReadsBack()) return null;
+    const bmp = await createImageBitmap(file).catch(() => null);
+    if (!bmp) return null;
+    const c = document.createElement('canvas'); c.width = bmp.width; c.height = bmp.height;
+    c.getContext('2d').drawImage(bmp, 0, 0); bmp.close();
+    const blob = await new Promise((r) => c.toBlob(r, 'image/webp', 0.82));
+    return blob && blob.type === 'image/webp' && blob.size < file.size ? blob : null;
+  }
   async function upload(file) {
     file = await shrink(file);
     const fd = new FormData(); fd.append('file', file);
+    const copy = await webpCopy(file).catch(() => null);
+    if (copy) fd.append('webp', copy, 'copy.webp');
     const res = await fetch('/api/media', { method: 'POST', headers: { 'X-Requested-With': 'anemos-admin' }, body: fd });
     const out = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(out.error || 'Upload failed.');

@@ -286,6 +286,23 @@ async function upload(request, env, user) {
   const key = `${d.getUTCFullYear()}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${rand}.${ext}`;
   await env.MEDIA.put(key, await file.arrayBuffer(), { httpMetadata: { contentType: file.type } });
   await db.insertMedia(env.DB, { key, uploader_email: user.email, content_type: file.type, size: file.size, created_at: now() });
+  // The editor sends a WebP copy of a PNG or JPEG when the browser can make one. It is kept
+  // beside the original (same key, .webp) and served to browsers that accept WebP. Losing the
+  // copy never fails the upload.
+  try {
+    const copy = form.get('webp');
+    if ((ext === 'png' || ext === 'jpg') && copy && typeof copy !== 'string' && copy.size > 12 && copy.size < file.size) {
+      const bytes = new Uint8Array(await copy.arrayBuffer());
+      const tag = (at) => String.fromCharCode(...bytes.subarray(at, at + 4));
+      if (tag(0) === 'RIFF' && tag(8) === 'WEBP') {
+        const copyKey = key.replace(/\.(png|jpg)$/, '.webp');
+        await env.MEDIA.put(copyKey, bytes, { httpMetadata: { contentType: 'image/webp' } });
+        await db.insertMedia(env.DB, { key: copyKey, uploader_email: user.email, content_type: 'image/webp', size: copy.size, created_at: now() });
+      }
+    }
+  } catch (err) {
+    console.error('webp copy not stored', err);
+  }
   return json({ ok: true, key, url: `/media/${key}` });
 }
 

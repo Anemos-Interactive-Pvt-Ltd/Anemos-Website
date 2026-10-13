@@ -15,7 +15,7 @@ Desktop.ini
 # Dependencies and Wrangler state
 node_modules/
 .wrangler/
-.dev.vars
+.dev.vars*
 
 # Generated before each deploy by scripts/stamp.mjs
 src/stamp.js

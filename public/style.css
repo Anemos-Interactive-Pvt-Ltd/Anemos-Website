@@ -94,6 +94,12 @@ header {
   font-size: 15px;
   letter-spacing: 0.04em;
   padding: 4px 0;
+  white-space: nowrap;
+}
+/* Nine links have to fit beside the wordmark on laptops: tighter spacing until the wide-screen container kicks in. */
+@media (min-width: 1181px) and (max-width: 1439px) {
+  .nav a { font-size: 14px; letter-spacing: 0.03em; }
+  .nav a + a { margin-left: 18px; }
 }
 .nav a:hover, .nav a.active { color: var(--teal); }
 
@@ -846,7 +852,8 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
   .is-live .panel .btn { margin-top: 22px; }
   .is-live .panel h2 { font-size: 24px; font-size: clamp(24px, min(3.6vw, 5.4vh), 42px); margin-bottom: 12px; }
 }
-@media (max-height: 700px) {
+/* Only truly short viewports (a phone on its side) drop the cue; a tall phone with both browser bars showing keeps it. */
+@media (max-height: 620px) {
   .is-live .scroll-cue { display: none; }
   .is-live .panel .lede { font-size: 14px; line-height: 1.55; }
 }

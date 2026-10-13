@@ -52,9 +52,9 @@ export function pageShell({ title, description, canonical, ogType = 'website', o
       <a href="/index.html#services">Services</a>
       <a href="/products.html">Products</a>
       <a href="/index.html#courses">Courses</a>
-      <a href="/blogs" class="active">Blogs</a>
       <a href="/index.html#follow">Socials</a>
       <a href="/index.html#about">About us</a>
+      <a href="/blogs" class="active">Blogs</a>
       <a href="/book.html">Book a call</a>
       <a href="/contact.html">Contact us</a>
     </nav>

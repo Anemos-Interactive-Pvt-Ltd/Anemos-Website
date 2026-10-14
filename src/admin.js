@@ -28,6 +28,10 @@ export async function handleAdmin(request, env, ctx, url) {
     if (env.ACCESS_AUD) return html(shell('Sign in required', `<h1>Sign in required</h1><p>Sign in with your Anemos Interactive Microsoft account to continue.</p><p><a class="btn" href="/admin">Sign in</a></p>`), 401, NOINDEX);
     return redirect('/admin/login');
   }
+  if (user.denied) {
+    if (path.startsWith('/api/')) return json({ error: 'Your account is not in the blog authors group.' }, 403);
+    return html(shell('Not a blog author', `<h1>Not a blog author</h1><p>You are signed in as ${esc(user.email)}, but this account is not in the Blog Authors team. Ask the administrator to add you, then sign in again.</p><p><a class="btn" href="/admin/logout">Sign out</a></p>`), 403, NOINDEX);
+  }
   const admin = isAdmin(user.email, env);
 
   if (path === '/' || path === '/admin/') return redirect('/admin');

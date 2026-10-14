@@ -35,6 +35,7 @@
     "ADMIN_HOST": "admin.anemosinteractive.com",
     "ALLOWED_DOMAIN": "anemosinteractive.com",
     "ADMIN_EMAILS": "ronak.jacob@anemosinteractive.com",
+    "AUTHOR_GROUP": "f360bb55-4a9b-4cfe-96ae-0967992164aa",
     "ACCESS_TEAM_DOMAIN": "anemosinteractive.cloudflareaccess.com",
     "ACCESS_AUD": "150303c95eb8cbc21a81afc79bdd01b9577bacd1e47f7bd9afccbcfe667d6771",
     "INDEXNOW_KEY": "a27d56b48e034ce6914a721e3666ef76"
@@ -58,6 +59,7 @@
         "ADMIN_HOST": "admin-test.anemosinteractive.com",
         "ALLOWED_DOMAIN": "anemosinteractive.com",
         "ADMIN_EMAILS": "ronak.jacob@anemosinteractive.com",
+        "AUTHOR_GROUP": "f360bb55-4a9b-4cfe-96ae-0967992164aa",
         "ACCESS_TEAM_DOMAIN": "anemosinteractive.cloudflareaccess.com",
         "ACCESS_AUD": "af7cdb7b413d314095f86b30f70174eb1dc9f5552499cd4322112a226d319b66",
         "INDEXNOW_KEY": ""

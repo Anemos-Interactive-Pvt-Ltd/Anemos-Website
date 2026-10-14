@@ -22,11 +22,21 @@ async function accessUser(request, env, url) {
   if (!payload) return null;
   const email = String(payload.email || '').toLowerCase();
   if (!email.endsWith('@' + env.ALLOWED_DOMAIN)) return null;
-  let name = '';
+  // Access keeps the identity it got from Microsoft at sign-in: display name and group memberships.
+  let identity = null;
   try {
     const r = await fetch(`https://${url.host}/cdn-cgi/access/get-identity`, { headers: { cookie: `CF_Authorization=${token}` } });
-    if (r.ok) name = (await r.json()).name || '';
-  } catch (e) { /* fall back to the email */ }
+    if (r.ok) identity = await r.json();
+  } catch (e) { /* treated as no identity */ }
+  // Posting is for members of one Microsoft group (AUTHOR_GROUP: its Object ID or name). The Access
+  // policy enforces this at the door; this is the same rule checked again inside, and it fails
+  // closed: no identity or no match means no entry.
+  if (env.AUTHOR_GROUP) {
+    const groups = Array.isArray(identity && identity.groups) ? identity.groups : [];
+    const member = groups.some((g) => g && (g.id === env.AUTHOR_GROUP || g.name === env.AUTHOR_GROUP));
+    if (!member) return { email, denied: 'group', mode: 'access' };
+  }
+  const name = (identity && identity.name) || '';
   return { email, name: name || nameFromEmail(email), mode: 'access' };
 }
 

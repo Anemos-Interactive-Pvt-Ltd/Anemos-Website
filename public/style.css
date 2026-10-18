@@ -1108,9 +1108,6 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .legal-body a:hover { text-decoration: underline; }
 .legal-body code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.9em; color: #fff; }
 .legal-body .legal-updated { margin: 36px 0 0; color: #aab0d8; font-size: 14px; }
-.contact-company { margin-top: 24px; font-size: 14px; color: var(--muted); }
-.contact-company a { color: var(--teal); text-decoration: none; }
-.contact-company a:hover { text-decoration: underline; }
 @media (min-width: 2400px) { .legal-body .container { max-width: 1040px; } .legal-body p, .legal-body li { font-size: 22px; } .legal-body h2 { font-size: 30px; } .legal-body h3 { font-size: 23px; } .legal-body .legal-updated { font-size: 19px; } }
 
 /* ============ The cookie line ============ */

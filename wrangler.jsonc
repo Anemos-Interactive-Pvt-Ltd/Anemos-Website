@@ -27,7 +27,7 @@
     "run_worker_first": [
       "/blogs", "/blogs/*", "/media/*", "/sitemap.xml", "/robots.txt", "/admin", "/admin/*", "/api/*",
       "/", "/index.html", "/products", "/products.html", "/about", "/about.html", "/book", "/book.html",
-      "/contact", "/contact.html", "/privacy", "/privacy.html", "/terms", "/terms.html", "/404.html"
+      "/contact", "/contact.html", "/privacy", "/privacy.html", "/terms", "/terms.html", "/company", "/company.html", "/404.html"
     ]
   },
   "vars": {

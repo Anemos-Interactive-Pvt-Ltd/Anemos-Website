@@ -68,10 +68,8 @@ ${main}
     <div class="wordmark"><img src="/logo-white.svg" alt="" class="logo-symbol logo-symbol-footer">anemos <span>interactive</span></div>
     <div class="legal">
       Anemos Interactive Private Limited<br>
-      CIN: U58203MH2026PTC475216 &nbsp;·&nbsp; GSTIN: 27ABGCA5982P1ZU &nbsp;·&nbsp; IEC: ABGCA5982P<br>
-      Registered office (mailing address): F50, 1st Floor, The Zone, Chandravarkar Road, Borivali West, Mumbai – 400092, Maharashtra, India<br>
       <a href="mailto:contactus@anemosinteractive.com">contactus@anemosinteractive.com</a><br><br>
-      © 2026 Anemos Interactive Private Limited. All rights reserved. &nbsp;·&nbsp; <a href="/privacy.html">Privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">Terms of use</a>
+      © 2026 Anemos Interactive Private Limited. All rights reserved. &nbsp;·&nbsp; <a href="/privacy.html">Privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">Terms of use</a> &nbsp;·&nbsp; <a href="/company.html">Company details</a>
     </div>
   </div>
 </footer>

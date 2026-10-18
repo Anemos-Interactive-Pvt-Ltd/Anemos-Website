@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company details — Anemos Interactive</title>
+  <meta name="description" content="The legal and registration details of Anemos Interactive Private Limited: registered office, CIN, GSTIN and IEC.">
+  <link rel="canonical" href="https://anemosinteractive.com/company.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Anemos Interactive">
+  <meta property="og:title" content="Company details — Anemos Interactive">
+  <meta property="og:description" content="The legal and registration details of Anemos Interactive Private Limited: registered office, CIN, GSTIN and IEC.">
+  <meta property="og:url" content="https://anemosinteractive.com/company.html">
+  <meta property="og:image" content="https://anemosinteractive.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Anemos Interactive: games and technology, built in Mumbai, made for the world.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://anemosinteractive.com/og-image.png">
+  <meta name="theme-color" content="#141242">
+  <link rel="preload" href="fonts/questrial-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <script>window.__trackQ = []; window.track = function (n, p) { window.__trackQ.push([n, p]); };</script>
+  <script>try { if (sessionStorage.getItem('wind-arrive')) document.documentElement.classList.add('wind-arriving'); } catch (e) {}</script>
+</head>
+<body class="home">
+
+<header>
+  <div class="container header-inner">
+    <a class="wordmark" href="index.html"><img src="logo-white.svg" alt="Anemos Interactive logo" class="logo-symbol">anemos <span>interactive</span></a>
+    <button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" id="site-nav">
+      <a href="index.html">Home</a>
+      <a href="index.html#services">Services</a>
+      <a href="products.html">Products</a>
+      <a href="index.html#courses">Courses</a>
+      <a href="index.html#follow">Socials</a>
+      <a href="index.html#about">About us</a>
+      <a href="blogs">Blogs</a>
+      <a href="book.html">Book a call</a>
+      <a href="contact.html">Contact us</a>
+    </nav>
+  </div>
+</header>
+
+<main class="about-page legal-page">
+  <section class="page-intro about-intro">
+    <canvas class="wind-ambient" aria-hidden="true"></canvas>
+    <div class="container">
+      <div class="kicker" data-wind>Company details</div>
+      <h1 data-wind="words">Who we are, <em>on paper</em>.</h1>
+      <p class="lede" data-wind="words">The legal and registration details of Anemos Interactive Private Limited, for invoices, contracts and correspondence.</p>
+    </div>
+  </section>
+
+  <section class="about-block legal-body">
+    <div class="container">
+      <h2>Legal name</h2>
+      <p>Anemos Interactive Private Limited, a private limited company incorporated in India.</p>
+
+      <h2>Registered office</h2>
+      <p>F50, 1st Floor, The Zone, Chandravarkar Road, Borivali West, Mumbai – 400092, Maharashtra, India</p>
+
+      <h2>Registrations</h2>
+      <ul>
+        <li>CIN U58203MH2026PTC475216</li>
+        <li>GSTIN 27ABGCA5982P1ZU</li>
+        <li>IEC ABGCA5982P</li>
+        <li>Recognised under DPIIT Startup India</li>
+      </ul>
+
+      <h2>Contact</h2>
+      <p><a href="mailto:contactus@anemosinteractive.com">contactus@anemosinteractive.com</a> · +91 93723 62676</p>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="container">
+    <div class="wordmark"><img src="logo-white.svg" alt="" class="logo-symbol logo-symbol-footer">anemos <span>interactive</span></div>
+    <div class="legal">
+      Anemos Interactive Private Limited<br>
+      <a href="mailto:contactus@anemosinteractive.com">contactus@anemosinteractive.com</a><br><br>
+      © 2026 Anemos Interactive Private Limited. All rights reserved. &nbsp;·&nbsp; <a href="privacy.html">Privacy policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of use</a> &nbsp;·&nbsp; <a href="company.html">Company details</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const nav = document.getElementById('site-nav');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+</script>
+<script src="wind.js"></script>
+
+<script src="analytics.js" defer></script>
+
+</body>
+</html>

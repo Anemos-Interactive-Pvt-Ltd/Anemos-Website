@@ -3,7 +3,7 @@
 import { esc } from './util.js';
 import { STAMP } from './stamp.js';
 
-export function pageShell({ title, description, canonical, ogType = 'website', ogImage, ogImageAlt, bodyClass = 'home', main, jsonLd, extraHead = '', analytics = true }) {
+export function pageShell({ title, description, canonical, ogType = 'website', ogImage, ogImageAlt, bodyClass = 'home', main, jsonLd, extraHead = '', analytics = true, adminHost = '' }) {
   const image = ogImage || 'https://anemosinteractive.com/og-image.png';
   const imageAlt = ogImageAlt || 'Anemos Interactive: games and technology, built in Mumbai, made for the world.';
   // Lines left empty by an optional tag are dropped, so the output validates cleanly.
@@ -68,7 +68,7 @@ ${main}
     <div class="legal">
       Anemos Interactive Private Limited<br>
       <a href="mailto:contactus@anemosinteractive.com">contactus@anemosinteractive.com</a><br><br>
-      © 2026 Anemos Interactive Private Limited. All rights reserved. &nbsp;·&nbsp; <a href="/privacy.html">Privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">Terms of use</a> &nbsp;·&nbsp; <a href="/company.html">Company details</a>
+      © 2026 Anemos Interactive Private Limited. All rights reserved. &nbsp;·&nbsp; <a href="/privacy.html">Privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">Terms of use</a> &nbsp;·&nbsp; <a href="/company.html">Company details</a>${adminHost ? ` &nbsp;·&nbsp; <a href="https://${esc(adminHost)}/admin" rel="nofollow">Admin</a>` : ''}
     </div>
   </div>
 </footer>

@@ -74,7 +74,6 @@ async function blogIndex(request, env, url) {
     <div class="container">${posts.length ? `
       <div class="blog-list">${cards}
       </div>` : ''}${pager}
-      <p class="blog-admin"><a href="https://${esc(env.ADMIN_HOST)}/admin" rel="nofollow">Admin</a></p>
     </div>
   </section>
 </main>`;
@@ -82,18 +81,18 @@ async function blogIndex(request, env, url) {
   const canonical = `${SITE}/blogs${page > 1 ? '?page=' + page : ''}`;
   const jsonLd = { '@context': 'https://schema.org', '@type': 'Blog', name: 'Anemos Interactive blog', url: `${SITE}/blogs`, description: BLOG_DESC, publisher: ORG };
   const title = page > 1 ? `Blogs, page ${page} — Anemos Interactive` : BLOG_TITLE;
-  return html(pageShell({ title, description: BLOG_DESC, canonical, main, jsonLd }), 200, PAGE_HEADERS);
+  return html(pageShell({ title, description: BLOG_DESC, canonical, main, jsonLd, adminHost: env.ADMIN_HOST }), 200, PAGE_HEADERS);
 }
 
 async function blogPost(request, env, slug) {
   if (!/^[a-z0-9-]{1,80}$/.test(slug)) return notFound(env, request);
   const post = await db.getPublishedBySlug(env.DB, slug);
   if (!post) return notFound(env, request);
-  return html(renderPost(post), 200, PAGE_HEADERS);
+  return html(renderPost(post, { adminHost: env.ADMIN_HOST }), 200, PAGE_HEADERS);
 }
 
 // Also used by the admin's draft preview.
-export function renderPost(p, { preview = false } = {}) {
+export function renderPost(p, { preview = false, adminHost = '' } = {}) {
   const url = `${SITE}/blogs/${p.slug}`;
   const cover = p.cover_key ? `${SITE}/media/${p.cover_key}` : null;
   const main = `<main class="about-page blog-page post-page">
@@ -128,7 +127,7 @@ ${p.body_html}
   return pageShell({
     title: `${p.title} — Anemos Interactive`, description: p.excerpt || BLOG_DESC, canonical: url,
     ogType: 'article', ogImage: cover, ogImageAlt: cover ? p.cover_alt : undefined,
-    main, jsonLd, extraHead, analytics: !preview,
+    main, jsonLd, extraHead, analytics: !preview, adminHost,
   });
 }
 

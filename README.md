@@ -54,8 +54,9 @@ The timeline, roughly: a plain static site in late September 2026; the run, the 
 | **Blogs** | Posts from the team, written in a small admin of our own (see below) |
 | **About us** | How we work and who the founders are |
 | **Book a call** | A calendar for a free consultation call, shown in the visitor's local time, booked straight into our calendar |
-| **Contact** | A form, the company details, and the mark from our business card behind the page |
+| **Contact** | A form, email, phone and working hours, the socials you can message us on, and the mark from our business card behind the page |
 | **Privacy, Terms** | Written for visitors in the EU, India and elsewhere, and kept in step with what the site actually collects |
+| **Company details** | The legal name, registered office and registrations, linked from the footer of every page beside Privacy and Terms |
 | **404** | "The wind took this page somewhere else" |
 
 ![Products: It Still Beats, coming soon](docs/screenshots/products.webp)
@@ -93,7 +94,7 @@ The blog is the only dynamic part of the site. It runs in a Cloudflare Worker ([
 
 - **Posts** live in a Cloudflare D1 database ([`schema.sql`](schema.sql)): title, address, summary, Markdown, the rendered HTML, cover image, author, status and dates. Images go into an R2 bucket and are served from `/media/`.
 - **Public pages:** `/blogs` (cards, newest first, twelve per page) and `/blogs/<address>` for each post, in the same style as the rest of the site, with a share image, structured data for search engines, an RSS feed at `/blogs/feed.xml`, and every published post added to `sitemap.xml` automatically. Posts without a cover get a panel with the studio mark so the grid stays even.
-- **Admin:** on its own hostname, behind Cloudflare Access. Only the team's Microsoft 365 accounts can sign in; the Worker verifies the signed token on every request rather than trusting the gate alone. The author's name comes from their Microsoft account, so a rename there changes old posts too. The founder can edit anything; everyone else edits only their own posts.
+- **Admin:** on its own hostname, behind Cloudflare Access, linked from the footer of the blog pages. Only the team's Microsoft 365 accounts that are in the Blog Authors group can sign in; Access checks that at the door, and the Worker verifies the signed token and the group membership again on every request rather than trusting the gate alone. The author's name comes from their Microsoft account, so a rename there changes old posts too. The founder can edit anything; everyone else edits only their own posts.
 - **Writing:** Markdown in a plain text box with a formatting bar (headings, bold, italic, underline, strikethrough, sub- and superscript, links, images, lists, checklists, quotes, code, tables, dividers), a live preview, and the list continuation you'd expect from an editor — Enter continues a list, a second Enter ends it. Images are shrunk in the browser before upload and shown at a consistent width in posts, whatever size they were.
 - **Safety:** everything typed is rendered through an allow-list, so a post can never carry scripts or styles onto the site; uploads are limited to images under 8 MB; the editor's requests carry a header the API insists on; each environment (live and test) has its own database and bucket.
 - **Search engines:** publishing a post pings IndexNow, so Bing and the engines that share its index pick it up within hours.
@@ -103,7 +104,7 @@ The blog is the only dynamic part of the site. It runs in a Cloudflare Worker ([
 - **Fourteen sizes** are checked on every change, from 3840×2160 down to 300×600, including tablets both ways, folding phones open and closed, and phones on their side.
 - **Engines:** Chromium, Gecko (Firefox) and WebKit (Safari), plus Samsung Internet's screen sizes, user agent, dark mode and toolbar heights.
 - **Layout shift is zero.** Fonts are served from the site itself and preloaded, the sections are hidden until the run is ready, and nothing moves after first paint.
-- **Caching:** fonts and the brand set are cached for a year; the stylesheet and scripts for ten minutes. The blog and admin pages stamp their stylesheet and script URLs with a hash on every deploy, so a change shows on the next load without waiting for a cache to expire.
+- **Caching:** fonts and the brand set are cached for a year; the stylesheet and scripts for ten minutes. Every page's stylesheet and script URLs are stamped with a hash on every deploy, so a change shows on the next load without waiting for a cache to expire.
 
 ## Search, sharing and analytics
 
@@ -163,7 +164,7 @@ How it is laid out:
 
 - **One Worker, two environments.** [`wrangler.jsonc`](wrangler.jsonc) describes `anemos-website` (live, on anemosinteractive.com and www) and `anemos-website-test` (test.anemosinteractive.com). Each has its own admin hostname, D1 database and R2 bucket, so nothing written on test can reach the live site. Deploying is `npx wrangler deploy --env <name>`; Cloudflare creates the DNS records and certificates for the hostnames itself.
 - **Static assets first.** Everything in `public/` is uploaded as static assets and served from Cloudflare's edge without running any code — those requests are free and unlimited. The Worker only runs for the paths that need it: the blog, the images, the sitemap, and the HTML pages (so the admin hostname can refuse to serve them). Clean URLs come from the assets layer: `/about.html` is served at `/about`.
-- **Caching** is set in [`public/_headers`](public/_headers): a year for fonts and the brand set, a week for logos and the share image, ten minutes for the stylesheet and scripts. The blog and admin pages avoid even that wait by stamping their stylesheet and script URLs with a content hash on every deploy ([`scripts/stamp.mjs`](scripts/stamp.mjs)).
+- **Caching** is set in [`public/_headers`](public/_headers): a year for fonts and the brand set, a week for logos and the share image, ten minutes for the stylesheet and scripts. Every page avoids even that wait: the Worker stamps the stylesheet and script URLs with a content hash on every deploy ([`scripts/stamp.mjs`](scripts/stamp.mjs)).
 - **Limits that matter.** The Workers free plan allows 100,000 Worker requests a day — tens of thousands of page views; past that, Worker-served pages error rather than bill. D1's free tier is five million reads a day; R2's is ten gigabytes stored with no egress charge; Access is free for up to fifty users. If the blog ever needs more, the paid Workers plan is five dollars a month.
 - **Branches match environments.** `main` is the live site, `test` is where the next release is built and checked. Nothing reaches `main` without passing the checks on `test` first.
 
@@ -192,7 +193,7 @@ npx wrangler d1 execute anemos-blog-test --env test --remote --file=schema.sql  
 npx wrangler dev --env test
 ```
 
-Deploying is one command per environment: `npx wrangler deploy --env test`, or plain `npx wrangler deploy` for the live site. The admin's sign-in is configured per environment with `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` in `wrangler.jsonc`; until those are set, a `DEV_KEY` secret and a simple sign-in form stand in.
+Deploying is one command per environment: `npx wrangler deploy --env test`, or plain `npx wrangler deploy` for the live site. The admin's sign-in is configured per environment with `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD` and `AUTHOR_GROUP` (the Microsoft group that may post) in `wrangler.jsonc`; until those are set, a `DEV_KEY` secret and a simple sign-in form stand in.
 
 <p align="center"><img src="docs/screenshots/home-phone.webp" width="300" alt="The home page on a phone"></p>
 
@@ -204,7 +205,7 @@ public/admin.*     the blog admin's stylesheet and editor script
 src/worker.js      entry point: public hostnames → the blog pages or static assets; admin hostname → the admin
 src/public.js      /blogs, posts, RSS feed, sitemap, images
 src/admin.js       post list, editor, uploads, the JSON API the editor talks to
-src/auth.js        Cloudflare Access token verification (and the stand-in sign-in for new environments)
+src/auth.js        Cloudflare Access token verification and the Blog Authors group check (and the stand-in sign-in for new environments)
 src/markdown.js    Markdown → HTML with the allow-list sanitiser
 src/db.js          the database queries
 src/layout.js      the shared page shell: header, nav, footer, scripts

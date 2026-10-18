@@ -1,5 +1,5 @@
 -- Blog storage (Cloudflare D1). Apply with:
---   npx wrangler d1 execute anemos-blog-experiment --env experiment --remote --file=schema.sql
+--   npx wrangler d1 execute anemos-blog-test --env test --remote --file=schema.sql   (anemos-blog for the live site)
 
 CREATE TABLE IF NOT EXISTS posts (
   id           INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,3 +34,14 @@ CREATE TABLE IF NOT EXISTS media (
   size           INTEGER NOT NULL,
   created_at     TEXT NOT NULL
 );
+
+-- Who did what in the admin: create, draft, publish, unpublish, delete, upload.
+CREATE TABLE IF NOT EXISTS audit (
+  id      INTEGER PRIMARY KEY AUTOINCREMENT,
+  at      TEXT    NOT NULL,
+  actor   TEXT    NOT NULL,
+  action  TEXT    NOT NULL,
+  post_id INTEGER,
+  detail  TEXT    NOT NULL DEFAULT '{}'
+);
+CREATE INDEX IF NOT EXISTS audit_at ON audit (at DESC);

@@ -31,18 +31,27 @@ async function sanitize(dirty) {
       if (DROP_WITH_CONTENT.has(tag)) { el.remove(); return; }
       const allowed = ALLOWED[tag];
       if (!allowed) { el.removeAndKeepContent(); return; }
-      for (const [name] of [...el.attributes]) {
-        if (!allowed.includes(name)) { el.removeAttribute(name); continue; }
+      // Each attribute is taken once (the first copy, which is the one browsers use), checked,
+      // and written back; every other copy is dropped, so a repeated attribute can't smuggle a
+      // second value through.
+      for (const name of new Set([...el.attributes].map(([n]) => n))) {
         const v = (el.getAttribute(name) || '').trim();
-        if (name === 'href' && !/^(https?:\/\/|mailto:|\/|#)/i.test(v)) el.removeAttribute(name);
-        if (name === 'src' && !/^(\/media\/|https:\/\/)/i.test(v)) el.removeAttribute(name);
-        if (name === 'class' && !/^language-[a-z0-9+#.-]+$/i.test(v)) el.removeAttribute(name);
-        if ((name === 'width' || name === 'height') && !/^\d{1,4}$/.test(v)) el.removeAttribute(name);
+        for (let i = 0; i < 20 && el.hasAttribute(name); i++) el.removeAttribute(name);
+        if (!allowed.includes(name)) continue;
+        if (name === 'href' && !/^(https?:\/\/|mailto:|\/|#)/i.test(v)) continue;
+        if (name === 'src' && !/^(\/media\/|https:\/\/)/i.test(v)) continue;
+        if (name === 'class' && !/^language-[a-z0-9+#.-]+$/i.test(v)) continue;
+        if ((name === 'width' || name === 'height') && !/^\d{1,4}$/.test(v)) continue;
+        el.setAttribute(name, v);
       }
       if (tag === 'a' && /^https?:\/\//i.test(el.getAttribute('href') || '')) el.setAttribute('rel', 'noopener');
       if (tag === 'img') { if (el.getAttribute('src')) el.setAttribute('loading', 'lazy'); else el.remove(); }
       if (tag === 'input') { if (el.getAttribute('type') === 'checkbox') el.setAttribute('disabled', ''); else el.remove(); }
     },
+  }).onDocument({
+    // Comments carry nothing a reader sees, and the odd things a browser treats as comments
+    // (CDATA sections, stray processing instructions) go with them.
+    comments(c) { c.remove(); },
   });
   return rewriter.transform(new Response(dirty, { headers: { 'content-type': 'text/html; charset=utf-8' } })).text();
 }

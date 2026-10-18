@@ -57,3 +57,8 @@ export function insertMedia(db, m) {
   return db.prepare(`INSERT INTO media (key, uploader_email, content_type, size, created_at) VALUES (?, ?, ?, ?, ?)`)
     .bind(m.key, m.uploader_email, m.content_type, m.size, m.created_at).run();
 }
+
+export function insertAudit(db, a) {
+  return db.prepare(`INSERT INTO audit (at, actor, action, post_id, detail) VALUES (?, ?, ?, ?, ?)`)
+    .bind(a.at, a.actor, a.action, a.post_id, a.detail).run();
+}

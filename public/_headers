@@ -1,3 +1,11 @@
+# Every file: only ever over HTTPS, served as the type it claims to be, and no full URLs leaked
+# to other sites. (Pages served through the Worker get these and a Content Security Policy there.)
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+
 # How long browsers may keep each file. Fonts and the logo set never change; the page files
 # are re-checked after ten minutes, so a change shows to returning visitors within that.
 /fonts/*

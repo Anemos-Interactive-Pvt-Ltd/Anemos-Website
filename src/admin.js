@@ -13,6 +13,28 @@ const MEDIA_KEY = /^[0-9]{4}\/[0-9]{2}\/[a-z0-9]+\.(png|jpg|webp|gif)$/;
 const IMAGE_EXT = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/gif': 'gif' };
 const MAX_IMAGE = 8 * 1024 * 1024;
 
+// The request body as JSON, or null when it isn't valid JSON (an object).
+async function body(request) {
+  try { const b = await request.json(); return b && typeof b === 'object' ? b : null; } catch (e) { return null; }
+}
+
+// What an image file actually is, from its first bytes; the browser's declared type is not trusted.
+function sniffImage(bytes) {
+  const at = (i, ...v) => v.every((b, j) => bytes[i + j] === b);
+  const tag = (i, t) => bytes.length >= i + t.length && String.fromCharCode(...bytes.subarray(i, i + t.length)) === t;
+  if (at(0, 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a)) return { type: 'image/png', ext: 'png' };
+  if (at(0, 0xff, 0xd8, 0xff)) return { type: 'image/jpeg', ext: 'jpg' };
+  if (tag(0, 'RIFF') && tag(8, 'WEBP')) return { type: 'image/webp', ext: 'webp' };
+  if (tag(0, 'GIF87a') || tag(0, 'GIF89a')) return { type: 'image/gif', ext: 'gif' };
+  return null;
+}
+
+// Who did what, kept in the database; a failure to record it never fails the action itself.
+async function audit(env, user, action, postId, detail) {
+  try { await db.insertAudit(env.DB, { at: now(), actor: user.email, action, post_id: postId, detail: JSON.stringify(detail || {}) }); }
+  catch (err) { console.error('audit not recorded', action, err); }
+}
+
 export async function handleAdmin(request, env, ctx, url) {
   const path = url.pathname;
   if (path === '/robots.txt') return new Response('User-agent: *\nDisallow: /\n', { headers: { 'content-type': 'text/plain' } });
@@ -88,7 +110,7 @@ async function listPage(env, user, admin) {
         <td>${fmtDate(p.updated_at)}</td>
         <td class="row-actions">${p.status === 'published'
           ? `<a href="${esc(env.SITE_ORIGIN)}/blogs/${esc(p.slug)}" target="_blank" rel="noopener">View</a>`
-          : `<a href="/admin/preview/${p.id}" target="_blank">Preview</a>`}</td>
+          : `<a href="/admin/preview/${p.id}" target="_blank" rel="noopener">Preview</a>`}</td>
       </tr>`).join('');
   const body = `<div class="admin-head">
   <h1>${admin ? 'All posts' : 'Your posts'}</h1>
@@ -178,7 +200,7 @@ async function editorPage(env, user, admin, id) {
   <div class="actions-bar">
     <button type="submit" class="btn" data-action="${published ? 'publish' : 'draft'}">${published ? 'Update' : 'Save draft'}</button>
     ${published ? '<button type="button" class="btn btn-ghost" data-action="unpublish">Unpublish</button>' : '<button type="button" class="btn" data-action="publish">Publish</button>'}
-    ${post ? `<a class="link" href="/admin/preview/${post.id}" target="_blank">Preview page</a>` : ''}
+    ${post ? `<a class="link" href="/admin/preview/${post.id}" target="_blank" rel="noopener">Preview page</a>` : ''}
     ${published ? `<a class="link" href="${esc(env.SITE_ORIGIN)}/blogs/${esc(d.slug)}" target="_blank" rel="noopener">View live</a>` : ''}
     ${post ? '<button type="button" class="link danger" data-action="delete">Delete</button>' : ''}
     <span id="status" class="status-line" role="status"></span>
@@ -234,7 +256,8 @@ async function api(request, env, ctx, url, user, admin) {
   const method = request.method;
   if (request.headers.get('x-requested-with') !== 'anemos-admin') return json({ error: 'Bad request.' }, 400);
   if (path === '/api/preview' && method === 'POST') {
-    const b = await request.json();
+    const b = await body(request);
+    if (!b) return json({ error: 'Bad request.' }, 400);
     return json({ html: await renderMarkdown(b.body_md) });
   }
   if (path === '/api/media' && method === 'POST') return upload(request, env, user);
@@ -245,13 +268,14 @@ async function api(request, env, ctx, url, user, admin) {
     if (!post) return json({ error: 'That post no longer exists.' }, 404);
     if (!admin && post.author_email !== user.email) return json({ error: 'You can only change posts you wrote.' }, 403);
     if (method === 'PUT') return savePost(request, env, ctx, user, post);
-    if (method === 'DELETE') { await db.deletePost(env.DB, post.id); return json({ ok: true }); }
+    if (method === 'DELETE') { await db.deletePost(env.DB, post.id); await audit(env, user, 'delete', post.id, { slug: post.slug, title: post.title }); return json({ ok: true }); }
   }
   return json({ error: 'Not found.' }, 404);
 }
 
 async function savePost(request, env, ctx, user, existing) {
-  const b = await request.json();
+  const b = await body(request);
+  if (!b) return json({ error: 'Bad request.' }, 400);
   const title = String(b.title || '').trim().slice(0, 140);
   if (!title) return json({ error: 'The post needs a title.' }, 400);
   const slug = slugify(b.slug || title);
@@ -274,6 +298,7 @@ async function savePost(request, env, ctx, user, existing) {
   };
   let id = existing ? existing.id : 0;
   if (existing) await db.updatePost(env.DB, id, f); else id = await db.createPost(env.DB, f);
+  await audit(env, user, existing ? action : 'create', id, { slug, title, status, published: action === 'publish' });
   if (status === 'published' && env.INDEXNOW_KEY) ctx.waitUntil(pingIndexNow(env, [`${env.SITE_ORIGIN}/blogs/${slug}`, `${env.SITE_ORIGIN}/blogs`]));
   return json({ ok: true, id, slug, status: f.status, published_at: f.published_at });
 }
@@ -281,15 +306,18 @@ async function savePost(request, env, ctx, user, existing) {
 async function upload(request, env, user) {
   const form = await request.formData();
   const file = form.get('file');
-  if (!file || typeof file === 'string') return json({ error: 'No file received.' }, 400);
-  const ext = IMAGE_EXT[file.type];
-  if (!ext) return json({ error: 'Use a PNG, JPEG, WebP or GIF image.' }, 400);
+  if (!file || typeof file === 'string' || !file.size) return json({ error: 'No file received.' }, 400);
   if (file.size > MAX_IMAGE) return json({ error: 'Images must be under 8 MB.' }, 400);
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const kind = sniffImage(bytes);
+  if (!kind || !IMAGE_EXT[kind.type]) return json({ error: 'Use a PNG, JPEG, WebP or GIF image.' }, 400);
+  const ext = kind.ext;
   const d = new Date();
   const rand = Array.from(crypto.getRandomValues(new Uint8Array(10)), (n) => (n % 36).toString(36)).join('');
   const key = `${d.getUTCFullYear()}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${rand}.${ext}`;
-  await env.MEDIA.put(key, await file.arrayBuffer(), { httpMetadata: { contentType: file.type } });
-  await db.insertMedia(env.DB, { key, uploader_email: user.email, content_type: file.type, size: file.size, created_at: now() });
+  await env.MEDIA.put(key, bytes, { httpMetadata: { contentType: kind.type } });
+  await db.insertMedia(env.DB, { key, uploader_email: user.email, content_type: kind.type, size: file.size, created_at: now() });
+  await audit(env, user, 'upload', null, { key, size: file.size, type: kind.type });
   // The editor sends a WebP copy of a PNG or JPEG when the browser can make one. It is kept
   // beside the original (same key, .webp) and served to browsers that accept WebP. Losing the
   // copy never fails the upload.

@@ -280,6 +280,12 @@ h2, .page-title {
 .contact-block h3:first-child { margin-top: 0; }
 .contact-block p { color: var(--muted); font-size: 15px; overflow-wrap: anywhere; }
 .contact-block a { color: var(--teal); text-decoration: none; }
+.contact-block a:hover { text-decoration: underline; }
+/* The icons on the contact panel sit on white, so they take the navy on a pale ground. */
+.contact-socials { margin-top: 14px; }
+.contact-socials .social { width: 44px; height: 44px; border-radius: 13px; margin: 0 10px 10px 0; color: var(--navy); background: rgba(20, 18, 66, 0.05); border-color: var(--teal); }
+.contact-socials .social svg { width: 21px; height: 21px; }
+.contact-socials .social:hover, .contact-socials .social:focus { color: #fff; background: var(--teal); }
 .note {
   font-size: 13px;
   color: var(--muted);

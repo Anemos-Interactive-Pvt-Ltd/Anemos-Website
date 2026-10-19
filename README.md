@@ -96,7 +96,7 @@ The blog is the only dynamic part of the site. It runs in a Cloudflare Worker ([
 - **Public pages:** `/blogs` (cards, newest first, twelve per page) and `/blogs/<address>` for each post, in the same style as the rest of the site, with a share image, structured data for search engines, an RSS feed at `/blogs/feed.xml`, and every published post added to `sitemap.xml` automatically. Posts without a cover get a panel with the studio mark so the grid stays even.
 - **Admin:** on its own hostname, behind Cloudflare Access, linked from the footer of the blog pages. Only the team's Microsoft 365 accounts that are in the Blog Authors group can sign in; Access checks that at the door, and the Worker verifies the signed token and the group membership again on every request rather than trusting the gate alone. The author's name comes from their Microsoft account, so a rename there changes old posts too. The founder can edit anything; everyone else edits only their own posts.
 - **Writing:** Markdown in a plain text box with a formatting bar (headings, bold, italic, underline, strikethrough, sub- and superscript, links, images, lists, checklists, quotes, code, tables, dividers), a live preview, and the list continuation you'd expect from an editor — Enter continues a list, a second Enter ends it. Images are shrunk in the browser before upload and shown at a consistent width in posts, whatever size they were.
-- **Safety:** everything typed is rendered through an allow-list, so a post can never carry scripts or styles onto the site; uploads are limited to images under 8 MB; the editor's requests carry a header the API insists on; each environment (live and test) has its own database and bucket.
+- **Safety:** everything typed is rendered through an allow-list, so a post can never carry scripts or styles onto the site; uploads are checked by their first bytes rather than their name, limited to PNG, JPEG, WebP and GIF under 8 MB, and served as exactly that type; the editor's requests carry a header the API insists on; every create, publish, unpublish, delete and upload is recorded with who did it and when; each environment (live and test) has its own database and bucket.
 - **Search engines:** publishing a post pings IndexNow, so Bing and the engines that share its index pick it up within hours.
 
 ## Screens, browsers and speed
@@ -171,6 +171,7 @@ How it is laid out:
 ## How it's built
 
 - **Forms and bookings:** the contact form posts to Web3Forms with a honeypot against bots; the booking page embeds Microsoft Bookings, which shows free slots in the visitor's own time zone and books straight into our calendar.
+- **Headers:** every response carries the standard protections (HTTPS only for a year, no content sniffing, no framing by other sites, a referrer policy) and a Content Security Policy that names the only places scripts, fonts and frames may come from: the site itself, Google Analytics, Cloudflare's beacon and Microsoft Bookings. The few scripts written inside the pages carry a nonce made fresh for each page view, so an injected script would not run. `/.well-known/security.txt` says where to report a problem.
 - **Checks before anything goes out:** the resolution matrix, an interaction run (dots, drag, hoops, menu, socials, forms), HTML validation, an accessibility audit, Lighthouse, and the cross-engine run. Changes go to the test site first and to the live site only after all of that passes.
 
 ![Contact](docs/screenshots/contact.webp)
@@ -202,7 +203,7 @@ Deploying is one command per environment: `npx wrangler deploy --env test`, or p
 ```
 public/            the site as served: pages, style.css, wind.js, analytics.js, fonts, brand, sitemap, robots
 public/admin.*     the blog admin's stylesheet and editor script
-src/worker.js      entry point: public hostnames → the blog pages or static assets; admin hostname → the admin
+src/worker.js      entry point: public hostnames → the blog pages or static assets; admin hostname → the admin; security headers on every response
 src/public.js      /blogs, posts, RSS feed, sitemap, images
 src/admin.js       post list, editor, uploads, the JSON API the editor talks to
 src/auth.js        Cloudflare Access token verification and the Blog Authors group check (and the stand-in sign-in for new environments)

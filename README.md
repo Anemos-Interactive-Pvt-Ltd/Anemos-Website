@@ -15,6 +15,7 @@ This is the source of **[anemosinteractive.com](https://anemosinteractive.com)**
 - [The brainstorm, honestly](#the-brainstorm-honestly)
 - [Hosting on Cloudflare](#hosting-on-cloudflare)
 - [How it's built](#how-its-built)
+- [Security](#security)
 - [Running it yourself](#running-it-yourself)
 - [Folder map](#folder-map)
 - [Credits](#credits)
@@ -171,10 +172,27 @@ How it is laid out:
 ## How it's built
 
 - **Forms and bookings:** the contact form posts to Web3Forms with a honeypot against bots; the booking page embeds Microsoft Bookings, which shows free slots in the visitor's own time zone and books straight into our calendar.
-- **Headers:** every response carries the standard protections (HTTPS only for a year, no content sniffing, no framing by other sites, a referrer policy) and a Content Security Policy that names the only places scripts, fonts and frames may come from: the site itself, Google Analytics, Cloudflare's beacon and Microsoft Bookings. The few scripts written inside the pages carry a nonce made fresh for each page view, so an injected script would not run. `/.well-known/security.txt` says where to report a problem.
+- **Security** has its own section below.
 - **Checks before anything goes out:** the resolution matrix, an interaction run (dots, drag, hoops, menu, socials, forms), HTML validation, an accessibility audit, Lighthouse, and the cross-engine run. Changes go to the test site first and to the live site only after all of that passes.
 
 ![Contact](docs/screenshots/contact.webp)
+
+## Security
+
+What protects the site and the blog admin, in plain terms. The admin is the only part of the site that accepts input, so most of this is about it.
+
+- **One door, guarded by Microsoft.** The admin lives on its own hostname behind Cloudflare Access. There is no password of our own to steal: the only way in is a Microsoft 365 account from our tenant that is in the Blog Authors group, with Microsoft's multi-factor sign-in. Sessions expire after a set number of hours and then Microsoft is asked again. Disable the account or take it out of the group and that person is locked out.
+- **Checked twice.** Access enforces the rule at the edge and hands the Worker a signed token with every request. The Worker verifies the signature against Cloudflare's current keys, the audience, the issuer and the expiry, then checks the email domain and the group membership again for itself. No identity, or a failed lookup, means no entry.
+- **Roles.** One account may edit any post; everyone else may edit only their own. The public hostnames answer 404 for every admin and API path, so the admin is not reachable from the site's own address at all.
+- **The API is picky.** Every request from the editor carries a custom header the API insists on, and the site grants no cross-origin permissions, so another website cannot make a signed-in browser call the API on the visitor's behalf. Bodies must be JSON objects; anything else is answered with 400.
+- **What a post may contain** is decided by a short allow-list. The Markdown is rendered and then every tag and attribute not on the list is dropped: scripts, styles, frames and forms go with their contents; links keep only safe schemes; images may come only from our media store or an HTTPS address; a repeated attribute keeps one copy; comments are removed.
+- **Uploads** are accepted only when their first bytes say PNG, JPEG, WebP or GIF, never on the strength of the file name or the declared type. They are capped at 8 MB, stored under random names, and served as exactly the type found, with sniffing disabled. SVG is refused because it can carry scripts.
+- **Every response carries** HTTPS-only for a year, no content sniffing, no framing by other sites, a referrer policy, a permissions policy that switches off camera, microphone and location, and a Content Security Policy that names the only places scripts, fonts, images and frames may come from: the site itself, Google Analytics, Cloudflare's beacon, Google's font copies and Microsoft Bookings. The few scripts written inside the pages carry a nonce made fresh for each page view, so an injected script would not run.
+- **An audit table** records every create, draft, publish, unpublish, delete and upload, with who did it and when.
+- **Live and test are separate**: their own databases, buckets, hostnames and Access applications. Nothing written on test can reach the live site.
+- **Nothing secret is in this repository.** The Microsoft client secret lives only in Cloudflare Access; the database and bucket are bound to the Worker by the Cloudflare account, not by anything here. The identifiers that do appear (the Access application IDs, the IndexNow key, the analytics ID, the contact form key) are public by design.
+- **Reporting a problem:** [`/.well-known/security.txt`](public/.well-known/security.txt) gives the address to write to.
+- **Chosen trade-offs**, so nobody has to discover them: the sanitiser is our own allow-list on Cloudflare's HTML parser rather than a library; inline styles are allowed; the API has no rate limit beyond the sign-in gate. All of it was reviewed in October 2026 and is written up for an outside reviewer.
 
 ## Running it yourself
 

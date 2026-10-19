@@ -19,13 +19,14 @@ export default {
 
 // Every response leaves with the same protective headers. HTML pages also get a Content
 // Security Policy: scripts may only come from the site itself (inline ones carry a nonce made
-// fresh for each response), from Google Analytics and from Cloudflare's own beacon; fonts may
+// fresh for each response; 'unsafe-inline' is only a fallback for old browsers that don't know
+// nonces, and is ignored by every browser that does), from Google Analytics and from Cloudflare's own beacon; fonts may
 // also come from Google's copies, which style.css names as the fallback to our own; the booking
 // calendar is the only thing that may sit in a frame; nothing may frame our pages. Static files
 // that never reach the Worker get the plain headers from public/_headers instead.
 const PUBLIC_CSP = (nonce) => [
   "default-src 'self'",
-  `script-src 'self' 'nonce-${nonce}' https://www.googletagmanager.com https://static.cloudflareinsights.com`,
+  `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: https:",
   "font-src 'self' https://fonts.gstatic.com",
@@ -34,7 +35,7 @@ const PUBLIC_CSP = (nonce) => [
   "object-src 'none'", "base-uri 'self'", "form-action 'self' https://api.web3forms.com", "frame-ancestors 'none'", 'upgrade-insecure-requests',
 ].join('; ');
 const ADMIN_CSP = (nonce) => [
-  "default-src 'self'", `script-src 'self' 'nonce-${nonce}'`, "style-src 'self' 'unsafe-inline'", "img-src 'self' data: https:",
+  "default-src 'self'", `script-src 'self' 'nonce-${nonce}' 'unsafe-inline'`, "style-src 'self' 'unsafe-inline'", "img-src 'self' data: https:",
   "font-src 'self' https://fonts.gstatic.com", "connect-src 'self'", "frame-src 'none'", "object-src 'none'", "base-uri 'self'", "form-action 'self'", "frame-ancestors 'none'",
 ].join('; ');
 

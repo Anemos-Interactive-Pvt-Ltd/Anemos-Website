@@ -334,11 +334,25 @@ footer .legal { margin-top: 14px; line-height: 1.9; overflow-wrap: anywhere; }
 footer a { color: var(--teal-bright); text-decoration: none; }
 /* The policy links sit in two tidy groups under the address line, wrapping cleanly on phones; the
    copyright has the last line to itself. */
-.footer-links { display: flex; flex-wrap: wrap; gap: 6px 40px; margin: 18px 0 14px; }
-.footer-links ul { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 22px; margin: 0; padding: 0; }
+.footer-links { display: flex; flex-wrap: wrap; gap: 6px 0; margin: 18px 0 14px; }
+/* Wide enough for both groups on one row: a bar between the groups as well, so it reads as one
+   continuous row. Narrower, the second group takes its own row and the bar would dangle, so it
+   is left out there. */
+@media (min-width: 900px) { .footer-links ul + ul::before { content: ""; display: inline-block; width: 1px; height: 14px; margin: 0 14px; background: rgba(255, 255, 255, 0.22); align-self: center; } }
+.footer-links ul { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 0; margin: 0; padding: 0; }
+.footer-links li { display: flex; align-items: center; }
+.footer-links li + li::before { content: ""; display: inline-block; width: 1px; height: 14px; margin: 0 14px; background: rgba(255, 255, 255, 0.22); }
 .footer-links a { white-space: nowrap; }
 .footer-links a:hover { text-decoration: underline; }
 footer .copyright { margin: 0; color: #9ea3c6; }
+/* On phones the groups become two short lists with a hairline between them, so no separator
+   is ever left dangling at the start of a wrapped line. */
+@media (max-width: 599px) {
+  .footer-links { flex-direction: column; gap: 10px; }
+  .footer-links ul { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .footer-links li + li::before { display: none; }
+  .footer-links ul + ul { padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.12); }
+}
 
 /* clamp() and min() only arrived in 2020. Wherever one is used, the same property is
    declared just before it with a fixed value that browsers back to 2018 can use. */

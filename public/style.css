@@ -1109,7 +1109,8 @@ body.home footer { border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .legal-body h2:first-child { margin-top: 0; }
 .legal-body h3 { color: #fff; font-size: 17px; letter-spacing: 0.03em; margin: 22px 0 6px; }
 .legal-body p, .legal-body li { color: #cfd2e6; font-size: 16px; line-height: 1.7; margin-bottom: 12px; overflow-wrap: anywhere; }
-.legal-body ul { padding-left: 22px; margin-bottom: 12px; }
+.legal-body ul, .legal-body ol { padding-left: 22px; margin-bottom: 12px; }
+.legal-body .legal-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 4px 0 16px; }
 .legal-body a { color: var(--teal-bright); text-decoration: none; }
 .legal-body a:hover { text-decoration: underline; }
 .legal-body code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.9em; color: #fff; }

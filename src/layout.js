@@ -68,7 +68,7 @@ ${main}
     <div class="legal">
       Anemos Interactive Private Limited<br>
       <a href="mailto:contactus@anemosinteractive.com">contactus@anemosinteractive.com</a><br><br>
-      © 2026 Anemos Interactive Private Limited. All rights reserved. &nbsp;·&nbsp; <a href="/privacy.html">Privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">Terms of use</a> &nbsp;·&nbsp; <a href="/company.html">Company details</a>${adminHost ? ` &nbsp;·&nbsp; <a href="https://${esc(adminHost)}/admin" rel="nofollow">Admin</a>` : ''}
+      © 2026 Anemos Interactive Private Limited. All rights reserved. &nbsp;·&nbsp; <a href="/privacy.html">Privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">Terms and conditions</a> &nbsp;·&nbsp; <a href="/company.html">Company details</a> &nbsp;·&nbsp; <a href="/pricing.html">Pricing</a> &nbsp;·&nbsp; <a href="/refund.html">Refunds</a> &nbsp;·&nbsp; <a href="/delivery.html">Delivery</a>${adminHost ? ` &nbsp;·&nbsp; <a href="https://${esc(adminHost)}/admin" rel="nofollow">Admin</a>` : ''}
     </div>
   </div>
 </footer>

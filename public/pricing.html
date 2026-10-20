@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How we price — Anemos Interactive</title>
+  <meta name="description" content="How Anemos Interactive Private Limited prices its work: every project is custom-quoted, with a free consultation, a written proposal, a signed agreement, a 10% advance and milestone billing.">
+  <link rel="canonical" href="https://anemosinteractive.com/pricing.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Anemos Interactive">
+  <meta property="og:title" content="How we price — Anemos Interactive">
+  <meta property="og:description" content="How Anemos Interactive Private Limited prices its work: every project is custom-quoted, with a free consultation, a written proposal, a signed agreement, a 10% advance and milestone billing.">
+  <meta property="og:url" content="https://anemosinteractive.com/pricing.html">
+  <meta property="og:image" content="https://anemosinteractive.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Anemos Interactive: games and technology, built in Mumbai, made for the world.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://anemosinteractive.com/og-image.png">
+  <meta name="theme-color" content="#141242">
+  <link rel="preload" href="fonts/questrial-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <script>window.__trackQ = []; window.track = function (n, p) { window.__trackQ.push([n, p]); };</script>
+  <script>try { if (sessionStorage.getItem('wind-arrive')) document.documentElement.classList.add('wind-arriving'); } catch (e) {}</script>
+</head>
+<body class="home">
+
+<header>
+  <div class="container header-inner">
+    <a class="wordmark" href="index.html"><img src="logo-white.svg" alt="Anemos Interactive logo" class="logo-symbol">anemos <span>interactive</span></a>
+    <button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" id="site-nav">
+      <a href="index.html">Home</a>
+      <a href="index.html#services">Services</a>
+      <a href="products.html">Products</a>
+      <a href="index.html#courses">Courses</a>
+      <a href="index.html#follow">Socials</a>
+      <a href="index.html#about">About us</a>
+      <a href="blogs">Blogs</a>
+      <a href="contact.html">Contact us</a>
+    </nav>
+  </div>
+</header>
+
+<main class="about-page legal-page">
+  <section class="page-intro about-intro">
+    <canvas class="wind-ambient" aria-hidden="true"></canvas>
+    <div class="container">
+      <div class="kicker" data-wind>Pricing</div>
+      <h1 data-wind="words">How we <em>price</em>.</h1>
+      <p class="lede" data-wind="words">Every project is quoted on its own terms. Here is how that works.</p>
+    </div>
+  </section>
+
+  <section class="about-block legal-body">
+    <div class="container">
+      <h2>Custom quotes</h2>
+      <p>All projects are custom-quoted based on scope, timeline and complexity. We do not list fixed prices.</p>
+
+      <h2>The process</h2>
+      <ol>
+        <li>A free consultation call to understand the project.</li>
+        <li>A written proposal with the scope, timeline and fee.</li>
+        <li>A signed agreement.</li>
+        <li>A 10% advance of the total project fee, payable on signing.</li>
+        <li>The remaining 90% invoiced in milestones as set out in the agreement.</li>
+      </ol>
+
+      <h2>Billing models</h2>
+      <p>Per project, per milestone, or on a retainer, whichever suits the work.</p>
+
+      <h2>Taxes and invoices</h2>
+      <p>Prices exclude GST, which is added where it applies. Invoices are due within 7 days.</p>
+
+      <h2>Payment methods</h2>
+      <p>Our payment gateway partners, direct bank transfer (NEFT, RTGS or IMPS), or international wire transfer (SWIFT). The method for each project is stated on its invoice.</p>
+
+      <h2>Request a quote</h2>
+      <p class="legal-actions"><a class="btn" href="contact.html">Request a quote</a><a class="btn" href="book.html">Book a call</a></p>
+      <p>Our <a href="refund.html">cancellation and refund policy</a> explains what happens if a project changes course.</p>
+      <p class="legal-updated">Updated on 20 October 2026</p>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="container">
+    <div class="wordmark"><img src="logo-white.svg" alt="" class="logo-symbol logo-symbol-footer">anemos <span>interactive</span></div>
+    <div class="legal">
+      Anemos Interactive Private Limited<br>
+      <a href="mailto:contactus@anemosinteractive.com">contactus@anemosinteractive.com</a><br><br>
+      © 2026 Anemos Interactive Private Limited. All rights reserved. &nbsp;·&nbsp; <a href="privacy.html">Privacy policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms and conditions</a> &nbsp;·&nbsp; <a href="company.html">Company details</a> &nbsp;·&nbsp; <a href="pricing.html">Pricing</a> &nbsp;·&nbsp; <a href="refund.html">Refunds</a> &nbsp;·&nbsp; <a href="delivery.html">Delivery</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const nav = document.getElementById('site-nav');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+</script>
+<script src="wind.js"></script>
+
+<script src="analytics.js" defer></script>
+
+</body>
+</html>

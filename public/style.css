@@ -332,6 +332,13 @@ footer .wordmark { color: #fff; font-size: 18px; }
 footer .wordmark span { color: var(--teal-bright); }
 footer .legal { margin-top: 14px; line-height: 1.9; overflow-wrap: anywhere; }
 footer a { color: var(--teal-bright); text-decoration: none; }
+/* The policy links sit in two tidy groups under the address line, wrapping cleanly on phones; the
+   copyright has the last line to itself. */
+.footer-links { display: flex; flex-wrap: wrap; gap: 6px 40px; margin: 18px 0 14px; }
+.footer-links ul { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 22px; margin: 0; padding: 0; }
+.footer-links a { white-space: nowrap; }
+.footer-links a:hover { text-decoration: underline; }
+footer .copyright { margin: 0; color: #9ea3c6; }
 
 /* clamp() and min() only arrived in 2020. Wherever one is used, the same property is
    declared just before it with a fixed value that browsers back to 2018 can use. */

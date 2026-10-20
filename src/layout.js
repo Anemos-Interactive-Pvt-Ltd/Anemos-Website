@@ -71,13 +71,11 @@ ${main}
       <nav class="footer-links" aria-label="Policies and information">
         <ul>
           <li><a href="/privacy.html">Privacy policy</a></li>
-          <li><a href="/terms.html">Terms and conditions</a></li>
-          <li><a href="/company.html">Company details</a></li>
-        </ul>
-        <ul>
           <li><a href="/pricing.html">Pricing</a></li>
+          <li><a href="/delivery.html">Delivery</a></li>
           <li><a href="/refund.html">Refunds</a></li>
-          <li><a href="/delivery.html">Delivery</a></li>${adminHost ? `
+          <li><a href="/terms.html">Terms and conditions</a></li>
+          <li><a href="/company.html">Company details</a></li>${adminHost ? `
           <li><a href="https://${esc(adminHost)}/admin" rel="nofollow">Admin</a></li>` : ''}
         </ul>
       </nav>

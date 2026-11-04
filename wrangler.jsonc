@@ -4,11 +4,12 @@
 // REPLACE_WITH_… for the database IDs. They show the shape of the configuration; this repository
 // is published for learning and is not licensed to be deployed (see LICENSE).
 //
-// The pages in public/ are served as static assets (404.html for missing paths, clean URLs so
-// /about.html is served at /about). The Worker in src/ adds the blog: /blogs and the posts under
-// it, the RSS feed, the sitemap with posts included, images under /media/, and the blog admin on
-// its own hostname. Only the paths in run_worker_first reach the Worker; everything else is served
-// straight from the assets.
+// The pages in public/ are served as static assets (404.html for missing paths). Each page's real
+// address is its .html file (/about.html), which is what the canonical tags, sitemap and links use;
+// the Worker redirects /about and /about/ there, and /index.html to / (see src/public.js).
+// The Worker in src/ also adds the blog: /blogs and the posts under it, the RSS feed, the sitemap
+// with posts included, images under /media/, and the blog admin on its own hostname. Only the
+// paths in run_worker_first reach the Worker; everything else is served straight from the assets.
 //
 //   npx wrangler deploy               -> the live Worker
 //   npx wrangler deploy --env test    -> the test Worker
@@ -24,8 +25,8 @@
     "directory": "./public",
     "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "html_handling": "auto-trailing-slash",
-    "run_worker_first": ["/blogs", "/blogs/*", "/media/*", "/sitemap.xml", "/robots.txt", "/admin", "/admin/*", "/api/*", "/", "/index.html", "/products", "/products.html", "/about", "/about.html", "/book", "/book.html", "/contact", "/contact.html", "/privacy", "/privacy.html", "/terms", "/terms.html", "/company", "/company.html", "/pricing", "/pricing.html", "/refund", "/refund.html", "/delivery", "/delivery.html", "/404", "/404.html"]
+    "html_handling": "none",
+    "run_worker_first": ["/blogs", "/blogs/*", "/media/*", "/sitemap.xml", "/robots.txt", "/admin", "/admin/*", "/api/*", "/", "/index.html", "/404", "/404.html", "/products", "/products/", "/products.html", "/about", "/about/", "/about.html", "/book", "/book/", "/book.html", "/contact", "/contact/", "/contact.html", "/privacy", "/privacy/", "/privacy.html", "/terms", "/terms/", "/terms.html", "/company", "/company/", "/company.html", "/pricing", "/pricing/", "/pricing.html", "/refund", "/refund/", "/refund.html", "/delivery", "/delivery/", "/delivery.html"]
   },
   "vars": {
     // Where the public site lives, and the separate hostname the admin answers on.

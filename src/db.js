@@ -3,8 +3,8 @@
 
 import { nameFromEmail } from './util.js';
 
-const COLS = 'p.id, p.slug, p.title, p.excerpt, p.body_md, p.body_html, p.cover_key, p.cover_alt, p.author_email, p.status, p.created_at, p.updated_at, p.published_at, a.name AS author_name';
-const FROM = 'FROM posts p LEFT JOIN authors a ON a.email = p.author_email';
+const COLS = 'p.id, p.slug, p.title, p.excerpt, p.body_md, p.body_html, p.cover_key, p.cover_alt, p.author_email, p.status, p.created_at, p.updated_at, p.published_at, a.name AS author_name, m.width AS cover_w, m.height AS cover_h';
+const FROM = 'FROM posts p LEFT JOIN authors a ON a.email = p.author_email LEFT JOIN media m ON m.key = p.cover_key';
 
 // A post whose author has no saved display name shows a name made from the address, never the address.
 const named = (row) => (row && !row.author_name ? { ...row, author_name: nameFromEmail(row.author_email) } : row);
@@ -59,8 +59,16 @@ export function upsertAuthor(db, email, name, at) {
 }
 
 export function insertMedia(db, m) {
-  return db.prepare(`INSERT INTO media (key, uploader_email, content_type, size, created_at) VALUES (?, ?, ?, ?, ?)`)
-    .bind(m.key, m.uploader_email, m.content_type, m.size, m.created_at).run();
+  return db.prepare(`INSERT INTO media (key, uploader_email, content_type, size, created_at, width, height) VALUES (?, ?, ?, ?, ?, ?, ?)`)
+    .bind(m.key, m.uploader_email, m.content_type, m.size, m.created_at, m.width ?? null, m.height ?? null).run();
+}
+
+// Pixel sizes for the given media keys, as { key: [width, height] }.
+export async function mediaSizes(db, keys) {
+  const list = [...new Set(keys)].slice(0, 50);
+  if (!list.length) return {};
+  const { results } = await db.prepare(`SELECT key, width, height FROM media WHERE width IS NOT NULL AND key IN (${list.map(() => '?').join(',')})`).bind(...list).all();
+  return Object.fromEntries(results.map((r) => [r.key, [r.width, r.height]]));
 }
 
 export function insertAudit(db, a) {

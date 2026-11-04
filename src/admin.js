@@ -4,7 +4,7 @@ import { getUser, isAdmin, devCookie, clearDevCookie } from './auth.js';
 import { renderMarkdown, UnreadableMarkup } from './markdown.js';
 import { renderPost, media } from './public.js';
 import * as db from './db.js';
-import { esc, fmtDate, html, json, now, redirect, slugify } from './util.js';
+import { esc, fmtDate, html, imageSize, json, now, redirect, slugify } from './util.js';
 import { STAMP } from './stamp.js';
 
 const NOINDEX = { 'x-robots-tag': 'noindex, nofollow', 'cache-control': 'no-store' };
@@ -215,7 +215,8 @@ async function previewPage(env, user, admin, id) {
   const post = await db.getById(env.DB, id);
   if (!post) return html(shell('Not found', '<h1>Not found</h1><p>That post no longer exists.</p>', user), 404, NOINDEX);
   if (!admin && post.author_email !== user.email) return html(shell('Not yours', '<h1>Not yours to view</h1><p>You can only preview posts you wrote.</p>', user), 403, NOINDEX);
-  return html(renderPost(post, { preview: true }), 200, NOINDEX);
+  const sizes = await db.mediaSizes(env.DB, [...post.body_html.matchAll(/src="\/media\/([^"]+)"/g)].map((m) => m[1]));
+  return html(renderPost(post, { preview: true, sizes }), 200, NOINDEX);
 }
 
 // ---------- sign-in without Access (DEV_KEY) ----------
@@ -331,7 +332,8 @@ async function upload(request, env, user) {
   const rand = Array.from(crypto.getRandomValues(new Uint8Array(10)), (n) => (n % 36).toString(36)).join('');
   const key = `${d.getUTCFullYear()}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${rand}.${ext}`;
   await env.MEDIA.put(key, bytes, { httpMetadata: { contentType: kind.type } });
-  await db.insertMedia(env.DB, { key, uploader_email: user.email, content_type: kind.type, size: file.size, created_at: now() });
+  const [width, height] = imageSize(bytes) || [];
+  await db.insertMedia(env.DB, { key, uploader_email: user.email, content_type: kind.type, size: file.size, created_at: now(), width, height });
   await audit(env, user, 'upload', null, { key, size: file.size, type: kind.type });
   // The editor sends a WebP copy of a PNG or JPEG when the browser can make one. It is kept
   // beside the original (same key, .webp) and served to browsers that accept WebP. Losing the
@@ -344,7 +346,8 @@ async function upload(request, env, user) {
       if (tag(0) === 'RIFF' && tag(8) === 'WEBP') {
         const copyKey = key.replace(/\.(png|jpg)$/, '.webp');
         await env.MEDIA.put(copyKey, bytes, { httpMetadata: { contentType: 'image/webp' } });
-        await db.insertMedia(env.DB, { key: copyKey, uploader_email: user.email, content_type: 'image/webp', size: copy.size, created_at: now() });
+        const [w, h] = imageSize(bytes) || [];
+        await db.insertMedia(env.DB, { key: copyKey, uploader_email: user.email, content_type: 'image/webp', size: copy.size, created_at: now(), width: w, height: h });
       }
     }
   } catch (err) {

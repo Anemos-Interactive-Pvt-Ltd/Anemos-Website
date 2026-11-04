@@ -2,7 +2,7 @@
 // and the images under /media/. Everything else on the public hostnames is a static asset.
 import { pageShell } from './layout.js';
 import * as db from './db.js';
-import { esc, fmtDate, html, notFound, redirect, TRUSTED_STATIC } from './util.js';
+import { esc, fmtDate, html, notFound, redirect, sizeImages, TRUSTED_STATIC } from './util.js';
 import { STAMP } from './stamp.js';
 
 const SITE = 'https://anemosinteractive.com';
@@ -13,6 +13,9 @@ const BLOG_LEDE = 'Notes from the studio: what we\'re building, the tech we\'re 
 const ORG = { '@type': 'Organization', name: 'Anemos Interactive', url: SITE, logo: { '@type': 'ImageObject', url: `${SITE}/apple-touch-icon.png` } };
 const MEDIA_KEY = /^[0-9]{4}\/[0-9]{2}\/[a-z0-9]+\.(png|jpg|webp|gif)$/;
 const PAGE_HEADERS = { 'cache-control': 'public, max-age=0, must-revalidate' };
+// Each static page's address is its .html file; the same name without .html (or with a trailing
+// slash) redirects there permanently, so search engines see one address per page.
+const STATIC_PAGES = new Set(['products', 'about', 'book', 'contact', 'privacy', 'terms', 'company', 'pricing', 'refund', 'delivery']);
 
 export async function handlePublic(request, env, ctx, url) {
   const path = url.pathname;
@@ -26,11 +29,14 @@ export async function handlePublic(request, env, ctx, url) {
   }
   if (path === '/sitemap.xml') return sitemap(request, env);
   if (path === '/404' || path === '/404.html') return notFound(env, request);
+  const bare = path.replace(/^\/|\/$/g, '');
+  if (STATIC_PAGES.has(bare)) return redirect('/' + bare + '.html' + url.search, 301);
+  if (path === '/index.html') return redirect('/' + url.search, 301);
   if (path.startsWith('/media/')) return media(request, env, path.slice(7));
   if (path === '/admin' || path.startsWith('/admin/') || path.startsWith('/api/')) return notFound(env, request);
   // Ask for the full file, never "not modified": every HTML page is sent with a fresh CSP nonce, and
   // a 304 would pair the browser's cached page (old nonce) with a new policy (new nonce).
-  const fresh = new Request(request);
+  const fresh = new Request(path === '/' ? new URL('/index.html', request.url) : request, request);
   fresh.headers.delete('if-none-match');
   fresh.headers.delete('if-modified-since');
   return stampAssets(await env.ASSETS.fetch(fresh));
@@ -57,9 +63,10 @@ async function blogIndex(request, env, url) {
   if (page > pages) return notFound(env, request);
   const posts = await db.listPublished(env.DB, PER_PAGE, (page - 1) * PER_PAGE);
 
-  const cards = posts.map((p) => `
+  // The first card's image is usually the largest thing on screen, so it loads straight away.
+  const cards = posts.map((p, i) => `
         <a class="post-card" href="/blogs/${esc(p.slug)}">
-          ${p.cover_key ? `<img src="/media/${esc(p.cover_key)}" alt="${esc(p.cover_alt)}" loading="lazy">` : '<div class="post-card-mark" aria-hidden="true"><img src="/logo.svg" alt=""></div>'}
+          ${p.cover_key ? `<img src="/media/${esc(p.cover_key)}" alt="${esc(p.cover_alt)}"${p.cover_w ? ` width="${p.cover_w}" height="${p.cover_h}"` : ''}${i === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}>` : '<div class="post-card-mark" aria-hidden="true"><img src="/logo.svg" alt=""></div>'}
           <div class="post-card-body">
             <div class="post-meta">${fmtDate(p.published_at)} · ${esc(p.author_name)}</div>
             <h2>${esc(p.title)}</h2>
@@ -99,11 +106,12 @@ async function blogPost(request, env, slug) {
   if (!/^[a-z0-9-]{1,80}$/.test(slug)) return notFound(env, request);
   const post = await db.getPublishedBySlug(env.DB, slug);
   if (!post) return notFound(env, request);
-  return html(renderPost(post, { adminHost: env.ADMIN_HOST }), 200, PAGE_HEADERS);
+  const sizes = await db.mediaSizes(env.DB, [...post.body_html.matchAll(/src="\/media\/([^"]+)"/g)].map((m) => m[1]));
+  return html(renderPost(post, { adminHost: env.ADMIN_HOST, sizes }), 200, PAGE_HEADERS);
 }
 
 // Also used by the admin's draft preview.
-export function renderPost(p, { preview = false, adminHost = '' } = {}) {
+export function renderPost(p, { preview = false, adminHost = '', sizes = {} } = {}) {
   const url = `${SITE}/blogs/${p.slug}`;
   const cover = p.cover_key ? `${SITE}/media/${p.cover_key}` : null;
   const main = `<main class="about-page blog-page post-page">
@@ -118,9 +126,9 @@ export function renderPost(p, { preview = false, adminHost = '' } = {}) {
 
   <article class="about-block">
     <div class="container">
-      ${p.cover_key ? `<img class="post-cover" src="/media/${esc(p.cover_key)}" alt="${esc(p.cover_alt)}">` : ''}
+      ${p.cover_key ? `<img class="post-cover" src="/media/${esc(p.cover_key)}" alt="${esc(p.cover_alt)}"${p.cover_w ? ` width="${p.cover_w}" height="${p.cover_h}"` : ''} fetchpriority="high">` : ''}
       <div class="post-body">
-${p.body_html}
+${sizeImages(p.body_html, sizes)}
       </div>
       <p class="post-back"><a class="btn" href="/blogs">All posts</a></p>
     </div>

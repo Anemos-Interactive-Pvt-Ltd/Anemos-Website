@@ -33,8 +33,12 @@ CREATE TABLE IF NOT EXISTS media (
   uploader_email TEXT NOT NULL,
   content_type   TEXT NOT NULL,
   size           INTEGER NOT NULL,
-  created_at     TEXT NOT NULL
+  created_at     TEXT NOT NULL,
+  width          INTEGER,               -- pixel size, written into the page so it can reserve the space
+  height         INTEGER
 );
+-- Databases created before the width and height columns existed need, once:
+--   ALTER TABLE media ADD COLUMN width INTEGER;  ALTER TABLE media ADD COLUMN height INTEGER;
 
 -- Who did what in the admin: create, draft, publish, unpublish, delete, upload.
 CREATE TABLE IF NOT EXISTS audit (

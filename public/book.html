@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book a consultation call — Anemos Interactive</title>
+  <meta name="description" content="Book a 60-minute video call with Anemos Interactive to talk about what you're building. Pick a slot in your local time.">
+  <link rel="canonical" href="https://anemosinteractive.com/book.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Anemos Interactive">
+  <meta property="og:title" content="Book a consultation call — Anemos Interactive">
+  <meta property="og:description" content="Book a 60-minute video call with Anemos Interactive to talk about what you're building. Pick a slot in your local time.">
+  <meta property="og:url" content="https://anemosinteractive.com/book.html">
+  <meta property="og:image" content="https://anemosinteractive.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Anemos Interactive: games and technology, built in Mumbai, made for the world.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://anemosinteractive.com/og-image.png">
+  <meta name="theme-color" content="#141242">
+  <link rel="preload" href="fonts/questrial-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <script>window.__trackQ = []; window.track = function (n, p) { window.__trackQ.push([n, p]); };</script>
+  <script>try { if (sessionStorage.getItem('wind-arrive')) document.documentElement.classList.add('wind-arriving'); } catch (e) {}</script>
+</head>
+<body class="home">
+
+<header>
+  <div class="container header-inner">
+    <a class="wordmark" href="index.html"><img src="logo-white.svg" alt="Anemos Interactive logo" class="logo-symbol">anemos <span>interactive</span></a>
+    <button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" id="site-nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="index.html#services">Services</a>
+      <a href="products.html">Products</a>
+      <a href="index.html#courses">Courses</a>
+      <a href="index.html#follow">Socials</a>
+      <a href="index.html#about">About us</a>
+      <a href="blogs">Blogs</a>
+      <a href="contact.html" class="active">Contact us</a>
+    </nav>
+  </div>
+</header>
+
+<main class="about-page book-page">
+  <section class="page-intro about-intro">
+    <canvas class="wind-ambient" aria-hidden="true"></canvas>
+    <div class="container">
+      <div class="kicker" data-wind>Book a call</div>
+      <h1 data-wind="words">Let's talk about <em>what you're building</em>.</h1>
+      <p class="lede" data-wind="words">Choose any open slot below, shown in your local time, and we'll meet you there for an hour on video.</p>
+      <ul class="chips">
+        <li data-wind>60 minutes</li>
+        <li data-wind>Video call</li>
+        <li data-wind>Your local time</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="book-calendar">
+    <div class="container">
+      <!-- Microsoft Bookings: the calendar, availability and confirmations are managed there. -->
+      <div class="book-frame">
+        <iframe src="https://bookings.cloud.microsoft/book/AnemosInteractiveBookings@anemosinteractive.com/?ismsaljsauthenabled" title="Booking calendar" loading="lazy"></iframe>
+      </div>
+      <p class="book-fallback">Calendar not showing? <a class="btn" href="https://bookings.cloud.microsoft/book/AnemosInteractiveBookings@anemosinteractive.com/?ismsaljsauthenabled" target="_blank" rel="noopener">Open the booking page</a></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="wordmark"><img src="logo-white.svg" alt="" class="logo-symbol logo-symbol-footer">anemos <span>interactive</span></div>
+    <div class="legal">
+      Anemos Interactive Private Limited<br>
+      <a href="mailto:contactus@anemosinteractive.com">contactus@anemosinteractive.com</a>
+      <nav class="footer-links" aria-label="Policies and information">
+        <ul>
+          <li><a href="privacy.html">Privacy policy</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="delivery.html">Delivery</a></li>
+          <li><a href="refund.html">Refunds</a></li>
+          <li><a href="terms.html">Terms and conditions</a></li>
+          <li><a href="company.html">Company details</a></li>
+        </ul>
+      </nav>
+      <p class="copyright">© 2026 Anemos Interactive Private Limited. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const nav = document.getElementById('site-nav');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+</script>
+<script src="wind.js"></script>
+
+<script src="analytics.js" defer></script>
+
+</body>
+</html>

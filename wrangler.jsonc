@@ -1,0 +1,86 @@
+// Cloudflare Workers configuration for the site.
+//
+// This public copy uses placeholders: example.com for the domains, empty sign-in settings, and
+// REPLACE_WITH_… for the database IDs. They show the shape of the configuration; this repository
+// is published for learning and is not licensed to be deployed (see LICENSE).
+//
+// The pages in public/ are served as static assets (404.html for missing paths, clean URLs so
+// /about.html is served at /about). The Worker in src/ adds the blog: /blogs and the posts under
+// it, the RSS feed, the sitemap with posts included, images under /media/, and the blog admin on
+// its own hostname. Only the paths in run_worker_first reach the Worker; everything else is served
+// straight from the assets.
+//
+//   npx wrangler deploy               -> the live Worker
+//   npx wrangler deploy --env test    -> the test Worker
+//
+// Each environment has its own database and image bucket, so nothing written on test can appear
+// on the live site.
+{
+  "name": "my-site",
+  "main": "src/worker.js",
+  "build": { "command": "node scripts/stamp.mjs" },
+  "compatibility_date": "2026-10-06",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash",
+    "run_worker_first": ["/blogs", "/blogs/*", "/media/*", "/sitemap.xml", "/robots.txt", "/admin", "/admin/*", "/api/*", "/", "/index.html", "/products", "/products.html", "/about", "/about.html", "/book", "/book.html", "/contact", "/contact.html", "/privacy", "/privacy.html", "/terms", "/terms.html", "/company", "/company.html", "/pricing", "/pricing.html", "/refund", "/refund.html", "/delivery", "/delivery.html", "/404", "/404.html"]
+  },
+  "vars": {
+    // Where the public site lives, and the separate hostname the admin answers on.
+    "SITE_ORIGIN": "https://example.com",
+    "ADMIN_HOST": "admin.example.com",
+    // Only email addresses at this domain may use the admin.
+    "ALLOWED_DOMAIN": "example.com",
+    // Accounts that may edit every post (comma-separated). Everyone else edits only their own.
+    "ADMIN_EMAILS": "editor@example.com",
+    // Cloudflare Access: your team domain (<team>.cloudflareaccess.com) and the application's AUD
+    // tag. While these are empty, the admin uses the DEV_KEY sign-in form instead.
+    "ACCESS_TEAM_DOMAIN": "",
+    "ACCESS_AUD": "",
+    // Optional: the identity-provider group allowed to post (its ID or name). Empty means anyone
+    // the sign-in lets through.
+    "AUTHOR_GROUP": "",
+    // Optional: an IndexNow key, also served as public/<key>.txt. Empty turns the ping off.
+    "INDEXNOW_KEY": ""
+  },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "my-site-blog", "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID" }
+  ],
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "my-site-media" }
+  ],
+  "routes": [
+    { "pattern": "example.com", "custom_domain": true },
+    { "pattern": "www.example.com", "custom_domain": true },
+    { "pattern": "admin.example.com", "custom_domain": true }
+  ],
+  "env": {
+    "test": {
+      "name": "my-site-test",
+      "vars": {
+        "SITE_ORIGIN": "https://staging.example.com",
+        "ADMIN_HOST": "admin-staging.example.com",
+        "ALLOWED_DOMAIN": "example.com",
+        "ADMIN_EMAILS": "editor@example.com",
+        "ACCESS_TEAM_DOMAIN": "",
+        "ACCESS_AUD": "",
+        "AUTHOR_GROUP": "",
+        "INDEXNOW_KEY": "",
+        // Tells search engines not to index the test site (an X-Robots-Tag header on every response).
+        "NOINDEX": "1"
+      },
+      "d1_databases": [
+        { "binding": "DB", "database_name": "my-site-blog-test", "database_id": "REPLACE_WITH_YOUR_TEST_D1_DATABASE_ID" }
+      ],
+      "r2_buckets": [
+        { "binding": "MEDIA", "bucket_name": "my-site-media-test" }
+      ],
+      "routes": [
+        { "pattern": "staging.example.com", "custom_domain": true },
+        { "pattern": "admin-staging.example.com", "custom_domain": true }
+      ]
+    }
+  }
+}

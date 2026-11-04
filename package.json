@@ -1,0 +1,14 @@
+{
+  "name": "anemos-website",
+  "private": true,
+  "type": "module",
+  "description": "The source of anemosinteractive.com: a static site with a scroll-driven canvas run, plus a small blog on Cloudflare Workers",
+  "scripts": {
+    "dev": "npx wrangler dev"
+  },
+  "dependencies": {
+    "marked": "^15.0.12"
+  },
+  "version": "1.0.0",
+  "license": "UNLICENSED"
+}

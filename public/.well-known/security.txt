@@ -1,0 +1,7 @@
+# Security contact for anemosinteractive.com (RFC 9116).
+# If you have found a vulnerability in this site, please tell us and give us a reasonable
+# time to fix it before publishing details. Thank you.
+Contact: mailto:contactus@anemosinteractive.com
+Expires: 2027-10-19T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://anemosinteractive.com/.well-known/security.txt

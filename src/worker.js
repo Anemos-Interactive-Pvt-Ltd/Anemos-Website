@@ -68,7 +68,9 @@ async function secure(res, admin, env) {
   // The test environment tells search engines not to index anything (NOINDEX in wrangler.jsonc).
   // It must stay crawlable for them to see this, so the test site's robots.txt does not block them.
   if (env && env.NOINDEX === '1') h.set('x-robots-tag', 'noindex, nofollow');
-  const isHtml = (h.get('content-type') || '').includes('text/html');
+  // A 304 carries no body, so it must not carry a new policy either: the browser keeps the cached
+  // page together with the policy (and nonce) it arrived with.
+  const isHtml = res.status !== 304 && (h.get('content-type') || '').includes('text/html');
   const nonce = isHtml ? btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(16)))) : null;
   if (isHtml) h.set('content-security-policy', (admin ? ADMIN_CSP : PUBLIC_CSP)(nonce, await scriptHashes()));
   const out = new Response(res.body, { status: res.status, statusText: res.statusText, headers: h });

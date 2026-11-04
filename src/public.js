@@ -28,7 +28,12 @@ export async function handlePublic(request, env, ctx, url) {
   if (path === '/404' || path === '/404.html') return notFound(env, request);
   if (path.startsWith('/media/')) return media(request, env, path.slice(7));
   if (path === '/admin' || path.startsWith('/admin/') || path.startsWith('/api/')) return notFound(env, request);
-  return stampAssets(await env.ASSETS.fetch(request));
+  // Ask for the full file, never "not modified": every HTML page is sent with a fresh CSP nonce, and
+  // a 304 would pair the browser's cached page (old nonce) with a new policy (new nonce).
+  const fresh = new Request(request);
+  fresh.headers.delete('if-none-match');
+  fresh.headers.delete('if-modified-since');
+  return stampAssets(await env.ASSETS.fetch(fresh));
 }
 
 // The static pages reference style.css and the scripts by plain name; add the deploy stamp so a
@@ -38,6 +43,8 @@ function stampAssets(res) {
   if (!(res.headers.get('content-type') || '').includes('text/html')) return res;
   const headers = new Headers(res.headers);
   headers.set(TRUSTED_STATIC, '1');
+  headers.delete('etag');            // no validators, so browsers always get the page and its nonce together
+  headers.delete('last-modified');
   res = new Response(res.body, { status: res.status, statusText: res.statusText, headers });
   const fix = (attr) => ({ element(el) { const v = el.getAttribute(attr) || ''; const m = v.match(STAMPED); if (m) el.setAttribute(attr, `${v}?v=${STAMP[m[1]]}`); } });
   return new HTMLRewriter().on('link[rel="stylesheet"]', fix('href')).on('script[src]', fix('src')).transform(res);
